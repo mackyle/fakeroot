@@ -1012,6 +1012,7 @@ int main(int argc, char **argv){
     while(!msg_key && (msg_key!=-1))  /* values 0 and -1 are treated
 					 specially by libfake */
       msg_key=random();
+  }
     
   if(debug)
     fprintf(stderr,"using %i as msg key\n",msg_key);
@@ -1051,7 +1052,6 @@ int main(int argc, char **argv){
     if (bind(sd, (struct sockaddr *) &addr, sizeof (addr)) < 0)
       fail("bind");
 #endif /* FAKEROOT_FAKENET */
-  }
 #ifndef FAKEROOT_FAKENET
   if(debug)
     fprintf(stderr,"msg_key=%i\n",msg_key);

@@ -1,3 +1,10 @@
+fakeroot (1.1.5) unstable; urgency=low
+
+  * faked.c: patch from Andreas Borchert to fix broken --key
+    option.  closes: #276872.
+
+ -- Clint Adams <schizo@debian.org>  Sun, 17 Oct 2004 17:51:39 -0400
+
 fakeroot (1.1.4) unstable; urgency=low
 
   * faked.c: patch from Andreas Borchert to fix command-line
