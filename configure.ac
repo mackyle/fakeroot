@@ -34,7 +34,7 @@ fi
 dnl Checks for header files.
 AC_HEADER_DIRENT
 AC_HEADER_STDC
-AC_CHECK_HEADERS(fcntl.h unistd.h features.h sys/feature_tests.h pthread.h stdint.h inttypes.h grp.h endian.h sys/sysmacros.h)
+AC_CHECK_HEADERS(fcntl.h unistd.h features.h sys/feature_tests.h pthread.h stdint.h inttypes.h grp.h endian.h sys/sysmacros.h sys/socket.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
