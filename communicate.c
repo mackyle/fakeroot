@@ -14,7 +14,7 @@
 #include <dlfcn.h>
 #include <stdio.h>
 #ifndef FAKEROOT_FAKENET
-# define _XOPEN_SOURCE 1
+# define _XOPEN_SOURCE 600
 # include <sys/ipc.h>
 # include <sys/msg.h>
 # include <sys/sem.h>
