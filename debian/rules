@@ -140,7 +140,7 @@ endif
 	# We can just use the deps for faked.
 	dpkg-shlibdeps -Tdebian/substvars \
 		debian/tmp/usr/bin/faked-sysv \
-		debian/tmp/usr/bin/faked-tcp \
+		debian/tmp/usr/bin/faked-tcp
 	dpkg-gencontrol -ldebian/changelog -isp -Tdebian/substvars -Pdebian/tmp
 	chmod 644 debian/tmp/DEBIAN/control
 	chown root:root debian/tmp/DEBIAN/control
