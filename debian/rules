@@ -175,6 +175,10 @@ binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary checkroot prebuild
 
 prebuild:
+	if [ $(sed -n '/^AC_INIT(\[fakeroot\],\[\([^,]*\)\],.*$/ { s//\1/;p }' configure.ac) != $(dpkg-parsechangelog | sed -n '/^Version: \(.*\)$/ {s//\1/;p}') ]; \
+	then exit 1; \
+	fi
+
 	autoreconf -fi
 	cd fake && autoreconf -fi
 
@@ -185,4 +189,3 @@ endef
 checkroot:
 	$(checkdir)
 	test root = "`whoami`"
-

@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([fakeroot],[1.1],[schizo@debian.org],[fakeroot])
+AC_INIT([fakeroot],[1.2.2],[schizo@debian.org],[fakeroot])
 AC_PREREQ(2.59)
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE
