@@ -1,0 +1,19 @@
+Source: fakeroot
+Section: utils
+Priority: optional
+Build-Depends: sharutils, libc6-dev-s390x [s390], libc6-dev-sparc64 [sparc]
+Maintainer: Clint Adams <schizo@debian.org>
+Standards-Version: 3.6.1
+
+Package: fakeroot
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: Gives a fake root environment
+ This package is intended to enable something like:
+   dpkg-buildpackage -rfakeroot
+ i.e. to remove the need to become root for a package build.
+ This is done by setting LD_PRELOAD to libfakeroot.so,
+ which provides wrappers around getuid, chown, chmod, mknod, 
+ stat, and so on, thereby creating a fake root environment.
+ .
+ fakeroot requires SYSV IPC to operate.
