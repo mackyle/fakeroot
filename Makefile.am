@@ -24,7 +24,7 @@ DISTCLEANFILES = fakerootconfig.h
 EXTRA_DIST=wrapawk wrapfunc.inp                        \
            debian/rules debian/changelog debian/control  \
 	   message.h \
-	   DEBUG BUGS
+	   DEBUG BUGS VERSION
 
 CLEAN_FILES=fakerootconfig.h
 

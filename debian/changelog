@@ -1,7 +1,6 @@
 fakeroot (1.2.2) unstable; urgency=low
 
-  * Add version check to the prebuild target; abort
-    if the changelog doesn't match configure.ac.
+  * Derive version from debian/changelog entry.
     closes: #286648.
 
  -- Clint Adams <schizo@debian.org>  Tue, 21 Dec 2004 12:16:30 -0500
