@@ -713,7 +713,7 @@ void process_unlink(struct fake_msg *buf){
   }
 }
 
-void debugdata(int dummy){
+void debugdata(int dummy UNUSED){
   int stored_errno = errno;
   data_node_t *i;
 
@@ -756,7 +756,7 @@ void get_msg(const int listen_sd)
     if(r!=-1)
 #else /* FAKEROOT_FAKENET */
   while (1) {
-    int maxfd, count, i;
+    unsigned int maxfd, count, i;
 
     FD_ZERO(&readfds);
 
