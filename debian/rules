@@ -145,8 +145,8 @@ ifeq (sparc-linux,$(DEB_HOST_GNU_TYPE))
 	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=sparc64-linux --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 endif
 ifeq (s390-linux,$(DEB_HOST_GNU_TYPE))
-	cd obj64 && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=s390x-linux $(CONFARGS)
-	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=s390x-linux --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
+	cd obj64 && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=s390-linux --host=s390x-linux $(CONFARGS)
+	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=s390-linux --host=s390x-linux --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 endif
 
 	cd obj64-tcp && $(MAKE) libfakeroot.la
