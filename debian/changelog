@@ -1,3 +1,10 @@
+fakeroot (1.1.1) unstable; urgency=low
+
+  * faked.c, libfakeroot.c: address some signedness issues which
+    crept in in 1.1.
+
+ -- Clint Adams <schizo@debian.org>  Thu,  7 Oct 2004 11:30:41 -0400
+
 fakeroot (1.1) unstable; urgency=low
 
   Ruben Porras:

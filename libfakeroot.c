@@ -161,7 +161,7 @@ static int env_set_id(const char *key, int id) {
   }
 }
 
-static void read_id(int *id, const char *key) {
+static void read_id(unsigned int *id, const char *key) {
   if (*id < 0)
     *id = env_get_id(key);
 }
