@@ -180,6 +180,8 @@ static uid_t faked_effective_uid = -1;
 static gid_t faked_effective_gid = -1;
 static uid_t faked_saved_uid = -1;
 static gid_t faked_saved_gid = -1;
+static uid_t faked_fs_uid = -1;
+static gid_t faked_fs_gid = -1;
 
 /* Read user ID */
 
@@ -195,10 +197,15 @@ static void read_saved_uid() {
   read_id(&faked_saved_uid, FAKEROOTSUID_ENV);
 }
 
+static void read_fs_uid() {
+  read_id(&faked_fs_uid, FAKEROOTFUID_ENV);
+}
+
 static void read_uids() {
   read_real_uid();
   read_effective_uid();
   read_saved_uid();
+  read_fs_uid();
 }
 
 /* Read group ID */
@@ -215,10 +222,15 @@ static void read_saved_gid() {
   read_id(&faked_saved_gid, FAKEROOTSGID_ENV);
 }
 
+static void read_fs_gid() {
+  read_id(&faked_fs_gid, FAKEROOTFGID_ENV);
+}
+
 static void read_gids() {
   read_real_gid();
   read_effective_gid();
   read_saved_gid();
+  read_fs_gid();
 }
 
 /* Write user ID */
@@ -235,12 +247,18 @@ static int write_saved_uid() {
   return write_id(FAKEROOTSUID_ENV, faked_saved_uid);
 }
 
+static int write_fs_uid() {
+  return write_id(FAKEROOTFUID_ENV, faked_fs_uid);
+}
+
 static int write_uids() {
   if (write_real_uid() < 0)
     return -1;
   if (write_effective_uid() < 0)
     return -1;
   if (write_saved_uid() < 0)
+    return -1;
+  if (write_fs_uid() < 0)
     return -1;
   return 0;
 }
@@ -259,12 +277,18 @@ static int write_saved_gid() {
   return write_id(FAKEROOTSGID_ENV, faked_saved_gid);
 }
 
+static int write_fs_gid() {
+  return write_id(FAKEROOTFGID_ENV, faked_fs_gid);
+}
+
 static int write_gids() {
   if (write_real_gid() < 0)
     return -1;
   if (write_effective_gid() < 0)
     return -1;
   if (write_saved_gid() < 0)
+    return -1;
+  if (write_fs_gid() < 0)
     return -1;
   return 0;
 }
@@ -291,6 +315,26 @@ static gid_t get_faked_egid() {
   return faked_effective_gid;
 }
 
+static uid_t get_faked_suid() {
+  read_saved_uid();
+  return faked_saved_uid;
+}
+
+static gid_t get_faked_sgid() {
+  read_saved_gid();
+  return faked_saved_gid;
+}
+
+static uid_t get_faked_fsuid() {
+  read_fs_uid();
+  return faked_fs_uid;
+}
+
+static gid_t get_faked_fsgid() {
+  read_fs_gid();
+  return faked_fs_gid;
+}
+
 /* Faked set functions */
 
 static int set_faked_uid(uid_t uid) {
@@ -302,6 +346,7 @@ static int set_faked_uid(uid_t uid) {
   } else {
     faked_effective_uid = uid;
   }
+  faked_fs_uid = uid;
   return write_uids();
 }
 
@@ -314,19 +359,32 @@ static int set_faked_gid(gid_t gid) {
   } else {
     faked_effective_gid = gid;
   }
+  faked_fs_gid = gid;
   return write_gids();
 }
 
 static int set_faked_euid(uid_t euid) {
   read_effective_uid();
   faked_effective_uid = euid;
-  return write_effective_uid();
+  read_fs_uid();
+  faked_fs_uid = euid;
+  if (write_effective_uid() < 0)
+    return -1;
+  if (write_fs_uid() < 0)
+    return -1;
+  return 0;
 }
 
 static int set_faked_egid(gid_t egid) {
   read_effective_gid();
   faked_effective_gid = egid;
-  return write_effective_gid();
+  read_fs_gid();
+  faked_fs_gid = egid;
+  if (write_effective_gid() < 0)
+    return -1;
+  if (write_fs_gid() < 0)
+    return -1;
+  return 0;
 }
 
 static int set_faked_reuid(uid_t ruid, uid_t euid) {
@@ -337,6 +395,7 @@ static int set_faked_reuid(uid_t ruid, uid_t euid) {
     faked_real_uid = ruid;
   if (euid != (uid_t)-1)
     faked_effective_uid = euid;
+  faked_fs_uid = faked_effective_uid;
   return write_uids();
 }
 
@@ -348,6 +407,7 @@ static int set_faked_regid(gid_t rgid, gid_t egid) {
     faked_real_gid = rgid;
   if (egid != (gid_t)-1)
     faked_effective_gid = egid;
+  faked_fs_gid = faked_effective_gid;
   return write_gids();
 }
 
@@ -360,6 +420,7 @@ static int set_faked_resuid(uid_t ruid, uid_t euid, uid_t suid) {
     faked_effective_uid = euid;
   if (suid != (uid_t)-1)
     faked_saved_uid = suid;
+  faked_fs_uid = faked_effective_uid;
   return write_uids();
 }
 #endif
@@ -373,7 +434,24 @@ static int set_faked_resgid(gid_t rgid, gid_t egid, gid_t sgid) {
     faked_effective_gid = egid;
   if (sgid != (gid_t)-1)
     faked_saved_gid = sgid;
+  faked_fs_gid = faked_effective_gid;
   return write_gids();
+}
+#endif
+
+#ifdef HAVE_SETFSUID
+static uid_t set_faked_fsuid(uid_t fsuid) {
+  uid_t prev_fsuid = get_faked_fsuid();
+  faked_fs_uid = fsuid;
+  return prev_fsuid;
+}
+#endif
+
+#ifdef HAVE_SETFSGID
+static gid_t set_faked_fsgid(gid_t fsgid) {
+  gid_t prev_fsgid = get_faked_fsgid();
+  faked_fs_gid = fsgid;
+  return prev_fsgid;
 }
 #endif
 
@@ -846,6 +924,17 @@ uid_t geteuid(void){
   return get_faked_euid();
 }
 
+#ifdef HAVE_GETRESUID
+int getresuid(uid_t *ruid, uid_t *euid, uid_t *suid){
+  if (fakeroot_disabled)
+    return next_getresuid(ruid, euid, suid);
+  *ruid = get_faked_uid();
+  *euid = get_faked_euid();
+  *suid = get_faked_suid();
+  return 0;
+}
+#endif /* HAVE_GETRESUID */
+
 uid_t getgid(void){
   if (fakeroot_disabled)
     return next_getgid();
@@ -857,6 +946,17 @@ uid_t getegid(void){
     return next_getegid();
   return get_faked_egid();
 }
+
+#ifdef HAVE_GETRESGID
+int getresgid(gid_t *rgid, gid_t *egid, gid_t *sgid){
+  if (fakeroot_disabled)
+    return next_getresgid(rgid, egid, sgid);
+  *rgid = get_faked_gid();
+  *egid = get_faked_egid();
+  *sgid = get_faked_sgid();
+  return 0;
+}
+#endif /* HAVE_GETRESGID */
 
 int setuid(uid_t id){
   if (fakeroot_disabled)
@@ -909,6 +1009,22 @@ int setresgid(gid_t rgid, gid_t egid, gid_t sgid){
   return set_faked_resgid(rgid, egid, sgid);
 }
 #endif /* HAVE_SETRESGID */
+
+#ifdef HAVE_SETFSUID
+uid_t setfsuid(uid_t fsuid){
+  if (fakeroot_disabled)
+    return next_setfsuid(fsuid);
+  return set_faked_fsuid(fsuid);
+}
+#endif /* HAVE_SETFSUID */
+
+#ifdef HAVE_SETFSGID
+gid_t setfsgid(gid_t fsgid){
+  if (fakeroot_disabled)
+    return next_setfsgid(fsgid);
+  return set_faked_fsgid(fsgid);
+}
+#endif /* HAVE_SETFSGID */
 
 int initgroups(const char* user, INITGROUPS_SECOND_ARG group){
   if (fakeroot_disabled)
