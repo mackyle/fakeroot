@@ -109,7 +109,10 @@ Use the real ownership of files previously unknown to fakeroot instead of
 pretending they are owned by root:root.
 .TP
 .BI \-b \ fd
-Specify fd base (TCP mode only).
+Specify fd base (TCP mode only). fd is the minimum file descriptor
+number to use for TCP connections; this may be important to avoid
+conflicts with the file descriptors used by the programs being run
+under fakeroot.
 .TP
 .BI \-h
 Display help.
