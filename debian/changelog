@@ -5,6 +5,7 @@ fakeroot (1.0.6) unstable; urgency=low
     from Rubén Porras Campo.  closes: #263035.
   * doc/faked.1, doc/fakeroot.1: fix Ray's email address.
   * doc/fakeroot.1: add lengthier explanation of fd base for TCP mode.
+  * doc/fakeroot.1: remove reference to potato.  closes: #263938.
 
  -- Clint Adams <schizo@debian.org>  Thu, 15 Jul 2004 09:34:31 -0400
 
