@@ -60,8 +60,12 @@ while test "X$1" != "X--"; do
        ;;
     -i)
        shift
-       FAKEDOPTS=$FAKEDOPTS" --load"
-       PIPEIN="<$1"
+       if test -f "$1"; then
+         FAKEDOPTS=$FAKEDOPTS" --load"
+         PIPEIN="<$1"
+       else
+         echo 1>&2 "fakeroot: database file \`$1' does not exist."
+       fi
        ;;
     -s)
        shift

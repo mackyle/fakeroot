@@ -19,6 +19,21 @@ AC_CACHE_CHECK([which IPC method to use],
 	       [ac_cv_use_ipc],
 	       [ac_cv_use_ipc=sysv])
 
+AC_ARG_WITH([dbformat],
+	    AS_HELP_STRING([--with-dbformat@<:@=DBFORMAT@:>@],
+			   [database format to use: either inode (default) or path]),
+	    [ac_cv_dbformat=$withval],
+	    [ac_cv_dbformat=inode])
+
+AC_CACHE_CHECK([which database format to use],
+	       [ac_cv_dbformat],
+	       [ac_cv_dbformat=inode])
+
+AH_TEMPLATE([FAKEROOT_DB_PATH], [store path in the database instead of inode and device])
+if test $ac_cv_dbformat = "path"; then
+AC_DEFINE_UNQUOTED(FAKEROOT_DB_PATH, [1])
+fi
+
 dnl Checks for programs.
 
 dnl Checks for libraries.
