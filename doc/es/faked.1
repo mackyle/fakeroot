@@ -16,11 +16,12 @@
 .\" (c) 2003 Software in the Public Interest
 .\" Esta traducción ha sido realizada por Rubén Porras Campo <nahoo@inicia.es>
 .\" Está basada en la página de manual original:
-.\" versión 1.5 del CVS de
+.\" versión 1.6 del CVS de
 .\" /cvs/debian-doc/manpages/english/fakeroot/faked.1
 
-.TH faked 1 "9 de mayo de 2003" "Proyecto Debian" "Manual Debian GNU/Linux"
+.TH faked 1 "17 de Junio de 2004" "Proyecto Debian" "Manual Debian GNU/Linux"
 .\" Manpage by J.H.M. Dassen <jdassen@wi.LeidenUniv.nl>
+.\" and Clint Adams
 .SH NOMBRE
 faked \- demonio que recuerda los propietarios/permisos falsos de ficheros
 manipulados por un proceso fakeroot.
@@ -30,6 +31,8 @@ manipulados por un proceso fakeroot.
 .IB número-llave ] 
 .B [\-\-load] [\-\-save-file
 .IB fichero-salvado ]
+.B [\-\-port
+.IB puerto-TCP ]
 .SH DESCRIPCIÓN
 Si un proceso fakeroot quiere cambiar el propietario de un fichero,
 .B faked
@@ -62,7 +65,9 @@ Carga un entorno previamente salvado desde la entrada estándar.
 .B \-\-unknown\-is\-real
 Usa el propietario real de ficheros previamente desconocidos en vez de suponer
 que son root:root.
-
+.TP
+.B \-\-port \ puerto-TCP
+Usa el puerto TCP puerto-TCP.
 .SH FALLOS
 Ninguno hasta ahora. Está avisado, consideración: aunque he escrito varios
 programas más largos (y pequeños), nunca escribí algo que fuese tan pequeño como
@@ -76,13 +81,19 @@ y que todavía fuese usable como, por ejemplo la versión 0.0_3 de
 .B fakeroot
 se distribuye bajo la Licencia Pública General de GNU.
 (GPL 2.0 o posterior).
-.SH AUTOR
+.SH AUTORES
+.TP
 joost witteveen
 .RI < joostje@debian.org >
+.TP
+Clint Adams
+.RI < schizo@debian.org >
+.TP
+Timo Savola
 .SH PÁGINA DEL MANUAL
 la mayor parte de  J.H.M. Dassen 
 .RI <jdassen@wi.LeidenUniv.nl> 
-con muchas modificaciones y añadiduras de joost.
+con muchas modificaciones y añadiduras de joost y Clint.
 .SH "VÉASE ADEMÁS"
 .BR fakeroot (1),
 .BR dpkg-buildpackage (1),

@@ -16,11 +16,12 @@
 .\" (c) 2003 Software in the Public Interest
 .\" Esta traducción ha sido realizada por Rubén Porras Campo <nahoo@inicia.es>
 .\" Está basada en la página de manual original:
-.\" versión 1.7 del CVS de
+.\" versión 1.8 del CVS de
 .\" /cvs/debian-doc/manpages/english/fakeroot/fakeroot.1
 
-.TH fakeroot 1 "9 de mayo de 2003" "Proyecto Debian" "manual de Debian"
+.TH fakeroot 1 "17 de Junio de 2004" "Proyecto Debian" "Manual de Debian"
 .\" Manpage by J.H.M. Dassen <jdassen@wi.LeidenUniv.nl>
+.\" and Clint Adams <schizo@debian.org>
 .SH NOMBRE
 fakeroot \- ejecuta una orden en un entorno que falsea privilegios de
 superusuario para la manipulación de ficheros
@@ -35,6 +36,9 @@ superusuario para la manipulación de ficheros
 .B [\-s
 .IB fichero-salvado ]
 .B [\-u|\-\-unknown\-is\-real ]
+.B [\-b|\-\-fd\-base ]
+.B [\-h|\-\-help ]
+.B [\-v|\-\-version ]
 .BI [\-\-]
 .BI [orden]
 .SH DESCRIPCIÓN
@@ -110,6 +114,15 @@ esto. Es seguro usar el mismo fichero para \-i y \-s en una misma invocación de
 \fB\-u\fR, \fB\-\-unknown\-is\-real\fR
 Usa el propietario real para ficheros desconocidos previamente por fakeroot en
 vez de suponer que pertenecen a root:root.
+.TP
+.BI \-b \ fd
+Especifica el descriptor de fichero base (sólo en modo TCP).
+.TP
+.BI \-h
+Muestra la ayuda.
+.TP
+.BI \-v
+Muestra la versión.
 
 .SH EJEMPLOS
 Aquí hay un ejemplo de una sesión con
@@ -255,13 +268,19 @@ funciones de libc cambie ligeramente).
 .B fakeroot
 se distribuye bajo la Licencia Pública General de GNU.
 (GPL 2.0 o posterior).
-.SH AUTOR
+.SH AUTORES
+.TP
 joost witteveen
 .RI < joostje@debian.org >
+.TP
+Clint Adams
+.RI < schizo@debian.org >
+.TP
+Timo Savola
 .SH PÁGINA DEL MANUAL
 la mayor parte de J.H.M. Dassen 
 .RI <jdassen@wi.LeidenUniv.nl> 
-con muchas modificaciones y añadiduras de joost.
+con muchas modificaciones y añadiduras de joost y Clint.
 .SH "VÉASE ADEMÁS"
 .BR faked (1)
 .BR dpkg\-buildpackage (1),
