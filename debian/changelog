@@ -1,3 +1,10 @@
+fakeroot (1.0.3) unstable; urgency=low
+
+  * libfakeroot.c: correctly handle platforms where the first
+    argument to setgroups() is int.
+
+ -- Clint Adams <schizo@debian.org>  Fri, 18 Jun 2004 15:42:33 -0400
+
 fakeroot (1.0.2) unstable; urgency=low
 
   * Fix the broken symlinks I just introduced.
