@@ -77,7 +77,7 @@ while test "X$1" != "X--"; do
        FAKEROOT_FD_BASE="$1"
        ;;
     -v|--version)
-       echo "fakeroot-net version @VERSION@"
+       echo "fakeroot version @VERSION@"
        exit 0
        ;;
     -h|--help)
