@@ -175,7 +175,7 @@ binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary checkroot prebuild
 
 prebuild:
-	dpkg-parsechangelog | sed -n '/^Version: \(.*\)$/ {s//\1/;p}' >VERSION
+	dpkg-parsechangelog | sed -n '/^Version: \(.*\)$$/ {s//\1/;p}' >VERSION
 
 	autoreconf -fi
 	cd fake && autoreconf -fi
