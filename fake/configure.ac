@@ -1,11 +1,11 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT
+AC_INIT([fakeroot],[FAKEROOT_VERSION],[schizo@debian.org],[fakeroot])
 AC_CONFIG_SRCDIR([libfakeroot.c])
 AC_CANONICAL_TARGET
-
-AM_INIT_AUTOMAKE(fakeroot, 0.9.6)
-AM_MAINTAINER_MODE
 AC_CONFIG_AUX_DIR(..)
+
+AM_INIT_AUTOMAKE
+AM_MAINTAINER_MODE
 
 dnl AM_CONFIG_HEADER(config.h)
 
