@@ -183,6 +183,23 @@ of a running daemon will automatically connect to that daemon, and
 have the same "fake" view of the file system's permissions/ownerships.
 (assuming the daemon and connecting program were started by the same
 user). 
+.B
+.IP LD_LIBRARY_PATH
+.B
+.IP LD_PRELOAD
+Fakeroot is implemented by wrapping system calls.  This is
+accomplished by setting LD_LIBRARY_PATH=/usr/lib/fakeroot and
+LD_PRELOAD=libfakeroot.so.0.  That library is loaded before the
+system's C library, and so most of the library functions are
+intercepted by it.  If you need to set either
+.B LD_LIBRARY_PATH
+or
+.B LD_PRELOAD
+from
+within a fakeroot environment, it should be set relative to the
+given paths, as in
+.B LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/foo/bar/
+
 .SH LIMITATIONS
 .B
 .IP "Library versions"

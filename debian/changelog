@@ -1,3 +1,10 @@
+fakeroot (1.2.5) unstable; urgency=low
+
+  * fakeroot.1: Include text by Justin Pryzby about LD_PRELOAD and
+    LD_LIBRARY_PATH environment variables.  closes: #294655.
+
+ -- Clint Adams <schizo@debian.org>  Thu, 10 Mar 2005 16:08:16 -0500
+
 fakeroot (1.2.4) unstable; urgency=low
 
   * Fix debian/rules typo that broke s390 build.
