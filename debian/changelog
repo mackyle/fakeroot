@@ -6,6 +6,7 @@ fakeroot (1.0.3) unstable; urgency=low
     (necessary on FreeBSD).
   * test/tartest: chown to daemon instead of sys, since it's more likely
     to exist.
+  * test/tartest.tar.gz.uue: update test tarball accordingly.
   * INSTALL: add some terse notes.
   * Add prebuild target to debian/rules for use with arch-buildpackage.
   * scripts/fakeroot.in: drop "-net" from version string.
