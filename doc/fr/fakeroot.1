@@ -13,8 +13,9 @@
 .sp
 ..
 .\"
-.TH fakeroot 1 "9 mai 2003" "Projet Debian" "Manuel de Debian"
+.TH fakeroot 1 "17 Juin 2004" "Projet Debian" "Manuel de Debian"
 .\" Page d'aide par J.H.M. Dassen <jdassen@wi.LeidenUniv.nl>
+.\" et Clint Adams <schizo@debian.org>
 .SH NOM
 fakeroot \- lance une commande dans un environnement simulant les privilèges du
 super-utilisateur pour la manipulation des fichiers.
@@ -29,6 +30,9 @@ super-utilisateur pour la manipulation des fichiers.
 .B [\-s
 .IB fichier-écrit ]
 .B [\-u|\-\-unknown\-is\-real ]
+.B [\-b|\-\-fd\-base ]
+.B [\-h|\-\-help ]
+.B [\-v|\-\-version ]
 .BI [\-\-]
 .BI [commande]
 .SH DESCRIPTION
@@ -105,6 +109,15 @@ de fichier pour \-i et \-s dans une seule commande
 \fB\-u\fR, \fB\-\-unknown\-is\-real\fR
 Utilise le véritable propriétaire des fichiers anciennement ignoré par fakeroot,
 plutôt que de considérer qu'ils appartiennent à root:root.
+.TP
+.BI \-b \ fd
+Definit la valeur de base du descripteur de fichier (En mode TCP uniquement).
+.TP
+.BI \-h
+Affiche l'aide.
+.TP
+.BI \-v
+Affiche la version.
 
 .SH EXEMPLES
 Voici un exemple d'utilisation de 
@@ -119,22 +132,22 @@ $ fakeroot /bin/bash
 #  whoami
 root
 # mknod hda3 b 3 1
-# ls -ld hda3
-brw-r--r--   1 root     root       3,   1 Jul  2 22:58 hda3
+# ls \-ld hda3
+brw\-r\-\-r\-\-   1 root     root       3,   1 Jul  2 22:58 hda3
 # chown joost:root hda3
-# ls -ld hda3
-brw-r--r--   1 joost    root       3,   1 Jul  2 22:58 hda3
-# ls -ld /
-drwxr-xr-x  20 root     root         1024 Jun 17 21:50 /
+# ls \-ld hda3
+brw\-r\-\-r\-\-   1 joost    root       3,   1 Jul  2 22:58 hda3
+# ls \-ld /
+drwxr\-xr\-x  20 root     root         1024 Jun 17 21:50 /
 # chown joost:users /
 # chmod a+w /
-# ls -ld /
+# ls \-ld /
 drwxrwxrwx  20 joost    users        1024 Jun 17 21:50 /
 # exit
-$ ls -ld /
-drwxr-xr-x  20 root     root         1024 Jun 17 21:50 //
-$ ls -ld hda3
--rw-r--r--   1 joost    users           0 Jul  2 22:58 hda3
+$ ls \-ld /
+drwxr\-xr\-x  20 root     root         1024 Jun 17 21:50 //
+$ ls \-ld hda3
+\-rw\-r\-\-r\-\-   1 joost    users           0 Jul  2 22:58 hda3
 .CE
 Seule l'opération que l'utilisateur 
 .B joost
@@ -237,7 +250,7 @@ testent le système (tel que configure du GNU) peuvent être troublés par cela
 que celui-ci risque lui-même de s'y perdre). Il est donc préférable de ne pas
 lancer «\ configure\ » dans un environnement fakeroot. Comme configure doit
 être lancé par la cible build de debian/rules, l'utilisation de
-«\ dpkg-buildpackage -rfakeroot\ » gère correctement ce problème.
+«\ dpkg-buildpackage \-rfakeroot\ » gère correctement ce problème.
 .SH BOGUES
 open() n'est pas simulé. Ce n'est pas si grave que cela, mais si un programme
 invoque open("file", O_WRONLY, 000), écrit dans ce fichier «\ file\ », le ferme,
@@ -254,12 +267,18 @@ change).
 est distribué sous la licence GNU General Public License.
 (GPL 2.0 ou supérieure).
 .SH AUTEUR
+.TP
 joost witteveen
 .RI <joostje@debian.org>
+.TP
+Clint Adams
+.RI < schizo@debian.org >
+.TP
+Timo Savola
 .SH PAGE DE MANUEL
 en majeure partie écrite par  J.H.M. Dassen 
 .RI <jdassen@wi.LeidenUniv.nl> 
-La plupart des ajouts et des modifications, par joost.
+La plupart des ajouts et des modifications, par Joost et Clint.
 .SH "VOIR AUSSI"
 .BR faked (1)
 .BR dpkg\-buildpackage (1),
