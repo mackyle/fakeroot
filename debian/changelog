@@ -5,7 +5,7 @@ fakeroot (1.0.4) unstable; urgency=medium
     magnitude.  Closes: #256433.
   * faked.c: Correct a typo in the usage information.
 
- ++ Daniel Schepler <schepler@debian.org>  Sun, 27 Jun 2004 15:47:54 -0700
+  + Daniel Schepler <schepler@debian.org>  Sun, 27 Jun 2004 15:47:54 -0700
  
   * test/tartest: order arguments to chown and chmod in a sane way. 
 
