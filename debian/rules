@@ -108,6 +108,8 @@ endif
 		 debian/tmp/usr/share/man/sv/man1/faked.1 \
 		 debian/tmp/usr/share/man/man1/faked.1 \
 		 debian/tmp/usr/share/man/man1/fakeroot.1 \
+		 debian/tmp/usr/share/man/man1/faked-tcp.1 \
+		 debian/tmp/usr/share/man/man1/fakeroot-tcp.1 \
 		 debian/tmp/usr/share/doc/fakeroot/changelog
 ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot.so.0.0.1

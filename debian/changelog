@@ -1,3 +1,9 @@
+fakeroot (1.0.5) unstable; urgency=low
+
+  * gzip faked-tcp and fakeroot-tcp manpages. 
+
+ -- Clint Adams <schizo@debian.org>  Mon, 12 Jul 2004 20:33:34 -0400
+
 fakeroot (1.0.4) unstable; urgency=medium
 
   * faked.c: Implement a hash table for looking up inode data.  This
