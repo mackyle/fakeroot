@@ -1,3 +1,9 @@
+fakeroot (1.0.6) unstable; urgency=low
+
+  * doc/fakeroot.1 Fix misspelling of 'where'.   closes: #259341.
+
+ -- Clint Adams <schizo@debian.org>  Thu, 15 Jul 2004 09:34:31 -0400
+
 fakeroot (1.0.5) unstable; urgency=low
 
   * gzip faked-tcp and fakeroot-tcp manpages. 
