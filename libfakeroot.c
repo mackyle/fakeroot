@@ -162,7 +162,7 @@ static int env_set_id(const char *key, int id) {
 }
 
 static void read_id(unsigned int *id, const char *key) {
-  if (*id < 0)
+  if (*id == (unsigned int)-1)
     *id = env_get_id(key);
 }
 
@@ -331,22 +331,22 @@ static int set_faked_egid(gid_t egid) {
 
 static int set_faked_reuid(uid_t ruid, uid_t euid) {
   read_uids();
-  if (ruid >= 0 || euid >= 0)
+  if (ruid != (uid_t)-1 || euid != (uid_t)-1)
     faked_saved_uid = faked_effective_uid;
-  if (ruid >= 0)
+  if (ruid != (uid_t)-1)
     faked_real_uid = ruid;
-  if (euid >= 0)
+  if (euid != (uid_t)-1)
     faked_effective_uid = euid;
   return write_uids();
 }
 
 static int set_faked_regid(gid_t rgid, gid_t egid) {
   read_gids();
-  if (rgid >= 0 || egid >= 0)
+  if (rgid != (gid_t)-1 || egid != (gid_t)-1)
     faked_saved_gid = faked_effective_gid;
-  if (rgid >= 0)
+  if (rgid != (gid_t)-1)
     faked_real_gid = rgid;
-  if (egid >= 0)
+  if (egid != (gid_t)-1)
     faked_effective_gid = egid;
   return write_gids();
 }
@@ -354,11 +354,11 @@ static int set_faked_regid(gid_t rgid, gid_t egid) {
 #ifdef HAVE_SETRESUID
 static int set_faked_resuid(uid_t ruid, uid_t euid, uid_t suid) {
   read_uids();
-  if (ruid >= 0)
+  if (ruid != (uid_t)-1)
     faked_real_uid = ruid;
-  if (euid >= 0)
+  if (euid != (uid_t)-1)
     faked_effective_uid = euid;
-  if (suid >= 0)
+  if (suid != (uid_t)-1)
     faked_saved_uid = suid;
   return write_uids();
 }
@@ -367,11 +367,11 @@ static int set_faked_resuid(uid_t ruid, uid_t euid, uid_t suid) {
 #ifdef HAVE_SETRESGID
 static int set_faked_resgid(gid_t rgid, gid_t egid, gid_t sgid) {
   read_gids();
-  if (rgid >= 0)
+  if (rgid != (gid_t)-1)
     faked_real_gid = rgid;
-  if (egid >= 0)
+  if (egid != (gid_t)-1)
     faked_effective_gid = egid;
-  if (sgid >= 0)
+  if (sgid != (gid_t)-1)
     faked_saved_gid = sgid;
   return write_gids();
 }
