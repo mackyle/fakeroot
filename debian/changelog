@@ -1,3 +1,32 @@
+fakeroot (1.2) unstable; urgency=low
+
+  * Apply patch from Dmitry V. Levin <ldv@altlinux.org>:
+    (Implement wrappers for getresuid, getresgid, setfsuid and
+     setfsgid functions.)
+   - communicate.h: New macros: FAKEROOTFUID_ENV, FAKEROOTFGID_ENV.
+   - configure.ac: Check for getresuid, getresgid, setfsuid and
+     setfsgid functions.
+   - libfakeroot.c: (faked_fs_uid, faked_fs_gid): New variables.
+     (set_faked_uid, set_faked_gid, set_faked_euid, set_faked_egid,
+     set_faked_reuid, set_faked_regid, set_faked_resuid,
+     set_faked_resgid): Set these variables.
+     (read_fs_uid, read_fs_gid, write_fs_uid, write_fs_gid): New
+     functions.
+     (read_uids, read_gids, write_uids, write_gids, set_faked_euid,
+     set_faked_egid): Use these functions.
+     (get_faked_suid, get_faked_sgid, get_faked_fsuid,
+     get_faked_fsgid, set_faked_fsuid, set_faked_fsgid): New functions.
+     [HAVE_GETRESUID] (getresuid): New function.
+     [HAVE_GETRESGID] (getresgid): Likewise.
+     [HAVE_SETFSUID] (set_faked_fsuid, setfsuid): New functions.
+     [HAVE_SETFSGID] (set_faked_fsgid, setfsgid): Likewise.
+   - wrapfunc.inp [HAVE_GETRESUID] (getresuid): New wrapper.
+     [HAVE_GETRESGID] (getresgid): Likewise.
+     [HAVE_SETFSUID] (setfsuid): Likewise.
+     [HAVE_SETFSGID] (setfsgid): Likewise.
+
+ -- Clint Adams <schizo@debian.org>  Sat, 27 Nov 2004 12:51:24 -0500
+
 fakeroot (1.1.5) unstable; urgency=low
 
   * faked.c: patch from Andreas Borchert to fix broken --key

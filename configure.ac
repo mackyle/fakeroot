@@ -343,7 +343,7 @@ esac
 AC_DEFINE_UNQUOTED([LIBCPATH], "$libcpath", [path to libc shared object])
 
 dnl Checks for library functions.
-AC_CHECK_FUNCS(strdup strstr setresuid setresgid)
+AC_CHECK_FUNCS(strdup strstr getresuid setresuid getresgid setresgid setfsuid setfsgid)
 
 dnl kludge
 AH_VERBATIM([WRAP_STAT],
