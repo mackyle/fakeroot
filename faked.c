@@ -371,6 +371,9 @@ int save_database(const uint32_t remote)
     return 0;
 
   for (i = data_begin(); i != data_end(); i = data_node_next(i)) {
+    if (i->remote != remote)
+      continue;
+
     fprintf(f,"dev=%llx,ino=%llu,mode=%llo,uid=%llu,gid=%llu,nlink=%llu,rdev=%llu\n",
             (uint64_t) i->buf.dev,(uint64_t) i->buf.ino,(uint64_t) i->buf.mode,
             (uint64_t) i->buf.uid,(uint64_t) i->buf.gid,(uint64_t) i->buf.nlink,
@@ -746,8 +749,8 @@ void cleanup(int g)
   msgctl (msg_get, IPC_RMID,NULL);
   msgctl (msg_snd, IPC_RMID,NULL);
   semctl (sem_id,0,IPC_RMID,sem_union);
-  save(0);
 #endif /* ! FAKEROOT_FAKENET */
+  save(0);
   if(g!=-1)
     exit(0);
 }
