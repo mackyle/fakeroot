@@ -1,3 +1,17 @@
+fakeroot (1.2.3) unstable; urgency=medium
+
+  Timo Savola:
+
+  * communicate.c, communicate.h, faked.c: Rearranged
+    FAKEROOT_FAKENET #ifdefs so that communication.c and faked.c
+    are manageable again.
+
+  Clint Adams:
+
+  * Remove debian/files in clean target.  closes: #291739.
+
+ -- Clint Adams <schizo@debian.org>  Sun, 23 Jan 2005 09:59:23 -0500
+
 fakeroot (1.2.2) unstable; urgency=low
 
   * Derive version from debian/changelog entry.

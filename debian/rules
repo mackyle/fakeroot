@@ -61,7 +61,7 @@ ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux s390-linux))
 	-cd obj64-tcp && $(MAKE) distclean
 endif
 	rm -rf .deps
-	rm -f debian/substvars
+	rm -f debian/substvars debian/files
 	rm -rf debian/tmp obj obj64 objfake autom4te.cache
 	find . -type f -a \( -name \#\*\# -o -name .\*\~ -o -name \*\~ -o -name DEADJOE -o -name \*.orig -o -name \*.rej -o -name \*.bak -o -name .\*.orig -o -name .\*.rej -o -name .SUMS -o -name TAGS -o -name core -o \( -path \*/.deps/\* -a -name \*.P \) \) -exec rm -f {} \;
 
