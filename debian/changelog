@@ -1,11 +1,23 @@
-fakeroot (1.0.8) unstable; urgency=low
+fakeroot (1.1) unstable; urgency=low
 
   Ruben Porras:
 
   * doc/es/faked.1, doc/es/fakeroot.1: Updated Spanish manpage
-    translations.
+    translations.  closes: #265753.
 
- -- Clint Adams <schizo@debian.org>  Thu,  2 Sep 2004 13:46:57 -0400
+  Timo Savola:
+
+  * communicate.h, libfakeroot.c: Fake implementations for the setuid
+    family of functions (fakeroot used to only provide dummy
+    implementations). The fake IDs are inherited by child processes via
+    environment variables. Attempts to behave according to the POSIX
+    standard (= Linux man pages).
+
+  Clint Adams:
+
+  * Update version number to 1.1.  closes: #267136.
+
+ -- Clint Adams <schizo@debian.org>  Sat,  2 Oct 2004 11:55:01 -0400
 
 fakeroot (1.0.7) unstable; urgency=medium
 
