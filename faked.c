@@ -175,16 +175,29 @@ typedef struct data_node_s {
 } data_node_t;
 
 #define data_node_get(n)   ((struct fakestat *) &(n)->buf)
-#define data_node_next(n)  ((n)->next)
 
-static data_node_t *data_head = NULL;
+#define HASH_TABLE_SIZE 10009
+#define HASH_DEV_MULTIPLIER 8328 /* = 2^64 % HASH_TABLE_SIZE */
+
+static int data_hash_val(const struct fakestat *key) {
+  return (key->dev * HASH_DEV_MULTIPLIER + key->ino) % HASH_TABLE_SIZE;
+}
+
+static data_node_t *data_hash_table[HASH_TABLE_SIZE];
+
+static void init_hash_table() {
+  int table_pos;
+
+  for (table_pos = 0; table_pos < HASH_TABLE_SIZE; table_pos++)
+    data_hash_table[table_pos] = NULL;
+}
 
 static data_node_t *data_find(const struct fakestat *key,
 			      const uint32_t remote)
 {
   data_node_t *n;
 
-  for (n = data_head; n; n = n->next) {
+  for (n = data_hash_table[data_hash_val(key)]; n; n = n->next) {
     if (fakestat_equal(&n->buf, key) && n->remote == remote)
       break;
   }
@@ -197,7 +210,7 @@ static void data_insert(const struct fakestat *buf,
 {
   data_node_t *n, *last = NULL;
   
-  for (n = data_head; n; last = n, n = n->next)
+  for (n = data_hash_table[data_hash_val(buf)]; n; last = n, n = n->next)
     if (fakestat_equal(&n->buf, buf) && n->remote == remote)
       break;
 
@@ -207,7 +220,7 @@ static void data_insert(const struct fakestat *buf,
     if (last)
       last->next = n;
     else
-      data_head = n;
+      data_hash_table[data_hash_val(buf)] = n;
   }
 
   memcpy(&n->buf, buf, sizeof (struct fakestat));
@@ -218,14 +231,15 @@ static data_node_t *data_erase(data_node_t *pos)
 {
   data_node_t *n, *prev = NULL, *next;
 
-  for (n = data_head; n; prev = n, n = n->next)
+  for (n = data_hash_table[data_hash_val(&pos->buf)]; n;
+       prev = n, n = n->next)
     if (n == pos)
       break;
 
   next = n->next;
 
-  if (n == data_head)
-    data_head = next;
+  if (n == data_hash_table[data_hash_val(&pos->buf)])
+    data_hash_table[data_hash_val(&pos->buf)] = next;
   else
     prev->next = next;
 
@@ -234,19 +248,39 @@ static data_node_t *data_erase(data_node_t *pos)
   return next;
 }
 
+static data_node_t *data_node_next(data_node_t *n) {
+  int table_pos;
+
+  if (n != NULL && n->next != NULL)
+    return n->next;
+
+  if (n == NULL)
+    table_pos = 0;
+  else
+    table_pos = data_hash_val(&n->buf) + 1;
+  while (table_pos < HASH_TABLE_SIZE && data_hash_table[table_pos] == NULL)
+    table_pos++;
+  if (table_pos < HASH_TABLE_SIZE)
+    return data_hash_table[table_pos];
+  else
+    return NULL;
+}
+
 static unsigned int data_size(void)
 {
   unsigned int size = 0;
+  int table_pos;
   data_node_t *n;
 
-  for (n = data_head; n; n = n->next)
-    size++;
+  for (table_pos = 0; table_pos < HASH_TABLE_SIZE; table_pos++)
+    for (n = data_hash_table[table_pos]; n; n = n->next)
+      size++;
 
   return size;
 
 }
 
-#define data_begin()  (data_head)
+#define data_begin()  (data_node_next(NULL))
 #define data_end()    (NULL)
 
 
@@ -825,7 +859,7 @@ int main(int argc, char **argv){
       fprintf(stderr,"fakeroot version " VERSION "\n");
       exit(0);
     } else {
-      fprintf(stderr,"faked, daemon for fake root enfironment\n");
+      fprintf(stderr,"faked, daemon for fake root environment\n");
       fprintf(stderr,"Best used from the shell script `fakeroot'\n");
 #ifndef FAKEROOT_FAKENET
       fprintf(stderr,"options for fakeroot: --key, --cleanup, --foreground, --debug, --save-file, --load, --unknown-is-real\n");
@@ -835,6 +869,7 @@ int main(int argc, char **argv){
       exit(1);
     }
   }
+  init_hash_table();
   if(load)
     if(!load_database(0)) {
       fprintf(stderr,"Database load failed\n");
