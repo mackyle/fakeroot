@@ -133,8 +133,14 @@ binary-biarch:
 	$(checkdir)
 	mkdir obj64 obj64-tcp
 
+ifeq (sparc-linux,$(DEB_HOST_GNU_TYPE))
 	cd obj64 && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=sparc64-linux
 	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=sparc64-linux --with-ipc=tcp --program-suffix=-tcp
+endif
+ifeq (s390-linux,$(DEB_HOST_GNU_TYPE))
+	cd obj64 && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=s390x-linux
+	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=s390x-linux --with-ipc=tcp --program-suffix=-tcp
+endif
 
 	cd obj64-tcp && $(MAKE) libfakeroot.la
 	$(INSTALL_DIR) debian/tmp/usr/lib64/libfakeroot
