@@ -1,6 +1,7 @@
-fakeroot (1.2.9) unstable; urgency=low
+fakeroot (1.2.9) unstable; urgency=medium
 
-  * Fix broken symlinks in /usr/lib64/libfakeroot. 
+  * Fix broken symlinks in /usr/lib64/libfakeroot.
+    closes: #301149.
 
  -- Clint Adams <schizo@debian.org>  Tue,  5 Apr 2005 20:29:33 -0400
 
