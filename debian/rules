@@ -159,7 +159,11 @@ source diff:
 	@echo >&2 'source and diff are obsolete - use dpkg-source -b'; false
 
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary checkroot
+.PHONY: build clean binary-indep binary-arch binary checkroot prebuild
+
+prebuild:
+	autoreconf -fi
+	cd fake && autoreconf -fi
 
 define checkdir
 	test -f debian/rules
