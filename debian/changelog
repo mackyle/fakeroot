@@ -4,6 +4,8 @@ fakeroot (1.0.3) unstable; urgency=low
     argument to setgroups() is int.
   * configure.ac, communicate.c: include sys/socket.h if available
     (necessary on FreeBSD).
+  * test/tartest: chown to daemon instead of sys, since it's more likely
+    to exist.
 
  -- Clint Adams <schizo@debian.org>  Fri, 18 Jun 2004 15:42:33 -0400
 
