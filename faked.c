@@ -756,7 +756,8 @@ void get_msg(const int listen_sd)
     if(r!=-1)
 #else /* FAKEROOT_FAKENET */
   while (1) {
-    unsigned int maxfd, count, i;
+    int count, maxfd;
+    unsigned int i;
 
     FD_ZERO(&readfds);
 
