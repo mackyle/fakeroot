@@ -1,7 +1,6 @@
 #!/usr/bin/make -f
 
-CFLAGS = -W -Wall -std=c99 -pedantic -g
-CXXFLAGS = -W -Wall -g
+CFLAGS = -W -Wall -std=c99 -g
 INSTALL = install
 INSTALL_FILE    = $(INSTALL) -p    -o root -g root  -m  644
 INSTALL_PROGRAM = $(INSTALL) -p    -o root -g root  -m  755
@@ -10,10 +9,8 @@ INSTALL_DIR     = $(INSTALL) -p -d -o root -g root  -m  755
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 CFLAGS += -O0
-CXXFLAGS += -O0
 else
 CFLAGS += -O2
-CXXFLAGS += -O2
 endif
 
 ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
@@ -26,11 +23,11 @@ build-stamp:
 	$(checkdir)
 
 	mkdir obj objfake obj-tcp objfake-tcp
-	cd obj && CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/usr/lib/libfakeroot
-	cd objfake && CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" ../fake/configure --prefix=/usr --mandir=/usr/share/man
+	cd obj && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/usr/lib/libfakeroot
+	cd objfake && CFLAGS="$(CFLAGS)" ../fake/configure --prefix=/usr --mandir=/usr/share/man
 
-	cd obj-tcp && CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/usr/lib/libfakeroot --with-ipc=tcp --program-suffix=-tcp
-	cd objfake-tcp && CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" ../fake/configure --prefix=/usr --mandir=/usr/share/man --program-suffix=-tcp
+	cd obj-tcp && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/usr/lib/libfakeroot --with-ipc=tcp --program-suffix=-tcp
+	cd objfake-tcp && CFLAGS="$(CFLAGS)" ../fake/configure --prefix=/usr --mandir=/usr/share/man --program-suffix=-tcp
 
 	cd obj && $(MAKE)
 	cd objfake && $(MAKE)
