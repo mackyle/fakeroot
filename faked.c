@@ -159,6 +159,7 @@ char *save_file = NULL;
 static int comm_sd = -1;
 #endif /* FAKEROOT_FAKENET */
 
+#ifdef FAKEROOT_FAKENET
 static void fail(const char *msg)
 {
   if (errno > 0)
@@ -168,6 +169,7 @@ static void fail(const char *msg)
 
   exit(1);
 }
+#endif
 
 struct data_node_s;
 typedef struct data_node_s {
@@ -488,7 +490,6 @@ int save_database(const uint32_t remote)
 
 int load_database(const uint32_t remote)
 {
-  data_node_t *i;
   int r;
 
   uint64_t stdev, stino, stmode, stuid, stgid, stnlink, strdev;
