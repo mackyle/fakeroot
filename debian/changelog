@@ -8,6 +8,8 @@ fakeroot (1.0.6) unstable; urgency=low
   * doc/fakeroot.1: remove reference to potato.  closes: #263938.
   * doc/fr/fakeroot.1: updated French manpage translation from Sylvain
     Cherrier.  closes: #263947.
+  * scripts/Makefile.am, scripts/fakeroot.in: use --libdir instead of
+    hardcoding ${PREFIX]/lib/libfakeroot.  closes: #260073.
 
  -- Clint Adams <schizo@debian.org>  Thu, 15 Jul 2004 09:34:31 -0400
 

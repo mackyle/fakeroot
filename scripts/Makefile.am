@@ -5,6 +5,7 @@ CLEANFILES=fakeroot
 
 do_subst = sed -e 's,[@]prefix[@],$(prefix),g' \
 	   -e 's,[@]bindir[@],$(bindir),g' \
+	   -e 's,[@]libdir[@],$(libdir),g' \
 	   -e 's,[@]fakeroot_transformed[@],'`echo fakeroot | sed -e '$(transform)'`',g' \
 	   -e 's,[@]faked_transformed[@],'`echo faked | sed -e '$(transform)'`',g' \
 	   -e 's,[@]VERSION[@],$(VERSION),g' 
