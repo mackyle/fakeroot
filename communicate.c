@@ -10,7 +10,6 @@
     
  */
 
-# define _XOPEN_SOURCE 600
 #include "communicate.h"
 #include <dlfcn.h>
 #include <stdio.h>
