@@ -1,5 +1,11 @@
 #!/usr/bin/make -f
 
+DEB_BUILD_GNU_TYPE = $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+DEB_HOST_GNU_TYPE = $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+ifneq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
+CONFARGS = --host=$(DEB_HOST_GNU_TYPE)
+endif
+
 CFLAGS = -W -Wall -g
 INSTALL = install
 INSTALL_FILE    = $(INSTALL) -p    -o root -g root  -m  644
@@ -23,19 +29,21 @@ build-stamp:
 	$(checkdir)
 
 	mkdir obj objfake obj-tcp objfake-tcp
-	cd obj && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/usr/lib/libfakeroot
-	cd objfake && CFLAGS="$(CFLAGS)" ../fake/configure --prefix=/usr --mandir=/usr/share/man
+	cd obj && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/usr/lib/libfakeroot $(CONFARGS)
+	cd objfake && CFLAGS="$(CFLAGS)" ../fake/configure --prefix=/usr --mandir=/usr/share/man $(CONFARGS)
 
-	cd obj-tcp && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/usr/lib/libfakeroot --with-ipc=tcp --program-suffix=-tcp
-	cd objfake-tcp && CFLAGS="$(CFLAGS)" ../fake/configure --prefix=/usr --mandir=/usr/share/man --program-suffix=-tcp
+	cd obj-tcp && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/usr/lib/libfakeroot --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
+	cd objfake-tcp && CFLAGS="$(CFLAGS)" ../fake/configure --prefix=/usr --mandir=/usr/share/man --program-suffix=-tcp $(CONFARGS)
 
 	cd obj && $(MAKE)
 	cd objfake && $(MAKE)
 	cd obj-tcp && $(MAKE)
 	cd objfake-tcp && $(MAKE)
 
+ifeq ($(DEB_BUILD_GNU_TYPE)),$(DEB_HOST_GNU_TYPE))
 	cd obj && $(MAKE) check
 	cd obj-tcp && $(MAKE) check
+endif
 
 	touch build-stamp
 
@@ -133,12 +141,12 @@ binary-biarch:
 	mkdir obj64 obj64-tcp
 
 ifeq (sparc-linux,$(DEB_HOST_GNU_TYPE))
-	cd obj64 && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=sparc64-linux
-	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=sparc64-linux --with-ipc=tcp --program-suffix=-tcp
+	cd obj64 && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=sparc64-linux $(CONFARGS)
+	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=sparc64-linux --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 endif
 ifeq (s390-linux,$(DEB_HOST_GNU_TYPE))
-	cd obj64 && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=s390x-linux
-	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=s390x-linux --with-ipc=tcp --program-suffix=-tcp
+	cd obj64 && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=s390x-linux $(CONFARGS)
+	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=s390x-linux --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 endif
 
 	cd obj64-tcp && $(MAKE) libfakeroot.la

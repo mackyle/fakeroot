@@ -1,3 +1,10 @@
+fakeroot (1.2.1) unstable; urgency=low
+
+  * debian/rules: Do configure --host on cross build.
+    Don't invoke 'make check' on cross build.
+        
+ -- NIIBE Yutaka <gniibe@fsij.org>  Wed,  8 Dec 2004 15:55:52 +0900
+
 fakeroot (1.2) unstable; urgency=low
 
   * Apply patch from Dmitry V. Levin <ldv@altlinux.org>:
