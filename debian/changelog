@@ -1,3 +1,17 @@
+fakeroot (1.0.7) unstable; urgency=medium
+
+  Timo Savola:
+
+  * faked.c: Database saving (-s option) enabled for the TCP
+    version.  Only non-remote entries are saved.
+
+  Robert Millan:
+
+  * configure.ac: Detect correct libc path on GNU/k*BSD.
+    closes: #265162.
+
+ -- Clint Adams <schizo@debian.org>  Wed, 11 Aug 2004 20:43:15 -0400
+
 fakeroot (1.0.6) unstable; urgency=low
 
   * doc/fakeroot.1: Fix misspelling of 'where'.   closes: #259341.

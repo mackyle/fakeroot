@@ -297,8 +297,8 @@ case $target_cpu:$target_os in
 	(*:linux*)
 	        libcpath="/lib/libc.so.6"
 		;;
-	(*:kfreebsd*gnu)
-	        libcpath="/lib/libc.so.1"
+	(*:k*bsd*-gnu)
+	        libcpath="/lib/libc.so.0.1"
 		;;
 	(*:freebsd*)
 		libcpath="/usr/lib/libc.so.4"
