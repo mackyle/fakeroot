@@ -127,67 +127,256 @@ void load_library_symbols(void){
 }
 
 
-/* a few functions that probe environment variables once, and remember
-   the results
-*/
+/*
+ * Fake implementations for the setuid family of functions.
+ * The fake IDs are inherited by child processes via environment variables.
+ *
+ * Issues:
+ *   o Privileges are not checked, which results in incorrect behaviour.
+ *     Example: process changes its (real, effective and saved) uid to 1000
+ *     and then tries to regain root privileges.  This should normally result
+ *     in an EPERM, but our implementation doesn't care...
+ *   o If one of the setenv calls fails, the state may get corrupted.
+ *   o Not thread-safe.
+ */
 
-static uid_t faked_uid(){
-  static int inited=0;
-  static int uid;
-  const char *s; 
 
-  if(!inited){
-    if((s=env_var_set(FAKEROOTUID_ENV)))
-      uid=atoi(s);
-    else
-      uid=0;
-    inited=1;
-  }
-  return uid;    
-}
-static uid_t faked_gid(){
-  static int inited=0;
-  static int gid;
-  const char *s;
+/* Generic set/get ID functions */
 
-  if(!inited){
-    if((s=env_var_set(FAKEROOTGID_ENV)))
-      gid=atoi(s);
-    else
-      gid=0;
-    inited=1;
-  }
-  return gid;    
+static int env_get_id(const char *key) {
+  char *str = getenv(key);
+  if (str)
+    return atoi(str);
+  return 0;
 }
 
-static uid_t faked_euid(){
-  static int inited=0;
-  static int uid;
-  const char *s; 
-
-  if(!inited){
-    if((s=env_var_set(FAKEROOTEUID_ENV)))
-      uid=atoi(s);
-    else
-      uid=0;
-    inited=1;
+static int env_set_id(const char *key, int id) {
+  if (id == 0) {
+    unsetenv(key);
+    return 0;
+  } else {
+    char str[12];
+    snprintf(str, sizeof (str), "%d", id);
+    return setenv(key, str, 1);
   }
-  return uid;    
 }
-static uid_t faked_egid(){
-  static int inited=0;
-  static int gid;
-  const char *s;
 
-  if(!inited){
-    if((s=env_var_set(FAKEROOTEGID_ENV)))
-      gid=atoi(s);
-    else
-      gid=0;
-    inited=1;
-  }
-  return gid;    
+static void read_id(int *id, const char *key) {
+  if (*id < 0)
+    *id = env_get_id(key);
 }
+
+static int write_id(const char *key, int id) {
+  if (env_get_id(key) != id)
+    return env_set_id(key, id);
+  return 0;
+}
+
+/* Fake ID storage */
+
+static uid_t faked_real_uid = -1;
+static gid_t faked_real_gid = -1;
+static uid_t faked_effective_uid = -1;
+static gid_t faked_effective_gid = -1;
+static uid_t faked_saved_uid = -1;
+static gid_t faked_saved_gid = -1;
+
+/* Read user ID */
+
+static void read_real_uid() {
+  read_id(&faked_real_uid, FAKEROOTUID_ENV);
+}
+
+static void read_effective_uid() {
+  read_id(&faked_effective_uid, FAKEROOTEUID_ENV);
+}
+
+static void read_saved_uid() {
+  read_id(&faked_saved_uid, FAKEROOTSUID_ENV);
+}
+
+static void read_uids() {
+  read_real_uid();
+  read_effective_uid();
+  read_saved_uid();
+}
+
+/* Read group ID */
+
+static void read_real_gid() {
+  read_id(&faked_real_gid, FAKEROOTGID_ENV);
+}
+
+static void read_effective_gid() {
+  read_id(&faked_effective_gid, FAKEROOTEGID_ENV);
+}
+
+static void read_saved_gid() {
+  read_id(&faked_saved_gid, FAKEROOTSGID_ENV);
+}
+
+static void read_gids() {
+  read_real_gid();
+  read_effective_gid();
+  read_saved_gid();
+}
+
+/* Write user ID */
+
+static int write_real_uid() {
+  return write_id(FAKEROOTUID_ENV, faked_real_uid);
+}
+
+static int write_effective_uid() {
+  return write_id(FAKEROOTEUID_ENV, faked_effective_uid);
+}
+
+static int write_saved_uid() {
+  return write_id(FAKEROOTSUID_ENV, faked_saved_uid);
+}
+
+static int write_uids() {
+  if (write_real_uid() < 0)
+    return -1;
+  if (write_effective_uid() < 0)
+    return -1;
+  if (write_saved_uid() < 0)
+    return -1;
+  return 0;
+}
+
+/* Write group ID */
+
+static int write_real_gid() {
+  return write_id(FAKEROOTGID_ENV, faked_real_gid);
+}
+
+static int write_effective_gid() {
+  return write_id(FAKEROOTEGID_ENV, faked_effective_gid);
+}
+
+static int write_saved_gid() {
+  return write_id(FAKEROOTSGID_ENV, faked_saved_gid);
+}
+
+static int write_gids() {
+  if (write_real_gid() < 0)
+    return -1;
+  if (write_effective_gid() < 0)
+    return -1;
+  if (write_saved_gid() < 0)
+    return -1;
+  return 0;
+}
+
+/* Faked get functions */
+
+static uid_t get_faked_uid() {
+  read_real_uid();
+  return faked_real_uid;
+}
+
+static gid_t get_faked_gid() {
+  read_real_gid();
+  return faked_real_gid;
+}
+
+static uid_t get_faked_euid() {
+  read_effective_uid();
+  return faked_effective_uid;
+}
+
+static gid_t get_faked_egid() {
+  read_effective_gid();
+  return faked_effective_gid;
+}
+
+/* Faked set functions */
+
+static int set_faked_uid(uid_t uid) {
+  read_uids();
+  if (faked_effective_uid == 0) {
+    faked_real_uid = uid;
+    faked_effective_uid = uid;
+    faked_saved_uid = uid;
+  } else {
+    faked_effective_uid = uid;
+  }
+  return write_uids();
+}
+
+static int set_faked_gid(gid_t gid) {
+  read_gids();
+  if (faked_effective_gid == 0) {
+    faked_real_gid = gid;
+    faked_effective_gid = gid;
+    faked_saved_gid = gid;
+  } else {
+    faked_effective_gid = gid;
+  }
+  return write_gids();
+}
+
+static int set_faked_euid(uid_t euid) {
+  read_effective_uid();
+  faked_effective_uid = euid;
+  return write_effective_uid();
+}
+
+static int set_faked_egid(gid_t egid) {
+  read_effective_gid();
+  faked_effective_gid = egid;
+  return write_effective_gid();
+}
+
+static int set_faked_reuid(uid_t ruid, uid_t euid) {
+  read_uids();
+  if (ruid >= 0 || euid >= 0)
+    faked_saved_uid = faked_effective_uid;
+  if (ruid >= 0)
+    faked_real_uid = ruid;
+  if (euid >= 0)
+    faked_effective_uid = euid;
+  return write_uids();
+}
+
+static int set_faked_regid(gid_t rgid, gid_t egid) {
+  read_gids();
+  if (rgid >= 0 || egid >= 0)
+    faked_saved_gid = faked_effective_gid;
+  if (rgid >= 0)
+    faked_real_gid = rgid;
+  if (egid >= 0)
+    faked_effective_gid = egid;
+  return write_gids();
+}
+
+#ifdef HAVE_SETRESUID
+static int set_faked_resuid(uid_t ruid, uid_t euid, uid_t suid) {
+  read_uids();
+  if (ruid >= 0)
+    faked_real_uid = ruid;
+  if (euid >= 0)
+    faked_effective_uid = euid;
+  if (suid >= 0)
+    faked_saved_uid = suid;
+  return write_uids();
+}
+#endif
+
+#ifdef HAVE_SETRESGID
+static int set_faked_resgid(gid_t rgid, gid_t egid, gid_t sgid) {
+  read_gids();
+  if (rgid >= 0)
+    faked_real_gid = rgid;
+  if (egid >= 0)
+    faked_effective_gid = egid;
+  if (sgid >= 0)
+    faked_saved_gid = sgid;
+  return write_gids();
+}
+#endif
+
 
 static int dont_try_chown(){
   static int inited=0;
@@ -648,79 +837,68 @@ pid_t vfork(void)
 uid_t getuid(void){
   if (fakeroot_disabled)
     return next_getuid();
-  else
-    return faked_uid();
+  return get_faked_uid();
 }
 
 uid_t geteuid(void){
   if (fakeroot_disabled)
     return next_geteuid();
-  else
-    return faked_euid();
+  return get_faked_euid();
 }
 
 uid_t getgid(void){
   if (fakeroot_disabled)
     return next_getgid();
-  else
-    return faked_gid();
+  return get_faked_gid();
 }
 
 uid_t getegid(void){
   if (fakeroot_disabled)
     return next_getegid();
-  else
-    return faked_egid();
+  return get_faked_egid();
 }
 
 int setuid(uid_t id){
   if (fakeroot_disabled)
     return next_setuid(id);
-  else
-    return 0;
+  return set_faked_uid(id);
 }
 
 int setgid(uid_t id){
   if (fakeroot_disabled)
     return next_setgid(id);
-  else
-    return 0;
+  return set_faked_gid(id);
 }
 
 int seteuid(uid_t id){
   if (fakeroot_disabled)
     return next_seteuid(id);
-  else
-    return 0;
+  return set_faked_euid(id);
 }
 
 int setegid(uid_t id){
   if (fakeroot_disabled)
     return next_setegid(id);
-  else
-    return 0;
+  return set_faked_egid(id);
 }
 
 int setreuid(SETREUID_ARG ruid, SETREUID_ARG euid){
   if (fakeroot_disabled)
     return next_setreuid(ruid, euid);
-  else
-    return 0;
+  return set_faked_reuid(ruid, euid);
 }
 
 int setregid(SETREGID_ARG rgid, SETREGID_ARG egid){
   if (fakeroot_disabled)
     return next_setregid(rgid, egid);
-  else
-    return 0;
+  return set_faked_regid(rgid, egid);
 }
 
 #ifdef HAVE_SETRESUID
 int setresuid(uid_t ruid, uid_t euid, uid_t suid){
   if (fakeroot_disabled)
     return next_setresuid(ruid, euid, suid);
-  else
-    return 0;
+  return set_faked_resuid(ruid, euid, suid);
 }
 #endif /* HAVE_SETRESUID */
 
@@ -728,8 +906,7 @@ int setresuid(uid_t ruid, uid_t euid, uid_t suid){
 int setresgid(gid_t rgid, gid_t egid, gid_t sgid){
   if (fakeroot_disabled)
     return next_setresgid(rgid, egid, sgid);
-  else
-    return 0;
+  return set_faked_resgid(rgid, egid, sgid);
 }
 #endif /* HAVE_SETRESGID */
 
