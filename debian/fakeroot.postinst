@@ -1,0 +1,32 @@
+#!/bin/sh -e
+
+case "$1" in
+    configure)
+	# continue below
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+	exit 0
+    ;;
+
+    *)
+	echo "postinst called with unknown argument \`$1'" >&2
+	exit 0
+    ;;
+esac
+
+update-alternatives --install /usr/bin/fakeroot fakeroot-sysv \
+			/usr/bin/fakeroot-sysv 50 \
+		--slave /usr/share/man/man1/fakeroot.1.gz \
+		fakeroot-sysv.1.gz /usr/share/man/man1/fakeroot-sysv.1.gz \
+		--slave /usr/share/man/man1/faked.1.gz \
+		faked-sysv.1.gz /usr/share/man/man1/faked-sysv.1.gz
+
+update-alternatives --install /usr/bin/fakeroot fakeroot-tcp \
+			/usr/bin/fakeroot-tcp 30 \
+		--slave /usr/share/man/man1/fakeroot.1.gz \
+		fakeroot-tcp.1.gz /usr/share/man/man1/fakeroot-tcp.1.gz \
+		--slave /usr/share/man/man1/faked.1.gz \
+		faked-tcp.1.gz /usr/share/man/man1/faked-tcp.1.gz
+
+exit 0

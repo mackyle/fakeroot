@@ -1,3 +1,9 @@
+fakeroot (1.2.6) unstable; urgency=low
+
+  * Manage /usr/bin/fakeroot via alternatives.
+
+ -- Clint Adams <schizo@debian.org>  Tue, 15 Mar 2005 19:27:35 -0500
+
 fakeroot (1.2.5) unstable; urgency=low
 
   * fakeroot.1: Include text by Justin Pryzby about LD_PRELOAD and
