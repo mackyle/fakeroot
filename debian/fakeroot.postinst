@@ -15,14 +15,14 @@ case "$1" in
     ;;
 esac
 
-update-alternatives --install /usr/bin/fakeroot fakeroot-sysv \
+update-alternatives --install /usr/bin/fakeroot fakeroot \
 			/usr/bin/fakeroot-sysv 50 \
 		--slave /usr/share/man/man1/fakeroot.1.gz \
 		fakeroot-sysv.1.gz /usr/share/man/man1/fakeroot-sysv.1.gz \
 		--slave /usr/share/man/man1/faked.1.gz \
 		faked-sysv.1.gz /usr/share/man/man1/faked-sysv.1.gz
 
-update-alternatives --install /usr/bin/fakeroot fakeroot-tcp \
+update-alternatives --install /usr/bin/fakeroot fakeroot \
 			/usr/bin/fakeroot-tcp 30 \
 		--slave /usr/share/man/man1/fakeroot.1.gz \
 		fakeroot-tcp.1.gz /usr/share/man/man1/fakeroot-tcp.1.gz \
