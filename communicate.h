@@ -73,6 +73,9 @@
 #ifdef FAKEROOT_FAKENET
 #define FD_BASE_ENV               "FAKEROOT_FD_BASE"
 #endif /* FAKEROOT_FAKENET */
+#ifdef FAKEROOT_DB_PATH
+#define DB_SEARCH_PATHS_ENV       "FAKEROOT_DB_SEARCH_PATHS"
+#endif /* FAKEROOT_DB_PATH */
 
 #ifdef __GNUC__
 #  define UNUSED __attribute__((unused))

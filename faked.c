@@ -29,7 +29,7 @@
 
     user program
        Any shell or other programme, run with 
-       LD_PRELOAD=libtricks.so.0.0, and FAKEROOTKEY=ipc-key,
+       LD_PRELOAD=libtricks.so.0.0, and FAKEROOT_DBKEY=ipc-key,
        thus the executed commands will communicate with
        faked. libtricks will wrap all file ownership etc modification
        calls, and send the info to faked. Also the stat() function
@@ -73,9 +73,8 @@
 #ifndef FAKEROOT_FAKENET
 # include <sys/ipc.h>
 # include <sys/msg.h>
-#else /* FAKEROOT_FAKENET */
-# include <sys/stat.h>
 #endif /* FAKEROOT_FAKENET */
+#include <sys/stat.h>
 #include <sys/wait.h>
 #ifndef FAKEROOT_FAKENET
 # include <sys/sem.h>
@@ -103,6 +102,9 @@
 #endif
 #ifdef HAVE_SYS_SYSMACROS_H
 # include <sys/sysmacros.h>
+#endif
+#ifdef FAKEROOT_DB_PATH
+# include <dirent.h>
 #endif
 
 #ifndef FAKEROOT_FAKENET
@@ -358,13 +360,107 @@ static void faked_send_fakem(const struct fake_msg *buf)
 
 #endif /* FAKEROOT_FAKENET */
 
+#ifdef FAKEROOT_DB_PATH
+# define DB_PATH_LEN    4095
+# define DB_PATH_SCAN "%4095s"
+
+/*
+ * IN:  'path' contains the dir to scan recursively
+ * OUT: 'path' contains the matching file if 1 is returned
+ */
+static int scan_dir(const fake_dev_t dev, const fake_ino_t ino,
+                    char *const path)
+{
+  const size_t pathlen = strlen(path) + strlen("/");
+  if (pathlen >= DB_PATH_LEN)
+    return 0;
+  strcat(path, "/");
+
+  DIR *const dir = opendir(path);
+  if (!dir)
+    return 0;
+
+  struct dirent *ent;
+  while ((ent = readdir(dir))) {
+    if (strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0)
+      continue;
+
+    if (ent->d_ino == ino) {
+      struct stat buf;
+      strncpy(path + pathlen, ent->d_name, DB_PATH_LEN - pathlen);
+      if (lstat(path, &buf) == 0 && buf.st_dev == dev)
+        break;
+    } else if (ent->d_type == DT_DIR) {
+      strncpy(path + pathlen, ent->d_name, DB_PATH_LEN - pathlen);
+      if (scan_dir(dev, ino, path))
+        break;
+    }
+  }
+
+  closedir(dir);
+  return ent != 0;
+}
+
+/*
+ * Finds a path for inode/device pair--there can be several if bind mounts
+ * are used.  This should not be a problem if the bind mount configuration
+ * is the same when loading the database.
+ *
+ * IN:  'roots' contains the dirs to scan recursively (separated by colons)
+ * OUT: 'path' contains the matching file if 1 is returned
+ */
+static int find_path(const fake_dev_t dev, const fake_ino_t ino,
+                     const char *const roots, char *const path)
+{
+  unsigned int end = 0;
+
+  do {
+    unsigned int len, start = end;
+
+    while (roots[end] != '\0' && roots[end] != ':')
+      end++;
+
+    len = end - start;
+    if (len == 0)
+      continue;
+
+    if (roots[end - 1] == '/')
+      len--;
+
+    if (len > DB_PATH_LEN)
+      len = DB_PATH_LEN;
+
+    strncpy(path, roots + start, len);
+    path[len] = '\0';
+
+    if (scan_dir(dev, ino, path))
+      return 1;
+  } while (roots[end++] != '\0');
+
+  return 0;
+}
+
+#endif
+
 int save_database(const uint32_t remote)
 {
+#ifdef FAKEROOT_DB_PATH
+  char path[DB_PATH_LEN + 1];
+  const char *roots;
+#endif
   data_node_t *i;
   FILE *f;
 
   if(!save_file)
     return 1;
+
+#ifdef FAKEROOT_DB_PATH
+  path[DB_PATH_LEN] = '\0';
+
+  roots = getenv(DB_SEARCH_PATHS_ENV);
+  if (!roots)
+    roots = "/";
+#endif
 
   f=fopen(save_file, "w");
   if(!f)
@@ -374,10 +470,17 @@ int save_database(const uint32_t remote)
     if (i->remote != remote)
       continue;
 
+#ifdef FAKEROOT_DB_PATH
+    if (find_path(i->buf.dev, i->buf.ino, roots, path))
+      fprintf(f,"mode=%llo,uid=%llu,gid=%llu,nlink=%llu,rdev=%llu %s\n",
+              (uint64_t) i->buf.mode,(uint64_t) i->buf.uid,(uint64_t) i->buf.gid,
+              (uint64_t) i->buf.nlink,(uint64_t) i->buf.rdev,path);
+#else
     fprintf(f,"dev=%llx,ino=%llu,mode=%llo,uid=%llu,gid=%llu,nlink=%llu,rdev=%llu\n",
             (uint64_t) i->buf.dev,(uint64_t) i->buf.ino,(uint64_t) i->buf.mode,
             (uint64_t) i->buf.uid,(uint64_t) i->buf.gid,(uint64_t) i->buf.nlink,
             (uint64_t) i->buf.rdev);
+#endif
   }
 
   return fclose(f);
@@ -390,22 +493,45 @@ int load_database(const uint32_t remote)
 
   uint64_t stdev, stino, stmode, stuid, stgid, stnlink, strdev;
   struct fakestat st;
+
+#ifdef FAKEROOT_DB_PATH
+  char path[DB_PATH_LEN + 1];
+  struct stat path_st;
+
+  path[DB_PATH_LEN] = '\0';
+#endif
+
   while(1){
+#ifdef FAKEROOT_DB_PATH
+    r=scanf("mode=%llo,uid=%llu,gid=%llu,nlink=%llu,rdev=%llu "DB_PATH_SCAN"\n",
+            &stmode, &stuid, &stgid, &stnlink, &strdev, &path);
+    if (r != 6)
+      break;
+
+    if (stat(path, &path_st) < 0) {
+      fprintf(stderr, "%s: %s\n", path, strerror(errno));
+      if (errno == ENOENT || errno == EACCES)
+        continue;
+      else
+        break;
+    }
+    stdev = path_st.st_dev;
+    stino = path_st.st_ino;
+#else
     r=scanf("dev=%llx,ino=%llu,mode=%llo,uid=%llu,gid=%llu,nlink=%llu,rdev=%llu\n",
             &stdev, &stino, &stmode, &stuid, &stgid, &stnlink, &strdev);
-
-    if(r==7) {
-      st.dev = stdev;
-      st.ino = stino;
-      st.mode = stmode;
-      st.uid = stuid;
-      st.gid = stgid;
-      st.nlink = stnlink;
-      st.rdev = strdev;
-      data_insert(&st, remote);
-    }
-    else
+    if (r != 7)
       break;
+#endif
+
+    st.dev = stdev;
+    st.ino = stino;
+    st.mode = stmode;
+    st.uid = stuid;
+    st.gid = stgid;
+    st.nlink = stnlink;
+    st.rdev = strdev;
+    data_insert(&st, remote);
   }
   if(!r||r==EOF)
     return 1;
