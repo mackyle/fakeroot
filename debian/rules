@@ -126,11 +126,11 @@ endif
 		 debian/tmp/usr/share/man/man1/fakeroot-tcp.1 \
 		 debian/tmp/usr/share/doc/fakeroot/changelog
 ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
-	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot.so.0.0.1
-	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot/libfakeroot.so.0.0.1
+	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot-sysv.so.0.0.1
+	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot/libfakeroot-sysv.so.0.0.1
 	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot-tcp.so.0.0.1
 	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot/libfakeroot-tcp.so.0.0.1
-	strip --remove-section=.comment --remove-section=.note debian/tmp/usr/bin/faked
+	strip --remove-section=.comment --remove-section=.note debian/tmp/usr/bin/faked-sysv
 	strip --remove-section=.comment --remove-section=.note debian/tmp/usr/bin/faked-tcp
 #	strip --strip-debug debian/tmp/usr/lib/libfakeroot.a
 endif

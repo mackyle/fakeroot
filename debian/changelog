@@ -1,3 +1,10 @@
+fakeroot (1.2.7) unstable; urgency=medium
+
+  * Apply patch from Andrey Mitrofanov to fix stripping of shared
+    objects, broken by the alternatives changes.
+
+ -- Clint Adams <schizo@debian.org>  Fri, 18 Mar 2005 09:42:58 -0500
+
 fakeroot (1.2.6) unstable; urgency=low
 
   * Manage /usr/bin/fakeroot via alternatives.
