@@ -168,7 +168,8 @@ endif
 		$(CURDIR)/debian/tmp/usr/lib64/libfakeroot/libfakeroot.la
 	rm -f debian/tmp/usr/lib64/libfakeroot/libfakeroot.*a*
 	mv debian/tmp/usr/lib64/libfakeroot/libfakeroot.so.0.0.1 debian/tmp/usr/lib64/libfakeroot/libfakeroot-tcp.so.0.0.1
-	mv debian/tmp/usr/lib64/libfakeroot/libfakeroot.so.0 debian/tmp/usr/lib64/libfakeroot/libfakeroot-tcp.so.0
+	rm -f debian/tmp/usr/lib64/libfakeroot/libfakeroot.so.0
+	ln -s libfakeroot-tcp.so.0.0.1 debian/tmp/usr/lib64/libfakeroot/libfakeroot-tcp.so.0
 #	mv debian/tmp/usr/lib64/libfakeroot.so.0.0.1 debian/tmp/usr/lib64/libfakeroot-tcp.so.0.0.1
 #	mv debian/tmp/usr/lib64/libfakeroot.so.0 debian/tmp/usr/lib64/libfakeroot-tcp.so.0
 
@@ -179,7 +180,8 @@ endif
 #	cd obj64-sysv && ./libtool --finish debian/fakeroot-sparc/usr/lib64/fakeroot
 	rm -f debian/tmp/usr/lib64/libfakeroot/libfakeroot.*a*
 	mv debian/tmp/usr/lib64/libfakeroot/libfakeroot.so.0.0.1 debian/tmp/usr/lib64/libfakeroot/libfakeroot-sysv.so.0.0.1
-	mv debian/tmp/usr/lib64/libfakeroot/libfakeroot.so.0 debian/tmp/usr/lib64/libfakeroot/libfakeroot-sysv.so.0
+	rm -f debian/tmp/usr/lib64/libfakeroot/libfakeroot.so.0
+	ln -s libfakeroot-sysv.so.0.0.1 debian/tmp/usr/lib64/libfakeroot/libfakeroot-sysv.so.0
 
 	rm debian/tmp/usr/lib64/libfakeroot/libfakeroot.so
 #	rm debian/tmp/usr/lib64/libfakeroot.so
