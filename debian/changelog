@@ -1,5 +1,12 @@
-fakeroot (1.0.4) unstable; urgency=low
+fakeroot (1.0.4) unstable; urgency=medium
 
+  * faked.c: Implement a hash table for looking up inode data.  This
+    speeds up fakeroot builds of large packages by a couple orders of
+    magnitude.  Closes: #256433.
+  * faked.c: Correct a typo in the usage information.
+
+ ++ Daniel Schepler <schepler@debian.org>  Sun, 27 Jun 2004 15:47:54 -0700
+ 
   * test/tartest: order arguments to chown and chmod in a sane way. 
 
  -- Clint Adams <schizo@debian.org>  Tue, 22 Jun 2004 13:15:16 -0400
