@@ -970,7 +970,7 @@ int main(int argc, char **argv){
       fprintf(stderr,"This fakeroot has been compiled for TCP and does not support --cleanup\n");
 #endif /* FAKEROOT_FAKENET */
     }
-    if(!strcmp(*argv,"--port"))
+    else if(!strcmp(*argv,"--port"))
 #ifndef FAKEROOT_FAKENET
       fprintf(stderr,"This fakeroot has been compiled for SYSV IPC and does not support --port\n");
 #else /* FAKEROOT_FAKENET */
