@@ -2,6 +2,7 @@ fakeroot (1.2.7) unstable; urgency=medium
 
   * Apply patch from Andrey Mitrofanov to fix stripping of shared
     objects, broken by the alternatives changes.
+  * Fix stripping of bi-arch shared objects.
 
  -- Clint Adams <schizo@debian.org>  Fri, 18 Mar 2005 09:42:58 -0500
 

@@ -183,6 +183,10 @@ endif
 
 	rm debian/tmp/usr/lib64/libfakeroot/libfakeroot.so
 #	rm debian/tmp/usr/lib64/libfakeroot.so
+ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib64/libfakeroot/libfakeroot-sysv.so.0.0.1
+	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib64/libfakeroot/libfakeroot-tcp.so.0.0.1
+endif
 
 source diff:
 	@echo >&2 'source and diff are obsolete - use dpkg-source -b'; false
