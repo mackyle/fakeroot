@@ -8,6 +8,7 @@ fakeroot (1.0.3) unstable; urgency=low
     to exist.
   * INSTALL: add some terse notes.
   * Add prebuild target to debian/rules for use with arch-buildpackage.
+  * scripts/fakeroot.in: drop "-net" from version string.
 
  -- Clint Adams <schizo@debian.org>  Fri, 18 Jun 2004 15:42:33 -0400
 
