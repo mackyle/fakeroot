@@ -46,9 +46,9 @@ for f in $LIST; do
   touch     $f.file
 done
 
-chown daemon:sys -R 2
-chown daemon:root -R 3 4 
-chmod u+xs -R 2
+chown -R daemon:sys 2
+chown -R daemon:root 3 4 
+chmod -R u+xs 2
 chmod u+s  5
 
 # see bugs (not wraping open()) in manual page: don't `chmod 0'

@@ -1,3 +1,9 @@
+fakeroot (1.0.4) unstable; urgency=low
+
+  * test/tartest: order arguments to chown and chmod in a sane way. 
+
+ -- Clint Adams <schizo@debian.org>  Tue, 22 Jun 2004 13:15:16 -0400
+
 fakeroot (1.0.3) unstable; urgency=low
 
   * libfakeroot.c: correctly handle platforms where the first
