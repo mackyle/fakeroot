@@ -175,7 +175,7 @@ binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary checkroot prebuild
 
 prebuild:
-	dpkg-parsechangelog | sed -n '/^Version: \(.*\)$$/ {s//\1/;p}' >VERSION
+	printf "define(FAKEROOT_VERSION, %s)\n" $$(dpkg-parsechangelog | sed -n '/^Version: \(.*\)$$/ {s//\1/;p}') >acinclude.m4
 
 	autoreconf -fi
 	cd fake && autoreconf -fi
