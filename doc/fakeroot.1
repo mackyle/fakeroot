@@ -13,7 +13,7 @@
 .sp
 ..
 .\"
-.TH fakeroot 1 "17 June 2004" "Debian Project" "Debian manual"
+.TH fakeroot 1 "15 July 2004" "Debian Project" "Debian manual"
 .\" Manpage by J.H.M. Dassen <jdassen@wi.LeidenUniv.nl>
 .\" and Clint Adams <schizo@debian.org>
 .SH NAME
@@ -37,12 +37,12 @@ manipulation
 .BI [command]
 .SH DESCRIPTION
 .B fakeroot
-runs a command in an environment were it appears to have root privileges for
-file manipulation.  This is useful for allowing users to create archives
+runs a command in an environment wherein it appears to have root privileges
+for file manipulation.  This is useful for allowing users to create archives
 (tar, ar, .deb etc.) with files in them with root permissions/ownership.
 Without 
 .B fakeroot
-one would have to have root privileges to create the constituent files of
+one would need to have root privileges to create the constituent files of
 the archives with the correct permissions and ownership, and then pack them
 up, or one would have to construct the archives directly, without using the
 archiver.
