@@ -1,3 +1,9 @@
+fakeroot (1.2.8) unstable; urgency=medium
+
+  * Fix typo in debian/rules preventing testsuite from being run. 
+
+ -- Clint Adams <schizo@debian.org>  Thu, 24 Mar 2005 07:09:26 -0500
+
 fakeroot (1.2.7) unstable; urgency=medium
 
   * Apply patch from Andrey Mitrofanov to fix stripping of shared
