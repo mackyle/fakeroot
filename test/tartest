@@ -33,7 +33,7 @@ done
 #   (inodes weren't removed from cache)
 FILES=$(for f in $LIST; do for c in mv rm ; do echo $c.$f ; done ; done)
 touch $FILES
-chown sys:sys $FILES
+chown daemon:sys $FILES
 for f in $LIST; do
   mv mv.$f gone
   rm rm.$f
@@ -46,8 +46,8 @@ for f in $LIST; do
   touch     $f.file
 done
 
-chown sys:sys -R 2
-chown sys:root -R 3 4 
+chown daemon:sys -R 2
+chown daemon:root -R 3 4 
 chmod u+xs -R 2
 chmod u+s  5
 
