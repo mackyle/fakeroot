@@ -2,8 +2,9 @@ fakeroot (1.0.6) unstable; urgency=low
 
   * doc/fakeroot.1: Fix misspelling of 'where'.   closes: #259341.
   * doc/es/fakeroot.1, doc/es/faked.1: updated Spanish manpage translations
-    from Rubén Porras Camp.  closes: #263035.
+    from Rubén Porras Campo.  closes: #263035.
   * doc/faked.1, doc/fakeroot.1: fix Ray's email address.
+  * doc/fakeroot.1: add lengthier explanation of fd base for TCP mode.
 
  -- Clint Adams <schizo@debian.org>  Thu, 15 Jul 2004 09:34:31 -0400
 
