@@ -740,7 +740,7 @@ int initgroups(const char* user, INITGROUPS_SECOND_ARG group){
     return 0;
 }
 
-int setgroups(size_t size, const gid_t *list){
+int setgroups(SETGROUPS_SIZE_TYPE size, const gid_t *list){
   if (fakeroot_disabled)
     return next_setgroups(size, list);
   else
