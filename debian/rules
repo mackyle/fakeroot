@@ -135,8 +135,8 @@ ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 #	strip --strip-debug debian/tmp/usr/lib/libfakeroot.a
 endif
 	$(INSTALL_FILE) debian/shlibs debian/tmp/DEBIAN/shlibs
-        $(INSTALL_SCRIPT) debian/fakeroot.prerm debian/tmp/DEBIAN/prerm
-        $(INSTALL_SCRIPT) debian/fakeroot.postinst debian/tmp/DEBIAN/postinst
+	$(INSTALL_SCRIPT) debian/fakeroot.prerm debian/tmp/DEBIAN/prerm
+	$(INSTALL_SCRIPT) debian/fakeroot.postinst debian/tmp/DEBIAN/postinst
 	# We can just use the deps for faked.
 	dpkg-shlibdeps -Tdebian/substvars debian/tmp/usr/bin/faked
 	dpkg-gencontrol -ldebian/changelog -isp -Tdebian/substvars -Pdebian/tmp
