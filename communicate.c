@@ -25,6 +25,9 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdarg.h>
+#ifdef HAVE_SYS_SOCKET_H
+# include <sys/socket.h>
+#endif
 
 #ifndef FAKEROOT_FAKENET
 int msg_snd=-1;

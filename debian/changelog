@@ -2,6 +2,8 @@ fakeroot (1.0.3) unstable; urgency=low
 
   * libfakeroot.c: correctly handle platforms where the first
     argument to setgroups() is int.
+  * configure.ac, communicate.c: include sys/socket.h if available
+    (necessary on FreeBSD).
 
  -- Clint Adams <schizo@debian.org>  Fri, 18 Jun 2004 15:42:33 -0400
 
