@@ -123,7 +123,7 @@ endif
 	dpkg-shlibdeps -Tdebian/substvars debian/tmp/usr/bin/faked
 	dpkg-gencontrol -ldebian/changelog -isp -Tdebian/substvars -Pdebian/tmp
 	chmod 644 debian/tmp/DEBIAN/control
-	chown 0.0 debian/tmp/DEBIAN/control
+	chown root:root debian/tmp/DEBIAN/control
 	chmod  4644  debian/tmp/usr/lib/libfakeroot.so.0.0.1
 	chmod  4644  debian/tmp/usr/lib/libfakeroot-tcp.so.0.0.1
 	cd debian/tmp && find * -type f ! -regex '^DEBIAN/.*' -print0 | xargs -r0 md5sum > DEBIAN/md5sums
