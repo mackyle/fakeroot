@@ -1051,6 +1051,7 @@ int main(int argc, char **argv){
 
     if (bind(sd, (struct sockaddr *) &addr, sizeof (addr)) < 0)
       fail("bind");
+  }
 #endif /* FAKEROOT_FAKENET */
 #ifndef FAKEROOT_FAKENET
   if(debug)
