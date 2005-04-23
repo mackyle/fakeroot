@@ -136,7 +136,15 @@ ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 endif
 	$(INSTALL_FILE) debian/shlibs debian/tmp/DEBIAN/shlibs
 	$(INSTALL_SCRIPT) debian/fakeroot.prerm debian/tmp/DEBIAN/prerm
+ifneq ($(DEB_HOST_GNU_TYPE),i386-hurd)
+	sed 's/@FAKEROOT_SYSV_ALTPRIO@/50/;s/@FAKEROOT_TCP_ALTPRIO@/30/;' \
+		debian/fakeroot.postinst.in > debian/fakeroot.postinst
+else
+	sed 's/@FAKEROOT_SYSV_ALTPRIO@/30/;s/@FAKEROOT_TCP_ALTPRIO@/50/;' \
+		debian/fakeroot.postinst.in > debian/fakeroot.postinst
+endif
 	$(INSTALL_SCRIPT) debian/fakeroot.postinst debian/tmp/DEBIAN/postinst
+	rm -f debian/fakeroot.postinst
 	# We can just use the deps for faked.
 	dpkg-shlibdeps -Tdebian/substvars \
 		debian/tmp/usr/bin/faked-sysv \
