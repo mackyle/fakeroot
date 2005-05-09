@@ -19,7 +19,7 @@ PREFIX=@prefix@
 BINDIR=@bindir@
     
 LIB=lib@fakeroot_transformed@.so.0
-PATHS=@libdir@:${PREFIX}/lib64/libfakeroot
+PATHS=@libdir@:${PREFIX}/lib64/libfakeroot:${PREFIX}/lib32/libfakeroot
 FAKED=${BINDIR}/@faked_transformed@
 
 FAKED_MODE="unknown-is-root"
