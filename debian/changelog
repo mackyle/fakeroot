@@ -2,6 +2,8 @@ fakeroot (1.2.12) unstable; urgency=low
 
   * Do not run the test suites if DEB_BUILD_OPTIONS contains
     'nocheck'.  closes: #308100.
+  * Apply Goswin's patch to extend biarch support to include
+    32bit on amd64.  closes: #292505.
 
  -- Clint Adams <schizo@debian.org>  Mon,  9 May 2005 11:47:47 -0400
 
