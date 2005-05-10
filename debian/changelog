@@ -1,3 +1,9 @@
+fakeroot (1.2.13) unstable; urgency=low
+
+  * Add gcc-3.4 and ia32-libs-dev to build-depends for amd64.
+
+ -- Clint Adams <schizo@debian.org>  Tue, 10 May 2005 14:11:22 -0400
+
 fakeroot (1.2.12) unstable; urgency=low
 
   * Do not run the test suites if DEB_BUILD_OPTIONS contains
