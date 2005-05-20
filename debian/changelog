@@ -1,3 +1,12 @@
+fakeroot (1.3) unstable; urgency=low
+
+  Timo Savola:
+
+  * communicate.c, communicate.h, libfakeroot.c, wrapfunc.inp:
+    Wrap close and dup2 to avoid closing TCP socket.
+
+ -- Clint Adams <schizo@debian.org>  Fri, 20 May 2005 10:25:21 -0400
+
 fakeroot (1.2.13) unstable; urgency=low
 
   * Add gcc-3.4 and ia32-libs-dev to build-depends for amd64.
