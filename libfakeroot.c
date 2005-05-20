@@ -19,6 +19,8 @@
 */
 #define _GNU_SOURCE 
 
+#define FAKEROOT_LIBFAKEROOT
+
 #include "config.h"
 #include "communicate.h"
 #include <stdlib.h>
@@ -899,8 +901,17 @@ pid_t fork(void)
 
   pid = next_fork();
 
-  if (pid == 0)
-    close_comm_sd();
+  if (pid == 0) {
+    int err = errno;
+
+    /* No need to lock in the child process. */
+    if (comm_sd >= 0) {
+      next_close(comm_sd);
+      comm_sd = -1;
+    }
+
+    errno = err;
+  }
 
   return pid;
 }
@@ -911,7 +922,50 @@ pid_t vfork(void)
   return fork();
 }
 
+/* Return an error when trying to close the comm_sd file descriptor
+   (pretend that it's closed). */
+int close(int fd)
+{
+  int retval, reterr;
+
+  lock_comm_sd();
+
+  if (comm_sd >= 0 && comm_sd == fd) {
+    retval = -1;
+    reterr = EBADF;
+  } else {
+    retval = next_close(fd);
+    reterr = errno;
+  }
+
+  unlock_comm_sd();
+
+  errno = reterr;
+  return retval;
+}
+
+int dup2(int oldfd, int newfd)
+{
+  int retval, reterr;
+
+  lock_comm_sd();
+
+  if (comm_sd >= 0 && comm_sd == newfd) {
+    /* If dup fails, comm_sd gets set to -1, which is fine. */
+    comm_sd = dup(newfd);
+    next_close(newfd);
+  }
+
+  retval = next_dup2(oldfd, newfd);
+  reterr = errno;
+
+  unlock_comm_sd();
+
+  errno = reterr;
+  return retval;
+}
 #endif /* FAKEROOT_FAKENET */
+
 uid_t getuid(void){
   if (fakeroot_disabled)
     return next_getuid();
