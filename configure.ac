@@ -44,7 +44,12 @@ if test $ac_cv_use_ipc = "tcp"; then
 AC_DEFINE_UNQUOTED(FAKEROOT_FAKENET, [TCP])
 AC_CHECK_LIB(pthread, pthread_self)
 AC_CHECK_LIB(socket, connect)
+signal=HUP
+else
+signal=TERM
 fi
+
+AC_SUBST(signal)
 
 dnl Checks for header files.
 AC_HEADER_DIRENT
