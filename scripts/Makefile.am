@@ -8,6 +8,7 @@ do_subst = sed -e 's,[@]prefix[@],$(prefix),g' \
 	   -e 's,[@]libdir[@],$(libdir),g' \
 	   -e 's,[@]fakeroot_transformed[@],'`echo fakeroot | sed -e '$(transform)'`',g' \
 	   -e 's,[@]faked_transformed[@],'`echo faked | sed -e '$(transform)'`',g' \
+	   -e 's,[@]signal[@],$(signal),g' \
 	   -e 's,[@]VERSION[@],$(VERSION),g' 
 
 fakeroot: $(srcdir)/fakeroot.in Makefile

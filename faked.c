@@ -151,6 +151,7 @@ unsigned int highest_funcid = sizeof(func_arr)/sizeof(func_arr[0]);
 key_t msg_key=0;
 #else /* FAKEROOT_FAKENET */
 static int comm_sd = -1;
+static volatile int detached = 0;
 #endif /* FAKEROOT_FAKENET */
 
 int debug = 0, unknown_is_real = 0;
@@ -765,6 +766,16 @@ void get_msg(const int listen_sd)
     int count, maxfd;
     unsigned int i;
 
+    if (debug)
+      fprintf(stderr, "fakeroot: detached=%i clients=%i\n", detached, sd_list_size());
+
+    if (detached && sd_list_size() == 0) {
+      if (debug)
+	fprintf(stderr, "fakeroot: exiting\n");
+
+      cleanup(0);
+    }
+
     FD_ZERO(&readfds);
 
     FD_SET(listen_sd, &readfds);
@@ -857,6 +868,20 @@ void save(int dummy){
       fprintf(stderr, "fakeroot: database save FAILED\n");
 }
 
+#ifdef FAKEROOT_FAKENET
+static void detach(int g)
+{
+  int saved_errno = errno;
+
+  if (debug)
+    fprintf(stderr, "fakeroot: detaching, signal=%i\n", g);
+
+  detached = 1;
+
+  errno = saved_errno;
+}
+#endif /* FAKEROOT_FAKENET */
+
 #ifndef FAKEROOT_FAKENET
 # define FAKEROOT_CLEANUPMSG "fakeroot: clearing up message queues and semaphores, signal=%i\n"
 #else /* FAKEROOT_FAKENET */
@@ -948,6 +973,7 @@ int main(int argc, char **argv){
   unsigned int port = 0;
   struct sockaddr_in addr;
   socklen_t addr_len;
+  struct sigaction sa_detach;
 #endif /* FAKEROOT_FAKENET */
 
   if(getenv(FAKEROOTKEY_ENV)) {
@@ -1074,6 +1100,10 @@ int main(int argc, char **argv){
 
   port = ntohs(addr.sin_port);
 
+  sa_detach.sa_handler=detach;
+  sigemptyset(&sa_detach.sa_mask);
+  sa_detach.sa_flags=0;
+
 #endif /* FAKEROOT_FAKENET */
 
   sa.sa_handler=cleanup;
@@ -1104,6 +1134,11 @@ int main(int argc, char **argv){
     case SIGUSR2:
       sigaction(i,&sa_debug,NULL);
       break;
+#ifdef FAKEROOT_FAKENET
+    case SIGHUP:
+      sigaction(i,&sa_detach,NULL);
+      break;
+#endif /* FAKEROOT_FAKENET */
     default:
       sigaction(i,&sa,NULL);
       break;

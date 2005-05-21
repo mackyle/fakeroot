@@ -122,9 +122,9 @@ FAKEROOTKEY=`echo $KEY_PID|cut -d: -f1`
 PID=`echo $KEY_PID|cut -d: -f2`
 
 if [ "$WAITINTRAP" -eq 0 ]; then
-  trap "kill -s TERM $PID" EXIT INT
+  trap "kill -s @signal@ $PID" EXIT INT
 else
-  trap "kill -s TERM $PID ; wait $PID >/dev/null 2>&1" EXIT INT
+  trap "kill -s @signal@ $PID ; wait $PID >/dev/null 2>&1" EXIT INT
 fi
 
 if test -z "$FAKEROOTKEY" || test -z "$PID"; then
