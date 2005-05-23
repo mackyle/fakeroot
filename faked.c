@@ -157,6 +157,8 @@ static volatile int detached = 0;
 int debug = 0, unknown_is_real = 0;
 char *save_file = NULL;
 
+void cleanup(int);
+
 #ifdef FAKEROOT_FAKENET
 static void fail(const char *msg)
 {
