@@ -902,15 +902,11 @@ pid_t fork(void)
   pid = next_fork();
 
   if (pid == 0) {
-    int err = errno;
-
     /* No need to lock in the child process. */
     if (comm_sd >= 0) {
       next_close(comm_sd);
       comm_sd = -1;
     }
-
-    errno = err;
   }
 
   return pid;
