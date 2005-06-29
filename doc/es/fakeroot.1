@@ -16,7 +16,7 @@
 .\" (c) 2003 Software in the Public Interest
 .\" Esta traducción ha sido realizada por Rubén Porras Campo <nahoo@inicia.es>
 .\" Está basada en la página de manual original:
-.\" versión 1.9 del CVS de
+.\" versión 1.10 del CVS de
 .\" /cvs/debian-doc/manpages/english/fakeroot/fakeroot.1
 
 .TH fakeroot 1 "6 de agosto de 2004" "Proyecto Debian" "Manual de Debian"
@@ -190,8 +190,23 @@ correcto y la
 .B FAKEROOTKEY
 de un demonio en ejecución conectará automáticamente con ese demonio, y tendrá
 la misma visión "falsa" de los permisos/propietarios de los ficheros del
-sistema.  (asumiendo que el demonio y el programa que se conecta los ejecutón el
+sistema. (sumiendo que el demonio y el programa que se conecta los ejecute el
 mismo usuario).
+.B
+.IP LD_LIBRARY_PATH
+.B
+.IP LD_PRELOAD
+Fakeroot está implementado envolviendo las llamadas al sistema. Esto se realiza
+modificando las variables de entorno de forma que queden como
+LD_LIBRARY_PATH=/usr/lib/fakeroot y LD_PRELOAD=libfakeroot.so.0. Esa biblioteca
+se carga antes que la biblioteca de C del sistema, y de esa forma se interceptan
+gran parte de las llamadas al sistema. Si necesita modificar
+.B LD_LIBRARY_PATH
+o
+.B LD_PRELOAD
+dentro de un entorno fakeroot, deberán quedar establecidos de forma relativa,
+como en
+.B LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/foo/bar/
 .SH LIMITACIONES
 .B
 .IP "Versiones de la biblioteca"
@@ -254,7 +269,7 @@ prueban el sistema, como GNU configure, pueden verse confundidos por esto (o si
 no lo hacen, llevarán a fakeroot tan al límite que será este el que se
 confunda). Así que es aconsejable no ejecutar el objetivo "configure" en un
 entorno fakeroot. Como configure debe ejecutarse en "debian/rules build",
- "dpkg\-buildpackage \-rfakeroot" tiene cuidado de esto, haciendolo
+ "dpkg\-buildpackage \-rfakeroot" tiene cuidado de esto, haciéndolo
 correctamente.
 .SH FALLOS
 No envuelve open(). Esto no es malo por si mismo, pero si un programa hace
@@ -289,4 +304,4 @@ con muchas modificaciones y añadiduras de joost y Clint.
 .BR debuild (1)
 .BR /usr/share/doc/fakeroot/DEBUG
 .SH TRADUCTOR
-Traducción de Rubén Porras Campo <debian-l10n-spanish@lists.debian.org>
+Traducción de Rubén Porras Campo <debian\-l10n\-spanish@lists.debian.org>
