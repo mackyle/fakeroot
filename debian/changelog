@@ -1,3 +1,10 @@
+fakeroot (1.4.1) unstable; urgency=low
+
+  * Fix broken shell substitution.
+  * Bump to Standards-Version 3.6.2.
+
+ -- Clint Adams <schizo@debian.org>  Wed, 29 Jun 2005 17:58:48 -0400
+
 fakeroot (1.4) unstable; urgency=low
 
   Timo Savola:

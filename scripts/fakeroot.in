@@ -1,4 +1,4 @@
-@SHELL@
+#!@SHELL@
 
 # This script first starts faked (the daemon), and then it will run
 # the requested program with fake root privileges.
