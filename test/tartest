@@ -1,8 +1,8 @@
-#!/bin/sh -x
+#!/bin/sh
 set -e
 echo tartest:
 TMP=./tmp
-SRCDIR=$(cd ${srcdir}; pwd -P)
+SRCDIR=`cd ${srcdir}; pwd -P`
 PATH=$PATH:/usr/bin/X11
 export PATH
 umask 022
@@ -31,7 +31,7 @@ done
 #do some mv/rm stuff. 
 #The "mv" part used to confuse fakeroot_0.0-6 
 #   (inodes weren't removed from cache)
-FILES=$(for f in $LIST; do for c in mv rm ; do echo $c.$f ; done ; done)
+FILES=`for f in $LIST; do for c in mv rm ; do echo $c.$f ; done ; done`
 touch $FILES
 chown daemon:sys $FILES
 for f in $LIST; do
@@ -63,7 +63,7 @@ cd ..
 rm -f tartest.tar.gz
 uudecode ${SRCDIR}/tartest.tar.gz.uue 
 
-tar -czf faketar.tar.gz tar
+tar -cf - tar | gzip -9 > faketar.tar.gz
 
 ${SRCDIR}/compare-tar tartest.tar.gz faketar.tar.gz 
  
@@ -74,8 +74,8 @@ ${SRCDIR}/compare-tar tartest.tar.gz faketar.tar.gz
 
 rm -rf tar
 
-tar -xzf tartest.tar.gz
-tar -czf tartest.test.tar.gz tar
+gzip -dc tartest.tar.gz | tar xf -
+tar cf - tar | gzip -9 >tartest.test.tar.gz
 
 ${SRCDIR}/compare-tar tartest.tar.gz tartest.test.tar.gz 
 
