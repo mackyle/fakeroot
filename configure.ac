@@ -392,8 +392,7 @@ dnl kludge end
 
 dnl check for b0rked Solaris (and other shells) and find one that works
 AC_MSG_CHECKING(for a working shell...)
-for i in /usr/xpg6/bin/sh /usr/xpg4/bin/sh /usr/ccs/bin/sh /bin/sh /usr/bin/sh /bin/ksh /bin/bash /usr/lo
-cal/bin/bash ; do
+for i in /usr/xpg6/bin/sh /usr/xpg4/bin/sh /usr/ccs/bin/sh /bin/sh /usr/bin/sh /bin/ksh /bin/bash /usr/local/bin/bash ; do
     $i -c 'if ! false ; then echo $(echo ok) ; fi' >config.$$ 2>/dev/null
     j=`cat config.$$`
     rm -f config.$$
