@@ -277,8 +277,6 @@ static struct sockaddr *get_addr(void)
 
 static void open_comm_sd(void)
 {
-  int val;
-
   if (comm_sd >= 0)
     return;
 
@@ -288,10 +286,6 @@ static void open_comm_sd(void)
 
   if (fcntl(comm_sd, F_SETFD, FD_CLOEXEC) < 0)
     fail("fcntl(F_SETFD, FD_CLOEXEC)");
-
-  val = 1;
-  if (setsockopt(comm_sd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof (val)) < 0)
-    fail("setsockopt(SO_REUSEADDR)");
 
   if (connect(comm_sd, get_addr(), sizeof (struct sockaddr_in)) < 0)
     fail("connect");
