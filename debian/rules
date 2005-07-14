@@ -178,8 +178,8 @@ ifneq (,$(findstring $(DEB_HOST_GNU_TYPE),s390-linux-gnu))
 	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=s390-linux --host=s390x-linux --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 endif
 ifneq (,$(findstring $(DEB_HOST_GNU_TYPE),x86_64-linux-gnu))
-	cd obj64-sysv && CC="gcc-3.4 -m32" ../configure --prefix=/usr --mandir=/usr/share/man --build=x86_64-linux --host=i386-linux --program-suffix=-sysv $(CONFARGS)
-	cd obj64-tcp && CC="gcc-3.4 -m32" ../configure --prefix=/usr --mandir=/usr/share/man --build=x86_64-linux --host=i386-linux --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
+	cd obj64-sysv && CC="gcc -m32" ../configure --prefix=/usr --mandir=/usr/share/man --build=x86_64-linux --host=i386-linux --program-suffix=-sysv $(CONFARGS)
+	cd obj64-tcp && CC="gcc -m32" ../configure --prefix=/usr --mandir=/usr/share/man --build=x86_64-linux --host=i386-linux --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 endif
 
 	cd obj64-tcp && $(MAKE) libfakeroot.la

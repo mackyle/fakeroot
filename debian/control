@@ -1,7 +1,7 @@
 Source: fakeroot
 Section: utils
 Priority: optional
-Build-Depends: sharutils, libc6-dev-s390x [s390], libc6-dev-sparc64 [sparc], gcc-3.4 [amd64], ia32-libs-dev [amd64]
+Build-Depends: sharutils, libc6-dev-s390x [s390], libc6-dev-sparc64 [sparc], ia32-libs-dev [amd64]
 Maintainer: Clint Adams <schizo@debian.org>
 Standards-Version: 3.6.2
 

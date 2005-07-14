@@ -10,6 +10,7 @@ fakeroot (1.4.2) unstable; urgency=medium
   * Apply patch from Steve Langasek to update debian/rules to build correctly
     on biarch with both the old and new versions of dpkg-architecture
     closes: #317911.
+  * Stop forcing gcc 3.4 on amd64.  closes: #317911.
 
  -- Clint Adams <schizo@debian.org>  Thu, 14 Jul 2005 06:37:36 -0400
 
