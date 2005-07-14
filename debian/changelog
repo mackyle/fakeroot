@@ -1,3 +1,18 @@
+fakeroot (1.4.2) unstable; urgency=medium
+
+  Timo Savola:
+
+  * Don't set SO_REUSEADDR option for client TCP socket (Fix
+    suggested by Riku Voipio.)
+
+  Clint Adams:
+
+  * Apply patch from Steve Langasek to update debian/rules to build correctly
+    on biarch with both the old and new versions of dpkg-architecture
+    closes: #317911.
+
+ -- Clint Adams <schizo@debian.org>  Thu, 14 Jul 2005 06:37:36 -0400
+
 fakeroot (1.4.1) unstable; urgency=low
 
   * Fix broken shell substitution.

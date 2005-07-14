@@ -23,7 +23,7 @@ ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 INSTALL_PROGRAM += -s
 endif
 
-ifeq (x86_64-linux,$(DEB_HOST_GNU_TYPE))
+ifeq (x86_64-linux-gnu,$(DEB_HOST_GNU_TYPE))
 BIARCH_LIB_DIR=emul/ia32-linux/usr/lib
 else
 BIARCH_LIB_DIR=usr/lib64
@@ -64,7 +64,7 @@ clean: checkroot
 	-cd obj-tcp && $(MAKE) distclean
 	-cd objfake-sysv && $(MAKE) distclean
 	-cd objfake-tcp && $(MAKE) distclean
-ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux s390-linux x86_64-linux))
+ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu x86_64-linux-gnu))
 	-cd obj64-sysv && $(MAKE) distclean
 	-cd obj64-tcp && $(MAKE) distclean
 endif
@@ -118,7 +118,7 @@ binary-arch: build checkroot
 	rm debian/tmp/usr/lib/libfakeroot/libfakeroot.so
 	rm debian/tmp/usr/lib/libfakeroot.a
 	rm debian/tmp/usr/lib/libfakeroot.so
-ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux s390-linux x86_64-linux))
+ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu x86_64-linux-gnu))
 	debian/rules binary-biarch
 endif
 	$(INSTALL_FILE) debian/copyright debian/tmp/usr/share/doc/fakeroot/copyright
@@ -169,15 +169,15 @@ binary-biarch:
 	$(checkdir)
 	mkdir obj64-sysv obj64-tcp
 
-ifeq (sparc-linux,$(DEB_HOST_GNU_TYPE))
+ifneq (,$(findstring $(DEB_HOST_GNU_TYPE),sparc-linux-gnu))
 	cd obj64-sysv && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=sparc64-linux --program-suffix=-sysv $(CONFARGS)
 	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=sparc64-linux --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 endif
-ifeq (s390-linux,$(DEB_HOST_GNU_TYPE))
+ifneq (,$(findstring $(DEB_HOST_GNU_TYPE),s390-linux-gnu))
 	cd obj64-sysv && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=s390-linux --host=s390x-linux --program-suffix=-sysv $(CONFARGS)
 	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=s390-linux --host=s390x-linux --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 endif
-ifeq (x86_64-linux,$(DEB_HOST_GNU_TYPE))
+ifneq (,$(findstring $(DEB_HOST_GNU_TYPE),x86_64-linux-gnu))
 	cd obj64-sysv && CC="gcc-3.4 -m32" ../configure --prefix=/usr --mandir=/usr/share/man --build=x86_64-linux --host=i386-linux --program-suffix=-sysv $(CONFARGS)
 	cd obj64-tcp && CC="gcc-3.4 -m32" ../configure --prefix=/usr --mandir=/usr/share/man --build=x86_64-linux --host=i386-linux --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 endif
