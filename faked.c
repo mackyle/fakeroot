@@ -648,7 +648,7 @@ void process_mknod(struct fake_msg *buf){
   data_node_t *i;
   
   if(debug)
-    fprintf(stderr,"FAKEROOT: chmod, mode=%lo\n",
+    fprintf(stderr,"FAKEROOT: mknod, mode=%lo\n",
 	    buf->st.mode);
   
   i = data_find(&buf->st, buf->remote);
