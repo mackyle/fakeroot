@@ -1,6 +1,7 @@
 fakeroot (1.4.3) unstable; urgency=low
 
   * Make mknod debug message say "mknod" instead of "chmod".
+  * Fix libcpath case statement in configure.ac.
 
  -- Clint Adams <schizo@debian.org>  Sun, 21 Aug 2005 19:49:55 -0400
 

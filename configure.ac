@@ -310,8 +310,7 @@ fi
 dnl This should really be done intelligently.
 
 case $target_cpu:$target_os in
-	(alpha*:linux*)
-	(ia64*:linux*)
+	(alpha*:linux*|ia64*:linux*)
       		libcpath="/lib/libc.so.6.1"
 		;;
 	(*:linux*)
