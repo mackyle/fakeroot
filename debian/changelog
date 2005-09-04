@@ -1,3 +1,9 @@
+fakeroot (1.5.1) unstable; urgency=high
+
+  * Fix autoconf magic to include the right dir on alphalinux/glibc.
+
+ -- Clint Adams <schizo@debian.org>  Sun,  4 Sep 2005 18:54:28 -0400
+
 fakeroot (1.5) unstable; urgency=low
 
   * Fix error in French fakeroot(1), thanks to Kevin Ryde.
