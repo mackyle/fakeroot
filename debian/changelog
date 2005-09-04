@@ -1,3 +1,10 @@
+fakeroot (1.4.4) unstable; urgency=low
+
+  * Fix error in French fakeroot(1), thanks to Kevin Ryde.
+    closes: #316797.
+
+ -- Clint Adams <schizo@debian.org>  Sat,  3 Sep 2005 23:38:41 -0400
+
 fakeroot (1.4.3) unstable; urgency=low
 
   * Make mknod debug message say "mknod" instead of "chmod".
