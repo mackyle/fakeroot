@@ -118,16 +118,32 @@ enum {chown_func,
 #include "message.h"
 
 extern const char *env_var_set(const char *env);
+#ifndef STUPID_ALPHA_HACK
 extern void send_stat(const struct stat *st, func_id_t f);
+#else
+extern void send_stat(const struct stat *st, func_id_t f,int ver);
+#endif
 extern void send_fakem(const struct fake_msg *buf);
+#ifndef STUPID_ALPHA_HACK
 extern void send_get_stat(struct stat *buf);
+#else
+extern void send_get_stat(struct stat *buf,int ver);
+#endif
 extern void cpyfakefake (struct fakestat *b1, const struct fakestat *b2);
+#ifndef STUPID_ALPHA_HACK
 extern void cpystatfakem(struct     stat *st, const struct fake_msg *buf);
+#else
+extern void cpystatfakem(struct     stat *st, const struct fake_msg *buf, int ver);
+#endif
 
 #ifndef FAKEROOT_FAKENET
 extern int init_get_msg();
 extern key_t get_ipc_key();
-extern void cpyfakemstat(struct fake_msg *b1, const struct stat     *st);
+# ifndef STUPID_ALPHA_HACK
+extern void cpyfakemstat(struct fake_msg *b1, const struct stat *st);
+# else
+extern void cpyfakemstat(struct fake_msg *b1, const struct stat *st, int ver);
+# endif
 #else /* FAKEROOT_FAKENET */
 # ifdef FAKEROOT_LIBFAKEROOT
 extern volatile int comm_sd;
