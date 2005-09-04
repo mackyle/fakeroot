@@ -406,6 +406,19 @@ if test "x$SHELL" = "x" ; then
     AC_MSG_ERROR(no SUS compliant shell found - on Solaris, install SUNWxcu4)
 fi
 
+case "$target_cpu:$target_os" in
+	(alpha*:linux*)
+	AH_TEMPLATE([STUPID_ALPHA_HACK], [stat-struct conversion hackery])
+	AC_MSG_CHECKING([if we need to do stat-struct conversion hackery])
+	AC_EGREP_CPP([3:3],[
+#include <sys/stat.h>
+_STAT_VER:_STAT_VER_GLIBC2_3_4
+],
+       [AC_MSG_RESULT([yes]); AC_DEFINE(STUPID_ALPHA_HACK)],
+       [AC_MSG_RESULT([no]);])
+        ;;
+esac
+
 AC_CONFIG_FILES([Makefile scripts/Makefile doc/Makefile doc/es/Makefile doc/fr/Makefile doc/sv/Makefile test/Makefile])
 AC_OUTPUT
 

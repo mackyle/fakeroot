@@ -35,7 +35,6 @@
 #include <dirent.h>
 #include <errno.h>
 
-
 /* 
    Where are those shared libraries? 
    If I knew of a configure/libtool way to find that out, I'd use it. Or
@@ -482,7 +481,11 @@ int WRAP_LSTAT LSTAT_ARG(int ver,
   r=NEXT_LSTAT(ver, file_name, statbuf);
   if(r)
     return -1;
+#ifndef STUPID_ALPHA_HACK
   send_get_stat(statbuf);
+#else
+  send_get_stat(statbuf, ver);
+#endif
   return 0;
 }
 
@@ -495,7 +498,11 @@ int WRAP_STAT STAT_ARG(int ver,
   r=NEXT_STAT(ver, file_name, st);
   if(r)
     return -1;
+#ifndef STUPID_ALPHA_HACK
   send_get_stat(st);
+#else
+  send_get_stat(st,ver);
+#endif
   return 0;
 }
 
@@ -510,7 +517,11 @@ int WRAP_FSTAT FSTAT_ARG(int ver,
   r=NEXT_FSTAT(ver, fd, st);
   if(r)
     return -1;
+#ifndef STUPID_ALPHA_HACK
   send_get_stat(st);
+#else
+  send_get_stat(st,ver);
+#endif
   return 0;
 }
 
@@ -610,7 +621,11 @@ int chown(const char *path, uid_t owner, gid_t group){
     return r;
   st.st_uid=owner;
   st.st_gid=group;
+#ifndef STUPID_ALPHA_HACK
   send_stat(&st,chown_func);
+#else
+  send_stat(&st,chown_func, _STAT_VER);
+#endif
   if(!dont_try_chown())
     r=next_lchown(path,owner,group);
   else
@@ -632,7 +647,11 @@ int lchown(const char *path, uid_t owner, gid_t group){
     return r;
   st.st_uid=owner;
   st.st_gid=group;
+#ifndef STUPID_ALPHA_HACK
   send_stat(&st,chown_func);
+#else
+  send_stat(&st,chown_func, _STAT_VER);
+#endif
   if(!dont_try_chown())
     r=next_lchown(path,owner,group);
   else
@@ -654,7 +673,11 @@ int fchown(int fd, uid_t owner, gid_t group){
   
   st.st_uid=owner;
   st.st_gid=group;
+#ifndef STUPID_ALPHA_HACK
   send_stat(&st, chown_func);
+#else
+  send_stat(&st, chown_func, _STAT_VER);
+#endif
   
   if(!dont_try_chown())
     r=next_fchown(fd,owner,group);
@@ -677,7 +700,11 @@ int chmod(const char *path, mode_t mode){
   
   st.st_mode=(mode&ALLPERMS)|(st.st_mode&~ALLPERMS);
     
+#ifndef STUPID_ALPHA_HACK
   send_stat(&st, chmod_func);
+#else
+  send_stat(&st, chmod_func, _STAT_VER);
+#endif
   
   /* if a file is unwritable, then root can still write to it
      (no matter who owns the file). If we are fakeroot, the only
@@ -708,7 +735,11 @@ int fchmod(int fd, mode_t mode){
     return(r);
   
   st.st_mode=(mode&ALLPERMS)|(st.st_mode&~ALLPERMS);
+#ifndef STUPID_ALPHA_HACK
   send_stat(&st,chmod_func);  
+#else
+  send_stat(&st,chmod_func, _STAT_VER);  
+#endif
   
   /* see chmod() for comment */
   mode |= 0600;
@@ -751,7 +782,11 @@ int WRAP_MKNOD MKNOD_ARG(int ver UNUSED,
   st.st_mode= mode & ~old_mask;
   st.st_rdev= XMKNOD_FRTH_ARG dev;
   
+#ifndef STUPID_ALPHA_HACK
   send_stat(&st,mknod_func);
+#else
+  send_stat(&st,mknod_func, _STAT_VER);
+#endif
     
   return 0;
 }
@@ -779,7 +814,11 @@ int mkdir(const char *path, mode_t mode){
   
   st.st_mode=(mode&~old_mask&ALLPERMS)|(st.st_mode&~ALLPERMS)|S_IFDIR;
 
+#ifndef STUPID_ALPHA_HACK
   send_stat(&st, chmod_func);
+#else
+  send_stat(&st, chmod_func, _STAT_VER);
+#endif
 
   return 0;
 }
@@ -840,7 +879,11 @@ int rmdir(const char *pathname){
   if(r)
     return -1;
 
+#ifndef STUPID_ALPHA_HACK
   send_stat(&st,unlink_func);  
+#else
+  send_stat(&st,unlink_func, _STAT_VER);  
+#endif
 
   return 0;
 }
@@ -859,7 +902,11 @@ int remove(const char *pathname){
   r=next_remove(pathname);  
   if(r)
     return -1;
+#ifndef STUPID_ALPHA_HACK
   send_stat(&st,unlink_func);  
+#else
+  send_stat(&st,unlink_func, _STAT_VER);  
+#endif
   
   return r;
 }
@@ -889,7 +936,11 @@ int rename(const char *oldpath, const char *newpath){
   if(s)
     return -1;
   if(!r)
+#ifndef STUPID_ALPHA_HACK
     send_stat(&st,unlink_func);
+#else
+    send_stat(&st,unlink_func, _STAT_VER);
+#endif
 
   return 0;
 }

@@ -1,7 +1,10 @@
-fakeroot (1.4.4) unstable; urgency=low
+fakeroot (1.5) unstable; urgency=low
 
   * Fix error in French fakeroot(1), thanks to Kevin Ryde.
     closes: #316797.
+  * Use crazy and ugly stat struct conversion hackery on alpha
+    to circumvent the hilariously incompatible struct change in
+    glibc 2.3.4.  closes: #324571.
 
  -- Clint Adams <schizo@debian.org>  Sat,  3 Sep 2005 23:38:41 -0400
 
