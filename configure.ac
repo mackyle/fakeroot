@@ -414,7 +414,7 @@ case "$target_cpu:$target_os" in
 #include <sys/stat.h>
 _STAT_VER:_STAT_VER_GLIBC2_3_4
 ],
-       [AC_MSG_RESULT([yes]); AC_DEFINE(STUPID_ALPHA_HACK);
+       [AC_MSG_RESULT([yes]); AC_DEFINE(STUPID_ALPHA_HACK)
 CPPFLAGS="$CPPFLAGS -I\$(srcdir)/statconv/glibc/linux/alpha"
 ],
        [AC_MSG_RESULT([no]);])
