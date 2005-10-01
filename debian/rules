@@ -26,7 +26,11 @@ endif
 ifeq (x86_64-linux-gnu,$(DEB_HOST_GNU_TYPE))
 BIARCH_LIB_DIR=emul/ia32-linux/usr/lib
 else
+ifeq (ppc64-linux-gnu,$(DEB_HOST_GNU_TYPE))
+BIARCH_LIB_DIR=usr/lib32
+else
 BIARCH_LIB_DIR=usr/lib64
+endif
 endif
 
 
@@ -64,7 +68,7 @@ clean: checkroot
 	-cd obj-tcp && $(MAKE) distclean
 	-cd objfake-sysv && $(MAKE) distclean
 	-cd objfake-tcp && $(MAKE) distclean
-ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu x86_64-linux-gnu))
+ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu x86_64-linux-gnu i486-linux-gnu powerpc-linux-gnu ppc64-linux-gnu))
 	-cd obj64-sysv && $(MAKE) distclean
 	-cd obj64-tcp && $(MAKE) distclean
 endif
@@ -118,7 +122,7 @@ binary-arch: build checkroot
 	rm debian/tmp/usr/lib/libfakeroot/libfakeroot.so
 	rm debian/tmp/usr/lib/libfakeroot.a
 	rm debian/tmp/usr/lib/libfakeroot.so
-ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu x86_64-linux-gnu))
+ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu x86_64-linux-gnu i486-linux-gnu powerpc-linux-gnu ppc64-linux-gnu))
 	debian/rules binary-biarch
 endif
 	$(INSTALL_FILE) debian/copyright debian/tmp/usr/share/doc/fakeroot/copyright
@@ -170,16 +174,28 @@ binary-biarch:
 	mkdir obj64-sysv obj64-tcp
 
 ifneq (,$(findstring $(DEB_HOST_GNU_TYPE),sparc-linux-gnu))
-	cd obj64-sysv && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=sparc64-linux --program-suffix=-sysv $(CONFARGS)
-	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=sparc64-linux --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
+	cd obj64-sysv && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=sparc64-linux-gnu --program-suffix=-sysv $(CONFARGS)
+	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=sparc-linux --host=sparc64-linux-gnu --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 endif
 ifneq (,$(findstring $(DEB_HOST_GNU_TYPE),s390-linux-gnu))
-	cd obj64-sysv && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=s390-linux --host=s390x-linux --program-suffix=-sysv $(CONFARGS)
-	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=s390-linux --host=s390x-linux --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
+	cd obj64-sysv && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=s390-linux --host=s390x-linux-gnu --program-suffix=-sysv $(CONFARGS)
+	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=s390-linux --host=s390x-linux-gnu --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 endif
 ifneq (,$(findstring $(DEB_HOST_GNU_TYPE),x86_64-linux-gnu))
-	cd obj64-sysv && CC="gcc -m32" ../configure --prefix=/usr --mandir=/usr/share/man --build=x86_64-linux --host=i386-linux --program-suffix=-sysv $(CONFARGS)
-	cd obj64-tcp && CC="gcc -m32" ../configure --prefix=/usr --mandir=/usr/share/man --build=x86_64-linux --host=i386-linux --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
+	cd obj64-sysv && CC="gcc -m32" ../configure --prefix=/usr --mandir=/usr/share/man --build=x86_64-linux --host=i486-linux-gnu --program-suffix=-sysv $(CONFARGS)
+	cd obj64-tcp && CC="gcc -m32" ../configure --prefix=/usr --mandir=/usr/share/man --build=x86_64-linux --host=i486-linux-gnu --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
+endif
+ifneq (,$(findstring $(DEB_HOST_GNU_TYPE),i486-linux-gnu))
+	cd obj64-sysv && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=i486-linux --host=x86_64-linux-gnu --program-suffix=-sysv $(CONFARGS)
+	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=i486-linux --host=x86_64-linux-gnu --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
+endif
+ifneq (,$(findstring $(DEB_HOST_GNU_TYPE),powerpc-linux-gnu))
+	cd obj64-sysv && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=powerpc-linux --host=ppc64-linux-gnu --program-suffix=-sysv $(CONFARGS)
+	cd obj64-tcp && CC="gcc -m64" ../configure --prefix=/usr --mandir=/usr/share/man --build=powerpc-linux --host=ppc64-linux-gnu --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
+endif
+ifneq (,$(findstring $(DEB_HOST_GNU_TYPE),ppc64-linux-gnu))
+	cd obj64-sysv && CC="gcc -m32" ../configure --prefix=/usr --mandir=/usr/share/man --build=ppc64-linux --host=powerpc-linux-gnu --program-suffix=-sysv $(CONFARGS)
+	cd obj64-tcp && CC="gcc -m32" ../configure --prefix=/usr --mandir=/usr/share/man --build=ppc64-linux --host=powerpc-linux-gnu --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 endif
 
 	cd obj64-tcp && $(MAKE) libfakeroot.la
