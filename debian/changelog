@@ -2,6 +2,7 @@ fakeroot (1.5.3) unstable; urgency=low
 
   * Patch from Steve Langasek to "schmunge the alpha stat struct
     conversion hackery to apply to the stat64 family of calls as well"
+  * Reorder i386 biarch build-deps to make sbuild happier.
 
  -- Clint Adams <schizo@debian.org>  Sun,  2 Oct 2005 11:35:51 -0400
 
