@@ -1,3 +1,9 @@
+fakeroot (1.5.4) unstable; urgency=low
+
+  * On i386, build-depend on lib64gcc1. 
+
+ -- Clint Adams <schizo@debian.org>  Sun,  2 Oct 2005 19:52:18 -0400
+
 fakeroot (1.5.3) unstable; urgency=low
 
   * Patch from Steve Langasek to "schmunge the alpha stat struct
