@@ -539,8 +539,11 @@ int WRAP_LSTAT64 LSTAT64_ARG (int ver,
   if(r)
     return -1;
 
+#ifndef STUPID_ALPHA_HACK
   send_get_stat64(st);
-
+#else
+  send_get_stat64(st,ver);
+#endif
   return 0;
 }
 
@@ -553,7 +556,11 @@ int WRAP_STAT64 STAT64_ARG(int ver,
   r=NEXT_STAT64(ver,file_name,st);
   if(r)
     return -1;
+#ifndef STUPID_ALPHA_HACK
   send_get_stat64(st);
+#else
+  send_get_stat64(st,ver);
+#endif
   return 0;
 }
 
@@ -566,7 +573,11 @@ int WRAP_FSTAT64 FSTAT64_ARG(int ver,
   r=NEXT_FSTAT64(ver, fd, st);
   if(r)
     return -1;
+#ifndef STUPID_ALPHA_HACK
   send_get_stat64(st);
+#else
+  send_get_stat64(st,ver);
+#endif
 
   return 0;
 }
@@ -856,7 +867,11 @@ int unlink(const char *pathname){
     return -1;
   
 #ifdef STAT64_SUPPORT
+#ifndef STUPID_ALPHA_HACK
   send_stat64(&st, unlink_func);
+#else
+  send_stat64(&st, unlink_func, _STAT_VER);
+#endif
 #else
   send_stat(&st, unlink_func);
 #endif

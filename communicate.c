@@ -201,8 +201,12 @@ void cpystatfakem(struct stat *st, const struct fake_msg *f
 #ifdef STAT64_SUPPORT
 
 void cpyfakemstat64(struct fake_msg *f,
-                 const struct stat64 *st){
-  
+                 const struct stat64 *st
+#ifdef STUPID_ALPHA_HACK
+                 , int ver
+#endif
+                 ){
+#ifndef STUPID_ALPHA_HACK
   f->st.mode =st->st_mode;
   f->st.ino  =st->st_ino ;
   f->st.uid  =st->st_uid ;
@@ -219,9 +223,54 @@ void cpyfakemstat64(struct fake_msg *f,
      to occur in practical fakeroot conditions. */
 
   f->st.nlink=st->st_nlink;
+#else
+  switch(ver) {
+	  case _STAT_VER_KERNEL:
+  f->st.mode  = ((struct fakeroot_kernel_stat *)st)->st_mode;
+  f->st.ino   = ((struct fakeroot_kernel_stat *)st)->st_ino;
+  f->st.uid   = ((struct fakeroot_kernel_stat *)st)->st_uid;
+  f->st.gid   = ((struct fakeroot_kernel_stat *)st)->st_gid;
+  f->st.dev   = ((struct fakeroot_kernel_stat *)st)->st_dev;
+  f->st.rdev  = ((struct fakeroot_kernel_stat *)st)->st_rdev;
+  f->st.nlink = ((struct fakeroot_kernel_stat *)st)->st_nlink;
+  break;
+	  case _STAT_VER_GLIBC2:
+  f->st.mode  = ((struct fakeroot_glibc2_stat *)st)->st_mode;
+  f->st.ino   = ((struct fakeroot_glibc2_stat *)st)->st_ino;
+  f->st.uid   = ((struct fakeroot_glibc2_stat *)st)->st_uid;
+  f->st.gid   = ((struct fakeroot_glibc2_stat *)st)->st_gid;
+  f->st.dev   = ((struct fakeroot_glibc2_stat *)st)->st_dev;
+  f->st.rdev  = ((struct fakeroot_glibc2_stat *)st)->st_rdev;
+  f->st.nlink = ((struct fakeroot_glibc2_stat *)st)->st_nlink;
+  break;
+	  case _STAT_VER_GLIBC2_1:
+  f->st.mode  = ((struct fakeroot_glibc21_stat *)st)->st_mode;
+  f->st.ino   = ((struct fakeroot_glibc21_stat *)st)->st_ino;
+  f->st.uid   = ((struct fakeroot_glibc21_stat *)st)->st_uid;
+  f->st.gid   = ((struct fakeroot_glibc21_stat *)st)->st_gid;
+  f->st.dev   = ((struct fakeroot_glibc21_stat *)st)->st_dev;
+  f->st.rdev  = ((struct fakeroot_glibc21_stat *)st)->st_rdev;
+  f->st.nlink = ((struct fakeroot_glibc21_stat *)st)->st_nlink;
+  break;
+		  default:
+  f->st.mode  = st->st_mode;
+  f->st.ino   = st->st_ino;
+  f->st.uid   = st->st_uid;
+  f->st.gid   = st->st_gid;
+  f->st.dev   = st->st_dev;
+  f->st.rdev  = st->st_rdev;
+  f->st.nlink = st->st_nlink;
+  break;
+  }
+#endif
 }
 void cpystat64fakem(struct stat64 *st,
-                 const struct fake_msg *f){
+                 const struct fake_msg *f
+#ifdef STUPID_ALPHA_HACK
+                 , int ver
+#endif
+                 ){
+#ifndef STUPID_ALPHA_HACK
   st->st_mode =f->st.mode;
   st->st_ino  =f->st.ino ;
   st->st_uid  =f->st.uid ;
@@ -231,6 +280,42 @@ void cpystat64fakem(struct stat64 *st,
   /* DON'T copy the nlink count! The system always knows
      this one better! */
   /*  st->st_nlink=f->st.nlink;*/
+#else
+  switch(ver) {
+	  case _STAT_VER_KERNEL:
+  ((struct fakeroot_kernel_stat *)st)->st_mode = f->st.mode;
+  ((struct fakeroot_kernel_stat *)st)->st_ino  = f->st.ino;
+  ((struct fakeroot_kernel_stat *)st)->st_uid  = f->st.uid;
+  ((struct fakeroot_kernel_stat *)st)->st_gid  = f->st.gid;
+  ((struct fakeroot_kernel_stat *)st)->st_dev  = f->st.dev;
+  ((struct fakeroot_kernel_stat *)st)->st_rdev = f->st.rdev;
+  break;
+	  case _STAT_VER_GLIBC2:
+  ((struct fakeroot_glibc2_stat *)st)->st_mode = f->st.mode;
+  ((struct fakeroot_glibc2_stat *)st)->st_ino  = f->st.ino;
+  ((struct fakeroot_glibc2_stat *)st)->st_uid  = f->st.uid;
+  ((struct fakeroot_glibc2_stat *)st)->st_gid  = f->st.gid;
+  ((struct fakeroot_glibc2_stat *)st)->st_dev  = f->st.dev;
+  ((struct fakeroot_glibc2_stat *)st)->st_rdev = f->st.rdev;
+  break;
+		  case _STAT_VER_GLIBC2_1:
+  ((struct fakeroot_glibc21_stat *)st)->st_mode = f->st.mode;
+  ((struct fakeroot_glibc21_stat *)st)->st_ino  = f->st.ino;
+  ((struct fakeroot_glibc21_stat *)st)->st_uid  = f->st.uid;
+  ((struct fakeroot_glibc21_stat *)st)->st_gid  = f->st.gid;
+  ((struct fakeroot_glibc21_stat *)st)->st_dev  = f->st.dev;
+  ((struct fakeroot_glibc21_stat *)st)->st_rdev = f->st.rdev;
+  break;
+		  default:
+  st->st_mode =f->st.mode;
+  st->st_ino  =f->st.ino ;
+  st->st_uid  =f->st.uid ;
+  st->st_gid  =f->st.gid ;
+  st->st_dev  =f->st.dev ;
+  st->st_rdev =f->st.rdev;
+  break;
+  }
+#endif
 }
 
 #endif /* STAT64_SUPPORT */
@@ -571,14 +656,22 @@ void send_stat(const struct stat *st,
 
 #ifdef STAT64_SUPPORT
 void send_stat64(const struct stat64 *st,
-                 func_id_t f){
+                 func_id_t f
+#ifdef STUPID_ALPHA_HACK
+                 , int ver
+#endif
+                 ){
   struct fake_msg buf;
 
 #ifndef FAKEROOT_FAKENET
   if(init_get_msg()!=-1)
 #endif /* ! FAKEROOT_FAKENET */
   {
+#ifndef STUPID_ALPHA_HACK
     cpyfakemstat64(&buf,st);
+#else
+    cpyfakemstat64(&buf,st,ver);
+#endif
     buf.id=f;
     send_fakem(&buf);
   }
@@ -613,7 +706,11 @@ void send_get_stat(struct stat *st
 }
 
 #ifdef STAT64_SUPPORT
-void send_get_stat64(struct stat64 *st)
+void send_get_stat64(struct stat64 *st
+#ifdef STUPID_ALPHA_HACK
+                     , int ver
+#endif
+                    )
 {
   struct fake_msg buf;
 
@@ -621,11 +718,19 @@ void send_get_stat64(struct stat64 *st)
   if(init_get_msg()!=-1)
 #endif /* ! FAKEROOT_FAKENET */
   {
+#ifndef STUPID_ALPHA_HACK
     cpyfakemstat64(&buf,st);
+#else
+    cpyfakemstat64(&buf,st,ver);
+#endif
 
     buf.id=stat_func;
     send_get_fakem(&buf);
+#ifndef STUPID_ALPHA_HACK
     cpystat64fakem(st,&buf);
+#else
+    cpystat64fakem(st,&buf,ver);
+#endif
   }
 }
 #endif /* STAT64_SUPPORT */

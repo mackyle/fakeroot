@@ -153,8 +153,13 @@ extern void unlock_comm_sd(void);
 #endif /* FAKEROOT_FAKENET */
 
 #ifdef STAT64_SUPPORT  
+#ifndef STUPID_ALPHA_HACK
 extern void send_stat64(const struct stat64 *st, func_id_t f);
 extern void send_get_stat64(struct stat64 *buf);
+#else
+extern void send_stat64(const struct stat64 *st, func_id_t f, int ver);
+extern void send_get_stat64(struct stat64 *buf, int ver);
+#endif
 extern void stat64from32(struct stat64 *s64, const struct stat *s32);
 extern void stat32from64(struct stat *s32, const struct stat64 *s64);
 #endif
