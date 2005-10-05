@@ -548,6 +548,35 @@ void send_get_fakem(struct fake_msg *buf)
 
 #else /* FAKEROOT_FAKENET */
 
+
+static size_t write_all(int fd,const void*buf,size_t count) {
+  ssize_t rc,remaining=count;
+  while(remaining>0) {
+	  rc= write(fd, buf+(count-remaining), remaining);
+	  if(rc<=0) {
+		  if(remaining==count) return rc;
+		  else fail("partial write");
+	  } else {
+		  remaining-=rc;
+	  }
+  }
+  return count-remaining;
+}
+
+static size_t read_all(int fd,void *buf,size_t count) {
+  ssize_t rc,remaining=count;
+  while(remaining>0) {
+	  rc = read(fd,buf+(count-remaining),remaining);
+	  if(rc<=0) {
+		  if(remaining==count) return rc;
+		  else fail("partial read");
+	  } else {
+		  remaining-=rc;
+	  }  
+  }
+  return count-remaining;
+}
+
 static void send_fakem_nr(const struct fake_msg *buf)
 {
   struct fake_msg fm;
@@ -565,7 +594,7 @@ static void send_fakem_nr(const struct fake_msg *buf)
   while (1) {
     ssize_t len;
 
-    len = write(comm_sd, &fm, sizeof (fm));
+    len = write_all(comm_sd, &fm, sizeof (fm));
     if (len > 0)
       break;
 
@@ -596,7 +625,7 @@ static void get_fakem_nr(struct fake_msg *buf)
   while (1) {
     ssize_t len;
 
-    len = read(comm_sd, buf, sizeof (struct fake_msg));
+    len = read_all(comm_sd, buf, sizeof (struct fake_msg));
     if (len > 0)
       break;
     if (len == 0) {
