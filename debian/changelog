@@ -1,6 +1,13 @@
 fakeroot (1.5.5) unstable; urgency=low
 
+  Timo Savola:
+
+  * TCP I/O function fix from Toni Timonen.
+
+  Clint Adams:
+
   * Patch from Yann Dirson: cope with Solaris tr.  closes: #337059.
+  * Patch from Yann Dirson: port to Solaris 10.  closes: #337063.
 
  -- Clint Adams <schizo@debian.org>  Wed,  2 Nov 2005 09:48:35 -0500
 
