@@ -1,3 +1,9 @@
+fakeroot (1.5.5) unstable; urgency=low
+
+  * Patch from Yann Dirson: cope with Solaris tr.  closes: #337059.
+
+ -- Clint Adams <schizo@debian.org>  Wed,  2 Nov 2005 09:48:35 -0500
+
 fakeroot (1.5.4) unstable; urgency=low
 
   * On i386, build-depend on lib64gcc1. 
