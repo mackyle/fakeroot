@@ -234,7 +234,11 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 done
 
 dnl find out how stat() etc are called. On linux systems, we really
-dnl need to wrap __xstat(), on Solaris _stat, on Digital Unix stat() (IIRC)
+dnl need to wrap (IIRC):
+dnl  Linux       : __xstat
+dnl  Solaris <=9 : _stat
+dnl  Solaris 10  : _xstat
+dnl  Digital Unix: stat
 
 :>fakerootconfig.h.tmp
 
@@ -242,7 +246,7 @@ for SEARCH in %stat f%stat l%stat %stat64 f%stat64 l%stat64 %mknod; do
   FUNC=`echo $SEARCH|sed -e 's/.*%//'`
   PRE=`echo $SEARCH|sed -e 's/%.*//'`
   FOUND=
-  for WRAPPED in __${PRE}x${FUNC} __${PRE}${FUNC}13 ${PRE}${FUNC}; do
+  for WRAPPED in __${PRE}x${FUNC} _${PRE}x${FUNC} __${PRE}${FUNC}13 ${PRE}${FUNC}; do
     AC_CHECK_FUNCS($WRAPPED,FOUND=$WRAPPED)
 dnl
 dnl to unconditionally define only the _* functions, comment out the 2 lines above,
@@ -259,7 +263,7 @@ dnl    FOUND=$WRAPPED
       AC_DEFINE_UNQUOTED(WRAP_${PF}_QUOTE, "$FOUND")
       AC_DEFINE_UNQUOTED(TMP_${PF}, tmp_$FOUND)
       AC_DEFINE_UNQUOTED(NEXT_${PF}_NOARG, next_$FOUND)
-      if test __"${PRE}x${FUNC}" != "${WRAPPED}"; then
+      if test __"${PRE}x${FUNC}" != "${WRAPPED}" && test _"${PRE}x${FUNC}" != "${WRAPPED}" ; then
         DEF_BEGIN=""
       else
         DEF_BEGIN="a,"

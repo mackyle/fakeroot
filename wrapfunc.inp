@@ -26,7 +26,7 @@ WRAP_FSTAT;int;FSTAT_ARG(int ver, int fd, struct stat *buf);FSTAT_ARG(ver, fd, b
 #ifdef STAT64_SUPPORT
 WRAP_LSTAT64;int;LSTAT64_ARG(int ver, const char *file_name, struct stat64 *buf);LSTAT64_ARG(ver, file_name, buf);LSTAT64
 WRAP_STAT64;int;STAT64_ARG(int ver, const char *file_name, struct stat64 *buf);STAT64_ARG(ver, file_name, buf);STAT64
-WRAP_FSTAT64;int;FSTAT_ARG(int ver, int fd, struct stat64 *buf);FSTAT_ARG(ver, fd, buf);FSTAT64
+WRAP_FSTAT64;int;FSTAT64_ARG(int ver, int fd, struct stat64 *buf);FSTAT64_ARG(ver, fd, buf);FSTAT64
 #endif
 
 WRAP_MKNOD;int;MKNOD_ARG(int ver, const char *pathname, mode_t mode, dev_t XMKNOD_FRTH_ARG dev);MKNOD_ARG(ver, pathname, mode, dev);MKNOD
