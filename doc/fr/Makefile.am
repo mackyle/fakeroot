@@ -1,6 +1,8 @@
 AUTOMAKE_OPTIONS=foreign
 
-manfrdir = $(mandir)/fr/man1
-manfr_DATA = fakeroot.1
+mandir = @mandir@/fr
+man_MANS = fakeroot.1 faked.1
 
-EXTRA_DIST = fakeroot.1
+$(man_MANS):
+
+EXTRA_DIST = fakeroot.1 faked.1

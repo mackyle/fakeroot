@@ -18,7 +18,7 @@ EOF
 PREFIX=@prefix@
 BINDIR=@bindir@
     
-LIB=lib@fakeroot_transformed@.so.0
+LIB=lib@fakeroot_transformed@.so
 PATHS=@libdir@:${PREFIX}/lib64/libfakeroot:${PREFIX}/lib32/libfakeroot
 FAKED=${BINDIR}/@faked_transformed@
 
