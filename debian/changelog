@@ -1,3 +1,11 @@
+fakeroot (1.5.6) unstable; urgency=low
+
+  * Patch from Thomas Huriaux to put translated manpages
+    under po4a; includes updated French translation from
+    Sylvain Cherrier.  closes: #343175.
+
+ -- Clint Adams <schizo@debian.org>  Tue, 13 Dec 2005 13:43:26 -0500
+
 fakeroot (1.5.5) unstable; urgency=low
 
   Timo Savola:

@@ -87,24 +87,20 @@ binary-arch: build checkroot
 
 	cd obj-tcp && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
 	cd objfake-tcp && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
-	mv debian/tmp/usr/lib/libfakeroot/libfakeroot.so.0.0.1 debian/tmp/usr/lib/libfakeroot/libfakeroot-tcp.so.0.0.1
-	rm debian/tmp/usr/lib/libfakeroot/libfakeroot.so.0
-	ln -s libfakeroot-tcp.so.0.0.1 debian/tmp/usr/lib/libfakeroot/libfakeroot-tcp.so.0
+	mv debian/tmp/usr/lib/libfakeroot/libfakeroot-0.so debian/tmp/usr/lib/libfakeroot/libfakeroot-tcp.so
+	rm debian/tmp/usr/lib/libfakeroot/libfakeroot.so
 
-	mv debian/tmp/usr/lib/libfakeroot.so.0.0.1 debian/tmp/usr/lib/libfakeroot-tcp.so.0.0.1
-	rm debian/tmp/usr/lib/libfakeroot.so.0
-	ln -s libfakeroot-tcp.so.0.0.1 debian/tmp/usr/lib/libfakeroot-tcp.so.0
+	mv debian/tmp/usr/lib/libfakeroot-0.so debian/tmp/usr/lib/libfakeroot-tcp.so
+	rm debian/tmp/usr/lib/libfakeroot.so
 
 	cd obj-sysv && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
 	cd objfake-sysv && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
 
-	mv debian/tmp/usr/lib/libfakeroot/libfakeroot.so.0.0.1 debian/tmp/usr/lib/libfakeroot/libfakeroot-sysv.so.0.0.1
-	rm debian/tmp/usr/lib/libfakeroot/libfakeroot.so.0
-	ln -s libfakeroot-sysv.so.0.0.1 debian/tmp/usr/lib/libfakeroot/libfakeroot-sysv.so.0
+	mv debian/tmp/usr/lib/libfakeroot/libfakeroot-0.so debian/tmp/usr/lib/libfakeroot/libfakeroot-sysv.so
+	rm debian/tmp/usr/lib/libfakeroot/libfakeroot.so
 
-	mv debian/tmp/usr/lib/libfakeroot.so.0.0.1 debian/tmp/usr/lib/libfakeroot-sysv.so.0.0.1
-	rm debian/tmp/usr/lib/libfakeroot.so.0
-	ln -s libfakeroot-sysv.so.0.0.1 debian/tmp/usr/lib/libfakeroot-sysv.so.0
+	mv debian/tmp/usr/lib/libfakeroot-0.so debian/tmp/usr/lib/libfakeroot-sysv.so
+	rm debian/tmp/usr/lib/libfakeroot.so
 
 	$(INSTALL_DIR) debian/tmp/DEBIAN debian/tmp/usr/bin/
 #	$(INSTALL_SCRIPT) scripts/fakeroot debian/tmp/usr/bin/
@@ -127,21 +123,28 @@ ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu x86_64
 endif
 	$(INSTALL_FILE) debian/copyright debian/tmp/usr/share/doc/fakeroot/copyright
 	$(INSTALL_FILE) debian/changelog debian/tmp/usr/share/doc/fakeroot/changelog
-	gzip -9f debian/tmp/usr/share/man/fr/man1/fakeroot.1 \
-	         debian/tmp/usr/share/man/es/man1/fakeroot.1 \
-		 debian/tmp/usr/share/man/es/man1/faked.1 \
-	         debian/tmp/usr/share/man/sv/man1/fakeroot.1 \
-		 debian/tmp/usr/share/man/sv/man1/faked.1 \
-		 debian/tmp/usr/share/man/man1/faked-sysv.1 \
+	gzip -9f debian/tmp/usr/share/man/man1/faked-sysv.1 \
 		 debian/tmp/usr/share/man/man1/fakeroot-sysv.1 \
 		 debian/tmp/usr/share/man/man1/faked-tcp.1 \
 		 debian/tmp/usr/share/man/man1/fakeroot-tcp.1 \
+		 debian/tmp/usr/share/man/es/man1/faked-sysv.1 \
+		 debian/tmp/usr/share/man/es/man1/fakeroot-sysv.1 \
+		 debian/tmp/usr/share/man/es/man1/faked-tcp.1 \
+		 debian/tmp/usr/share/man/es/man1/fakeroot-tcp.1 \
+		 debian/tmp/usr/share/man/fr/man1/faked-sysv.1 \
+		 debian/tmp/usr/share/man/fr/man1/fakeroot-sysv.1 \
+		 debian/tmp/usr/share/man/fr/man1/faked-tcp.1 \
+		 debian/tmp/usr/share/man/fr/man1/fakeroot-tcp.1 \
+		 debian/tmp/usr/share/man/sv/man1/faked-sysv.1 \
+		 debian/tmp/usr/share/man/sv/man1/fakeroot-sysv.1 \
+		 debian/tmp/usr/share/man/sv/man1/faked-tcp.1 \
+		 debian/tmp/usr/share/man/sv/man1/fakeroot-tcp.1 \
 		 debian/tmp/usr/share/doc/fakeroot/changelog
 ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
-	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot-sysv.so.0.0.1
-	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot/libfakeroot-sysv.so.0.0.1
-	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot-tcp.so.0.0.1
-	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot/libfakeroot-tcp.so.0.0.1
+	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot-sysv.so
+	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot/libfakeroot-sysv.so
+	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot-tcp.so
+	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot/libfakeroot-tcp.so
 	strip --remove-section=.comment --remove-section=.note debian/tmp/usr/bin/faked-sysv
 	strip --remove-section=.comment --remove-section=.note debian/tmp/usr/bin/faked-tcp
 #	strip --strip-debug debian/tmp/usr/lib/libfakeroot.a
@@ -164,8 +167,8 @@ endif
 	dpkg-gencontrol -ldebian/changelog -isp -Tdebian/substvars -Pdebian/tmp
 	chmod 644 debian/tmp/DEBIAN/control
 	chown root:root debian/tmp/DEBIAN/control
-	chmod  4644  debian/tmp/usr/lib/libfakeroot-sysv.so.0.0.1
-	chmod  4644  debian/tmp/usr/lib/libfakeroot-tcp.so.0.0.1
+	chmod  4644  debian/tmp/usr/lib/libfakeroot-sysv.so
+	chmod  4644  debian/tmp/usr/lib/libfakeroot-tcp.so
 	cd debian/tmp && find * -type f ! -regex '^DEBIAN/.*' -print0 | xargs -r0 md5sum > DEBIAN/md5sums
 	dpkg-deb --build debian/tmp ..
 
@@ -203,9 +206,7 @@ endif
 	cd obj64-tcp && $(SHELL) ./libtool --mode=install install libfakeroot.la \
 		$(CURDIR)/debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot.la
 	rm -f debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot.*a*
-	mv debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot.so.0.0.1 debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-tcp.so.0.0.1
-	rm -f debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot.so.0
-	ln -s libfakeroot-tcp.so.0.0.1 debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-tcp.so.0
+	mv debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-0.so debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-tcp.so
 #	mv debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot.so.0.0.1 debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot-tcp.so.0.0.1
 #	mv debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot.so.0 debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot-tcp.so.0
 
@@ -215,15 +216,13 @@ endif
 		$(CURDIR)/debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot.la
 #	cd obj64-sysv && ./libtool --finish debian/fakeroot-sparc/$(BIARCH_LIB_DIR)/fakeroot
 	rm -f debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot.*a*
-	mv debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot.so.0.0.1 debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-sysv.so.0.0.1
-	rm -f debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot.so.0
-	ln -s libfakeroot-sysv.so.0.0.1 debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-sysv.so.0
+	mv debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-0.so debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-sysv.so
 
 	rm debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot.so
 #	rm debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot.so
 ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
-	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-sysv.so.0.0.1
-	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-tcp.so.0.0.1
+	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-sysv.so
+	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-tcp.so
 endif
 
 source diff:

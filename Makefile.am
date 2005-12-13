@@ -6,8 +6,7 @@ libcommunicate_la_SOURCES = communicate.c
 
 lib_LTLIBRARIES=libfakeroot.la
 libfakeroot_la_SOURCES=libfakeroot.c statconv/glibc/linux/alpha/stats.h wrapdef.h  wrapstruct.h communicate.h
-libfakeroot_la_LDFLAGS=-version-info 0:1:0
-#libfakeroot_la_LDFLAGS=-version-info 4:0:4
+libfakeroot_la_LDFLAGS=-release 0
 libfakeroot_la_DEPENDENCIES=wrapdef.h wrapstruct.h libcommunicate.la
 libfakeroot_la_LIBADD = libcommunicate.la
 
