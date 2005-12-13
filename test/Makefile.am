@@ -4,7 +4,7 @@ TESTS = t.echoarg t.mknod t.tar t.truereturn t.falsereturn t.option \
 	t.touchinstall
 
 suffix =
-TESTS_ENVIRONMENT = libfakeroot=libfakeroot.so.0 suffix=$(suffix) posixshell=$(SHELL)
+TESTS_ENVIRONMENT = libfakeroot=libfakeroot-0.so suffix=$(suffix) posixshell=$(SHELL)
 
 CLEANFILES = tmp* tartest.tar.gz hda3
 
