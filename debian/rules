@@ -115,9 +115,7 @@ binary-arch: build checkroot
 #	cd objfake-sysv && ./libtool --finish $(CURDIR)/debian/tmp/usr/lib
 	rm -f debian/tmp/usr/lib/libfakeroot/libfakeroot.*a*
 	rm -f debian/tmp/usr/bin/simple debian/tmp/usr/lib/libfakeroot.la
-	rm debian/tmp/usr/lib/libfakeroot/libfakeroot.so
 	rm debian/tmp/usr/lib/libfakeroot.a
-	rm debian/tmp/usr/lib/libfakeroot.so
 ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu x86_64-linux-gnu i486-linux-gnu powerpc-linux-gnu ppc64-linux-gnu))
 	debian/rules binary-biarch
 endif
