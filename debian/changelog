@@ -1,3 +1,9 @@
+fakeroot (1.5.7) unstable; urgency=low
+
+  * Use libtool 1.9+20051221-1 instead of 1.5.22-2.
+
+ -- Clint Adams <schizo@debian.org>  Sun, 29 Jan 2006 22:44:47 -0500
+
 fakeroot (1.5.6) unstable; urgency=low
 
   * Patch from Thomas Huriaux to put translated manpages
