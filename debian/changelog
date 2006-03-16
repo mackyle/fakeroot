@@ -1,3 +1,9 @@
+fakeroot (1.5.8) unstable; urgency=low
+
+  * Change amd64 build-dep from ia32-libs-dev to libc6-dev-i386.
+
+ -- Clint Adams <schizo@debian.org>  Thu, 16 Mar 2006 18:18:21 -0500
+
 fakeroot (1.5.7) unstable; urgency=low
 
   * Use libtool 1.9+20051221-1 instead of 1.5.22-2.
