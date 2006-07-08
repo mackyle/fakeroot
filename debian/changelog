@@ -1,3 +1,11 @@
+fakeroot (1.5.9) unstable; urgency=low
+
+  * Fix libc6-dev-amd64 typo in build-deps.  closes: #376903.
+  * Drop amd64-libs-dev option from build-deps.
+  * Bump Standards-Version to 3.7.2.
+
+ -- Clint Adams <schizo@debian.org>  Sat,  8 Jul 2006 12:24:51 -0400
+
 fakeroot (1.5.8) unstable; urgency=low
 
   * Change amd64 build-dep from ia32-libs-dev to libc6-dev-i386.
