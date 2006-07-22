@@ -1,3 +1,11 @@
+fakeroot (1.5.10) unstable; urgency=low
+
+  * Move po4a stuff to dist-hook.
+  * In postrm, remove the symlink which may have been generated
+    by ldconfig, to avoid upsetting piuparts.  closes: #351299.
+
+ -- Clint Adams <schizo@debian.org>  Sat, 22 Jul 2006 16:02:43 -0400
+
 fakeroot (1.5.9) unstable; urgency=low
 
   * Fix libc6-dev-amd64 typo in build-deps.  closes: #376903.

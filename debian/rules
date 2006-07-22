@@ -33,6 +33,7 @@ BIARCH_LIB_DIR=usr/lib64
 endif
 endif
 
+fakeroot_version := $(shell dpkg-parsechangelog | sed -n '/^Version: \(.*\)$$/ {s//\1/;p}')
 
 build: build-stamp
 build-stamp:
@@ -148,6 +149,7 @@ ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 #	strip --strip-debug debian/tmp/usr/lib/libfakeroot.a
 endif
 	$(INSTALL_FILE) debian/shlibs debian/tmp/DEBIAN/shlibs
+	$(INSTALL_SCRIPT) debian/fakeroot.postrm debian/tmp/DEBIAN/postrm
 	$(INSTALL_SCRIPT) debian/fakeroot.prerm debian/tmp/DEBIAN/prerm
 ifneq ($(DEB_HOST_GNU_SYSTEM),gnu)
 	sed 's/@FAKEROOT_SYSV_ALTPRIO@/50/;s/@FAKEROOT_TCP_ALTPRIO@/30/;' \
@@ -230,11 +232,15 @@ binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary checkroot prebuild
 
 prebuild:
-	printf "define(FAKEROOT_VERSION, %s)\n" $$(dpkg-parsechangelog | sed -n '/^Version: \(.*\)$$/ {s//\1/;p}') >acinclude.m4
+	printf "define(FAKEROOT_VERSION, %s)\n" $(fakeroot_version) >acinclude.m4
 	ln -sf ../acinclude.m4 fake/acinclude.m4
 
 	autoreconf -fi
 	cd fake && autoreconf -fi
+
+	./configure
+	make dist
+	mv fakeroot-$(fakeroot_version).tar.gz ../fakeroot_$(fakeroot_version).orig.tar.gz
 
 define checkdir
 	test -f debian/rules
