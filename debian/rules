@@ -243,7 +243,7 @@ prebuild:
 
 	./configure
 	$(MAKE) dist
-	mv fakeroot-$(fakeroot_version).tar.gz ../fakeroot_$(fakeroot_version).orig.tar.gz
+	mv fakeroot-$(fakeroot_version).tar.gz ../fakeroot_$(fakeroot_version).tar.gz
 	$(MAKE) distclean
 
 define checkdir
