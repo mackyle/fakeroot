@@ -39,6 +39,8 @@ build: build-stamp
 build-stamp:
 	$(checkdir)
 
+	chmod +x fake/configure
+
 	mkdir obj-sysv objfake-sysv obj-tcp objfake-tcp
 	cd obj-sysv && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/usr/lib/libfakeroot --program-suffix=-sysv $(CONFARGS)
 	cd objfake-sysv && CFLAGS="$(CFLAGS)" ../fake/configure --prefix=/usr --mandir=/usr/share/man --program-suffix=-sysv $(CONFARGS)
@@ -233,14 +235,16 @@ binary: binary-indep binary-arch
 
 prebuild:
 	printf "define(FAKEROOT_VERSION, %s)\n" $(fakeroot_version) >acinclude.m4
-	ln -sf ../acinclude.m4 fake/acinclude.m4
+#	ln -sf ../acinclude.m4 fake/acinclude.m4
+	ln -f ../acinclude.m4 fake/acinclude.m4
 
 	autoreconf -fi
 	cd fake && autoreconf -fi
 
 	./configure
-	make dist
+	$(MAKE) dist
 	mv fakeroot-$(fakeroot_version).tar.gz ../fakeroot_$(fakeroot_version).orig.tar.gz
+	$(MAKE) distclean
 
 define checkdir
 	test -f debian/rules
