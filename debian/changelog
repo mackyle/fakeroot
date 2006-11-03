@@ -1,6 +1,6 @@
 fakeroot (1.5.10) unstable; urgency=low
 
-  * Move po4a stuff to dist-hook.
+  * Move po4a stuff to dist-hook and prebuild.
   * Drop po4a from build-deps.
   * In postrm, remove the symlink which may have been generated
     by ldconfig, to avoid upsetting piuparts.  closes: #351299.

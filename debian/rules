@@ -235,16 +235,18 @@ binary: binary-indep binary-arch
 
 prebuild:
 	printf "define(FAKEROOT_VERSION, %s)\n" $(fakeroot_version) >acinclude.m4
-#	ln -sf ../acinclude.m4 fake/acinclude.m4
-	ln -f ../acinclude.m4 fake/acinclude.m4
+	ln -sf ../acinclude.m4 fake/acinclude.m4
+#	ln -f acinclude.m4 fake/acinclude.m4
 
 	autoreconf -fi
 	cd fake && autoreconf -fi
 
-	./configure
-	$(MAKE) dist
-	mv fakeroot-$(fakeroot_version).tar.gz ../fakeroot_$(fakeroot_version).tar.gz
-	$(MAKE) distclean
+	cd doc && po4a -k 0 --rm-backups --variable "srcdir=$(CURDIR)/doc/" po4a/po4a.cfg
+
+#	./configure
+#	$(MAKE) dist
+#	mv fakeroot-$(fakeroot_version).tar.gz ../fakeroot_$(fakeroot_version).tar.gz
+#	$(MAKE) distclean
 
 define checkdir
 	test -f debian/rules
