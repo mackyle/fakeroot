@@ -2,7 +2,7 @@
 /* arguments, and the way to call them. This is then used to generate	  */ 
 /* the wrapper functions declarations in wrapped.h, the wrapper functions */ 
 /* definitions wrapdef.h (actually, only assignments of the function 	  */ 
-/* variables), the structure of wraped functions in wrapstruct.h,	  */ 
+/* variables), the structure of wrapped functions in wrapstruct.h,	  */ 
 /* and the temporary definitions (that hold until one of them is executed)*/ 
 /* in wraptmpf.h                                                          */ 
 /**/                                                                      */
