@@ -26,7 +26,7 @@ endif
 ifeq (x86_64-linux-gnu,$(DEB_HOST_GNU_TYPE))
 BIARCH_LIB_DIR=emul/ia32-linux/usr/lib
 else
-ifeq (ppc64-linux-gnu,$(DEB_HOST_GNU_TYPE))
+ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), ppc64-linux-gnu x86_64-kfreebsd-gnu))
 BIARCH_LIB_DIR=usr/lib32
 else
 BIARCH_LIB_DIR=usr/lib64
@@ -71,7 +71,7 @@ clean: checkroot
 	-cd obj-tcp && $(MAKE) distclean
 	-cd objfake-sysv && $(MAKE) distclean
 	-cd objfake-tcp && $(MAKE) distclean
-ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu x86_64-linux-gnu i486-linux-gnu powerpc-linux-gnu ppc64-linux-gnu))
+ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu x86_64-linux-gnu i486-linux-gnu powerpc-linux-gnu ppc64-linux-gnu x86_64-kfreebsd-gnu))
 	-cd obj64-sysv && $(MAKE) distclean
 	-cd obj64-tcp && $(MAKE) distclean
 endif
@@ -119,7 +119,7 @@ binary-arch: build checkroot
 	rm -f debian/tmp/usr/lib/libfakeroot/libfakeroot.*a*
 	rm -f debian/tmp/usr/bin/simple debian/tmp/usr/lib/libfakeroot.la
 	rm debian/tmp/usr/lib/libfakeroot.a
-ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu x86_64-linux-gnu i486-linux-gnu powerpc-linux-gnu ppc64-linux-gnu))
+ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu x86_64-linux-gnu i486-linux-gnu powerpc-linux-gnu ppc64-linux-gnui x86_64-kfreebsd-gnu))
 	debian/rules binary-biarch
 endif
 	$(INSTALL_FILE) debian/copyright debian/tmp/usr/share/doc/fakeroot/copyright
@@ -201,6 +201,10 @@ endif
 ifneq (,$(findstring $(DEB_HOST_GNU_TYPE),ppc64-linux-gnu))
 	cd obj64-sysv && CC="gcc -m32" ../configure --prefix=/usr --mandir=/usr/share/man --build=ppc64-linux --host=powerpc-linux-gnu --program-suffix=-sysv $(CONFARGS)
 	cd obj64-tcp && CC="gcc -m32" ../configure --prefix=/usr --mandir=/usr/share/man --build=ppc64-linux --host=powerpc-linux-gnu --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
+endif
+ifneq (,$(findstring $(DEB_HOST_GNU_TYPE),x86_64-kfreebsd-gnu))
+	cd obj64-sysv && CC="gcc -m32" ../configure --prefix=/usr --mandir=/usr/share/man --build=x86_64-kfreebsd --host=i486-kfreebsd-gnu --program-suffix=-sysv $(CONFARGS)
+	cd obj64-tcp && CC="gcc -m32" ../configure --prefix=/usr --mandir=/usr/share/man --build=x86_64-kfreebsd --host=i486-kfreebsd-gnu --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 endif
 
 	cd obj64-tcp && $(MAKE) libfakeroot.la
