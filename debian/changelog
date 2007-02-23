@@ -1,3 +1,12 @@
+fakeroot (1.5.13) unstable; urgency=low
+
+  * Add README to describe cases wherein one should use TCP rather
+    than SYSV IPC:
+    - multithreaded app creates IPC problems.  closes: #229050.
+    - slow with a realtime-preempt kernel.  closes: #319474.
+
+ -- Clint Adams <schizo@debian.org>  Fri, 23 Feb 2007 10:51:39 -0500
+
 fakeroot (1.5.12) unstable; urgency=low
 
   * Fix build-dep for kfreebsd-amd64. 

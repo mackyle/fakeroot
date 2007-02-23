@@ -109,7 +109,7 @@ binary-arch: build checkroot
 #	$(INSTALL_SCRIPT) scripts/fakeroot debian/tmp/usr/bin/
 	$(INSTALL_DIR) debian/tmp/usr/share/doc/fakeroot \
 		           debian/tmp/usr/lib/libfakeroot
-	$(INSTALL_FILE) README.fake doc/README.saving DEBUG debian/tmp/usr/share/doc/fakeroot/
+	$(INSTALL_FILE) README README.fake doc/README.saving DEBUG debian/tmp/usr/share/doc/fakeroot/
 	( echo "fakeroot was written originally by"; \
 	  echo "joost witteveen"                   ; \
 	  echo "------------------------------------------------"; \
