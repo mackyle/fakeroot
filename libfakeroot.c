@@ -23,6 +23,29 @@
 
 #include "config.h"
 #include "communicate.h"
+
+#ifdef STAT64_SUPPORT 
+#define INT_STRUCT_STAT struct stat64
+#define INT_NEXT_STAT(a,b,c) NEXT_STAT64(a,b,c)
+#define INT_NEXT_LSTAT(a,b,c) NEXT_LSTAT64(a,b,c)
+#define INT_NEXT_FSTAT(a,b,c) NEXT_FSTAT64(a,b,c)
+#ifndef STUPID_ALPHA_HACK
+#define INT_SEND_STAT(a,b) send_stat64(a,b)
+#else
+#define INT_SEND_STAT(a,b,c) send_stat64(a,b,c)
+#endif
+#else
+#define INT_STRUCT_STAT struct stat
+#define INT_NEXT_STAT(a,b,c) NEXT_STAT(a,b,c)
+#define INT_NEXT_LSTAT(a,b,c) NEXT_LSTAT(a,b,c)
+#define INT_NEXT_FSTAT(a,b,c) NEXT_FSTAT(a,b,c)
+#ifndef STUPID_ALPHA_HACK
+#define INT_SEND_STAT(a,b) send_stat(a,b)
+#else
+#define INT_SEND_STAT(a,b,c) send_stat(a,b,c)
+#endif
+#endif
+
 #include <stdlib.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
@@ -615,17 +638,17 @@ int WRAP_FSTAT64 FSTAT64_ARG(int ver,
  */
 
 int chown(const char *path, uid_t owner, gid_t group){
-  struct stat st;
+  INT_STRUCT_STAT st;
   int r=0;
 
 
 #ifdef LCHOWN_SUPPORT
   /*chown(sym-link) works on the target of the symlink if lchown is
     present and enabled.*/
-  r=NEXT_STAT(_STAT_VER, path, &st);
+  r=INT_NEXT_STAT(_STAT_VER, path, &st);
 #else
   /*chown(sym-link) works on the symlink itself, use lstat: */
-  r=NEXT_LSTAT(_STAT_VER, path, &st);
+  r=INT_NEXT_LSTAT(_STAT_VER, path, &st);
 #endif
   
   if(r)
@@ -633,9 +656,9 @@ int chown(const char *path, uid_t owner, gid_t group){
   st.st_uid=owner;
   st.st_gid=group;
 #ifndef STUPID_ALPHA_HACK
-  send_stat(&st,chown_func);
+  INT_SEND_STAT(&st,chown_func);
 #else
-  send_stat(&st,chown_func, _STAT_VER);
+  INT_SEND_STAT(&st,chown_func, _STAT_VER);
 #endif
   if(!dont_try_chown())
     r=next_lchown(path,owner,group);
@@ -702,19 +725,19 @@ int fchown(int fd, uid_t owner, gid_t group){
 }
 
 int chmod(const char *path, mode_t mode){
-  struct stat st;
+  INT_STRUCT_STAT st;
   int r;
 
-  r=NEXT_STAT(_STAT_VER, path, &st);
+  r=INT_NEXT_STAT(_STAT_VER, path, &st);
   if(r)
     return r;
   
   st.st_mode=(mode&ALLPERMS)|(st.st_mode&~ALLPERMS);
     
 #ifndef STUPID_ALPHA_HACK
-  send_stat(&st, chmod_func);
+  INT_SEND_STAT(&st, chmod_func);
 #else
-  send_stat(&st, chmod_func, _STAT_VER);
+  INT_SEND_STAT(&st, chmod_func, _STAT_VER);
 #endif
   
   /* if a file is unwritable, then root can still write to it
@@ -737,19 +760,19 @@ int chmod(const char *path, mode_t mode){
 
 int fchmod(int fd, mode_t mode){
   int r;
-  struct stat st;
+  INT_STRUCT_STAT st;
 
 
-  r=NEXT_FSTAT(_STAT_VER, fd, &st);
+  r=INT_NEXT_FSTAT(_STAT_VER, fd, &st);
   
   if(r)
     return(r);
   
   st.st_mode=(mode&ALLPERMS)|(st.st_mode&~ALLPERMS);
 #ifndef STUPID_ALPHA_HACK
-  send_stat(&st,chmod_func);  
+  INT_SEND_STAT(&st,chmod_func);  
 #else
-  send_stat(&st,chmod_func, _STAT_VER);  
+  INT_SEND_STAT(&st,chmod_func, _STAT_VER);  
 #endif
   
   /* see chmod() for comment */
@@ -803,7 +826,7 @@ int WRAP_MKNOD MKNOD_ARG(int ver UNUSED,
 }
 
 int mkdir(const char *path, mode_t mode){
-  struct stat st;
+  INT_STRUCT_STAT st;
   int r;
   mode_t old_mask=umask(022);
 
@@ -818,7 +841,7 @@ int mkdir(const char *path, mode_t mode){
   /* mode|0700: see comment in the chown() function above */
   if(r)
     return -1;
-  r=NEXT_STAT(_STAT_VER, path, &st);
+  r=INT_NEXT_STAT(_STAT_VER, path, &st);
   
   if(r)
     return -1;
@@ -826,9 +849,9 @@ int mkdir(const char *path, mode_t mode){
   st.st_mode=(mode&~old_mask&ALLPERMS)|(st.st_mode&~ALLPERMS)|S_IFDIR;
 
 #ifndef STUPID_ALPHA_HACK
-  send_stat(&st, chmod_func);
+  INT_SEND_STAT(&st, chmod_func);
 #else
-  send_stat(&st, chmod_func, _STAT_VER);
+  INT_SEND_STAT(&st, chmod_func, _STAT_VER);
 #endif
 
   return 0;
@@ -851,13 +874,10 @@ int mkdir(const char *path, mode_t mode){
 
 int unlink(const char *pathname){
   int r;
-#ifdef STAT64_SUPPORT
-  struct stat64 st;
-  r=NEXT_LSTAT64(_STAT_VER, pathname, &st);
-#else
-  struct stat st;
-  r=NEXT_LSTAT(_STAT_VER, pathname, &st);
-#endif
+  INT_STRUCT_STAT st;
+
+
+  r=INT_NEXT_LSTAT64(_STAT_VER, pathname, &st);
   if(r)
     return -1;
 
@@ -866,14 +886,10 @@ int unlink(const char *pathname){
   if(r)
     return -1;
   
-#ifdef STAT64_SUPPORT
 #ifndef STUPID_ALPHA_HACK
-  send_stat64(&st, unlink_func);
+  INT_SEND_STAT(&st, unlink_func);
 #else
-  send_stat64(&st, unlink_func, _STAT_VER);
-#endif
-#else
-  send_stat(&st, unlink_func);
+  INT_SEND_STAT(&st, unlink_func, _STAT_VER);
 #endif
   
   return 0;
@@ -885,9 +901,9 @@ int unlink(const char *pathname){
 */
 int rmdir(const char *pathname){
   int r;
-  struct stat st;
+  INT_STRUCT_STAT st;
 
-  r=NEXT_LSTAT(_STAT_VER, pathname, &st);
+  r=INT_NEXT_LSTAT(_STAT_VER, pathname, &st);
   if(r)
     return -1;
   r=next_rmdir(pathname);  
@@ -895,9 +911,9 @@ int rmdir(const char *pathname){
     return -1;
 
 #ifndef STUPID_ALPHA_HACK
-  send_stat(&st,unlink_func);  
+  INT_SEND_STAT(&st,unlink_func);  
 #else
-  send_stat(&st,unlink_func, _STAT_VER);  
+  INT_SEND_STAT(&st,unlink_func, _STAT_VER);  
 #endif
 
   return 0;
@@ -909,18 +925,18 @@ int rmdir(const char *pathname){
 */
 int remove(const char *pathname){
   int r;
-  struct stat st;
+  INT_STRUCT_STAT st;
 
-  r=NEXT_LSTAT(_STAT_VER, pathname, &st);
+  r=INT_NEXT_LSTAT(_STAT_VER, pathname, &st);
   if(r)
     return -1;
   r=next_remove(pathname);  
   if(r)
     return -1;
 #ifndef STUPID_ALPHA_HACK
-  send_stat(&st,unlink_func);  
+  INT_SEND_STAT(&st,unlink_func);  
 #else
-  send_stat(&st,unlink_func, _STAT_VER);  
+  INT_SEND_STAT(&st,unlink_func, _STAT_VER);  
 #endif
   
   return r;
@@ -937,7 +953,7 @@ int remove(const char *pathname){
 
 int rename(const char *oldpath, const char *newpath){
   int r,s;
-  struct stat st;     
+  INT_STRUCT_STAT st;     
 
   /* If newpath points to an existing file, that file will be 
      unlinked.   Make sure we tell the faked daemon about this! */
@@ -945,16 +961,16 @@ int rename(const char *oldpath, const char *newpath){
   /* we need the st_new struct in order to inform faked about the
      (possible) unlink of the file */
 
-  r=NEXT_LSTAT(_STAT_VER, newpath, &st);
+  r=INT_NEXT_LSTAT(_STAT_VER, newpath, &st);
 
   s=next_rename(oldpath, newpath);
   if(s)
     return -1;
   if(!r)
 #ifndef STUPID_ALPHA_HACK
-    send_stat(&st,unlink_func);
+    INT_SEND_STAT(&st,unlink_func);
 #else
-    send_stat(&st,unlink_func, _STAT_VER);
+    INT_SEND_STAT(&st,unlink_func, _STAT_VER);
 #endif
 
   return 0;
