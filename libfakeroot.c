@@ -877,7 +877,7 @@ int unlink(const char *pathname){
   INT_STRUCT_STAT st;
 
 
-  r=INT_NEXT_LSTAT64(_STAT_VER, pathname, &st);
+  r=INT_NEXT_LSTAT(_STAT_VER, pathname, &st);
   if(r)
     return -1;
 
