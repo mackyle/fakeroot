@@ -18,7 +18,7 @@ EOF
 PREFIX=@prefix@
 BINDIR=@bindir@
     
-LIB=lib@fakeroot_transformed@.so
+LIB=lib@fakeroot_transformed@@DLSUFFIX@
 PATHS=@libdir@:${PREFIX}/lib64/libfakeroot:${PREFIX}/lib32/libfakeroot
 FAKED=${BINDIR}/@faked_transformed@
 
@@ -133,21 +133,21 @@ if test -z "$FAKEROOTKEY" || test -z "$PID"; then
 fi
 
 # Keep other library paths
-if test -n "$LD_LIBRARY_PATH"; then
-  PATHS="$PATHS:$LD_LIBRARY_PATH"
+if test -n "$@LDLIBPATHVAR@"; then
+  PATHS="$PATHS:$@LDLIBPATHVAR@"
 fi
 # ...and preloaded libs
-if test -n "$LD_PRELOAD"; then
-  LIB="$LIB $LD_PRELOAD"
+if test -n "$@LDPRELOADVAR@"; then
+  LIB="$LIB $@LDPRELOADVAR@"
 fi
 
 export FAKEROOT_FD_BASE
 
 if test -z "$*"; then
-  FAKEROOTKEY=$FAKEROOTKEY LD_LIBRARY_PATH="$PATHS" LD_PRELOAD="$LIB" ${SHELL:-/bin/sh}
+  FAKEROOTKEY=$FAKEROOTKEY @LDLIBPATHVAR@="$PATHS" @LDEXTRAVAR@ @LDPRELOADVAR@="$LIB" ${SHELL:-/bin/sh}
   RESULT=$?
 else
-  FAKEROOTKEY=$FAKEROOTKEY LD_LIBRARY_PATH="$PATHS" LD_PRELOAD="$LIB" "$@"
+  FAKEROOTKEY=$FAKEROOTKEY @LDLIBPATHVAR@="$PATHS" @LDEXTRAVAR@ @LDPRELOADVAR@="$LIB" "$@"
   RESULT=$?
 fi
 
