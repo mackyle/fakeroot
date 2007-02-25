@@ -313,7 +313,10 @@ else
 fi
 
 dnl This should really be done intelligently.
-
+DLSUFFIX=".so"
+LDLIBPATHVAR="LD_LIBRARY_PATH"
+LDPRELOADVAR="LD_PRELOAD"
+LDEXTRAVAR=""
 case $target_cpu:$target_os in
 	(alpha*:linux*|ia64*:linux*)
       		libcpath="/lib/libc.so.6.1"
@@ -342,6 +345,13 @@ case $target_cpu:$target_os in
 	(*:solaris*)
 		libcpath="/lib/libc.so.1"
 		;;
+	(*:darwin*)
+		libcpath="/usr/lib/libSystem.dylib"
+		DLSUFFIX=".dylib"
+		LDLIBPATHVAR="DYLD_LIBRARY_PATH"
+		LDPRELOADVAR="DYLD_INSERT_LIBRARIES"
+		LDEXTRAVAR="DYLD_FORCE_FLAT_NAMESPACE=1"
+		;;
 	(*)
 		AC_MSG_WARN([don't know where libc is for $target_os on
 			     $target_cpu, setting to /lib/libc.so])
@@ -350,6 +360,10 @@ case $target_cpu:$target_os in
 esac
 
 AC_DEFINE_UNQUOTED([LIBCPATH], "$libcpath", [path to libc shared object])
+AC_SUBST(DLSUFFIX)
+AC_SUBST(LDLIBPATHVAR)
+AC_SUBST(LDPRELOADVAR)
+AC_SUBST(LDEXTRAVAR)
 
 dnl Checks for library functions.
 AC_CHECK_FUNCS(strdup strstr getresuid setresuid getresgid setresgid setfsuid setfsgid)

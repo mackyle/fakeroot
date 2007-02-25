@@ -1,3 +1,9 @@
+fakeroot (1.6.1) unstable; urgency=low
+
+  * Apply patch from Heikki Lindholm to fix MacOS X support.
+
+ -- Clint Adams <schizo@debian.org>  Sun, 25 Feb 2007 11:35:30 -0500
+
 fakeroot (1.6) unstable; urgency=medium
 
   * Apply patch from Christian Ehrhardt to use stat64 internally
