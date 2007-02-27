@@ -18,6 +18,7 @@ EOF
 PREFIX=@prefix@
 BINDIR=@bindir@
     
+USEABSLIBPATH=@LDPRELOADABS@
 LIB=lib@fakeroot_transformed@@DLSUFFIX@
 PATHS=@libdir@:${PREFIX}/lib64/libfakeroot:${PREFIX}/lib32/libfakeroot
 FAKED=${BINDIR}/@faked_transformed@
@@ -94,6 +95,7 @@ done
 shift #get rid of the '--'
 
 # make sure the preload is available
+ABSLIB=""
 if [ -n "$PATHS" ]
 then
     for dir in `echo $PATHS | sed 's/:/ /g'`
@@ -101,12 +103,14 @@ then
 	if test -r "$dir/$LIB"
 	then
 	    libfound=yes
+	    ABSLIB="$dir/$LIB"
 	fi
     done
 else
     if test -r "$LIB"
     then
 	libfound=yes
+	ABSLIB="$LIB"
     fi
 fi
 
@@ -132,6 +136,9 @@ if test -z "$FAKEROOTKEY" || test -z "$PID"; then
   exit 1
 fi
 
+if test $USEABSLIBPATH -ne 0 ; then
+  LIB=$ABSLIB
+fi
 # Keep other library paths
 if test -n "$@LDLIBPATHVAR@"; then
   PATHS="$PATHS:$@LDLIBPATHVAR@"
