@@ -1,6 +1,8 @@
 fakeroot (1.6.2) unstable; urgency=low
 
   * Apply patch from Heikki Lindholm to fix MacOS X support even more.
+  * Add MacOS X portability note (two-level namespaces break) to
+    README.
 
  -- Clint Adams <schizo@debian.org>  Tue, 27 Feb 2007 09:34:43 -0500
 
