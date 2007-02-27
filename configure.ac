@@ -316,6 +316,7 @@ dnl This should really be done intelligently.
 DLSUFFIX=".so"
 LDLIBPATHVAR="LD_LIBRARY_PATH"
 LDPRELOADVAR="LD_PRELOAD"
+LDPRELOADABS=0
 LDEXTRAVAR=""
 case $target_cpu:$target_os in
 	(alpha*:linux*|ia64*:linux*)
@@ -350,6 +351,7 @@ case $target_cpu:$target_os in
 		DLSUFFIX=".dylib"
 		LDLIBPATHVAR="DYLD_LIBRARY_PATH"
 		LDPRELOADVAR="DYLD_INSERT_LIBRARIES"
+		LDPRELOADABS=1
 		LDEXTRAVAR="DYLD_FORCE_FLAT_NAMESPACE=1"
 		;;
 	(*)
@@ -363,6 +365,7 @@ AC_DEFINE_UNQUOTED([LIBCPATH], "$libcpath", [path to libc shared object])
 AC_SUBST(DLSUFFIX)
 AC_SUBST(LDLIBPATHVAR)
 AC_SUBST(LDPRELOADVAR)
+AC_SUBST(LDPRELOADABS)
 AC_SUBST(LDEXTRAVAR)
 
 dnl Checks for library functions.

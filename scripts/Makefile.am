@@ -14,6 +14,7 @@ do_subst = sed -e 's,[@]prefix[@],$(prefix),g' \
 	   -e 's,[@]DLSUFFIX[@],$(DLSUFFIX),g' \
 	   -e 's,[@]LDLIBPATHVAR[@],$(LDLIBPATHVAR),g' \
 	   -e 's,[@]LDPRELOADVAR[@],$(LDPRELOADVAR),g' \
+	   -e 's,[@]LDPRELOADABS[@],$(LDPRELOADABS),g' \
 	   -e 's,[@]LDEXTRAVAR[@],$(LDEXTRAVAR),g'
 
 fakeroot: $(srcdir)/fakeroot.in Makefile
