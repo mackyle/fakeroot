@@ -1,3 +1,9 @@
+fakeroot (1.6.3) unstable; urgency=low
+
+  * Attempt to prevent nested fakeroot invocations.
+
+ -- Clint Adams <schizo@debian.org>  Tue, 27 Feb 2007 22:30:23 -0500
+
 fakeroot (1.6.2) unstable; urgency=low
 
   * Apply patch from Heikki Lindholm to fix MacOS X support even more.
