@@ -1,5 +1,5 @@
 AUTOMAKE_OPTIONS=foreign
-SUBDIRS = es fr sv
+SUBDIRS = es fr sv nl
 
 man_MANS = faked.1 fakeroot.1
 
