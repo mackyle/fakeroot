@@ -1,6 +1,7 @@
 fakeroot (1.6.4) unstable; urgency=low
 
   * Apply patch from Martijn Dekker to add Dutch man page translations.
+  * gzip Dutch man pages.
 
  -- Clint Adams <schizo@debian.org>  Sun,  4 Mar 2007 10:56:55 -0500
 
