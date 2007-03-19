@@ -39,8 +39,6 @@ build: build-stamp
 build-stamp:
 	$(checkdir)
 
-	chmod +x fake/configure
-
 	mkdir obj-sysv obj-tcp
 	cd obj-sysv && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/usr/lib/libfakeroot --program-suffix=-sysv $(CONFARGS)
 
