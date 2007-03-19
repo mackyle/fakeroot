@@ -41,17 +41,13 @@ build-stamp:
 
 	chmod +x fake/configure
 
-	mkdir obj-sysv objfake-sysv obj-tcp objfake-tcp
+	mkdir obj-sysv obj-tcp
 	cd obj-sysv && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/usr/lib/libfakeroot --program-suffix=-sysv $(CONFARGS)
-	cd objfake-sysv && CFLAGS="$(CFLAGS)" ../fake/configure --prefix=/usr --mandir=/usr/share/man --program-suffix=-sysv $(CONFARGS)
 
 	cd obj-tcp && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/usr/lib/libfakeroot --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
-	cd objfake-tcp && CFLAGS="$(CFLAGS)" ../fake/configure --prefix=/usr --mandir=/usr/share/man --program-suffix=-tcp $(CONFARGS)
 
 	cd obj-sysv && $(MAKE)
-	cd objfake-sysv && $(MAKE)
 	cd obj-tcp && $(MAKE)
-	cd objfake-tcp && $(MAKE)
 
 ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
 ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
@@ -64,20 +60,18 @@ endif
 
 clean: checkroot
 	$(checkdir)
-	rm -rf obj-sysv objfake-sysv obj64-sysv obj-tcp objfake-tcp obj64-tcp
+	rm -rf obj-sysv obj64-sysv obj-tcp obj64-tcp
 	rm -f build-stamp build-biarch-stamp
 #	 Add here commands to clean up after the build process.
 	-cd obj-sysv && $(MAKE) distclean
 	-cd obj-tcp && $(MAKE) distclean
-	-cd objfake-sysv && $(MAKE) distclean
-	-cd objfake-tcp && $(MAKE) distclean
 ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu x86_64-linux-gnu i486-linux-gnu powerpc-linux-gnu ppc64-linux-gnu x86_64-kfreebsd-gnu))
 	-cd obj64-sysv && $(MAKE) distclean
 	-cd obj64-tcp && $(MAKE) distclean
 endif
 	rm -rf .deps
 	rm -f debian/substvars debian/files
-	rm -rf debian/tmp obj obj64 objfake autom4te.cache
+	rm -rf debian/tmp obj obj64 autom4te.cache
 	find . -type f -a \( -name \#\*\# -o -name .\*\~ -o -name \*\~ -o -name DEADJOE -o -name \*.orig -o -name \*.rej -o -name \*.bak -o -name .\*.orig -o -name .\*.rej -o -name .SUMS -o -name TAGS -o -name core -o \( -path \*/.deps/\* -a -name \*.P \) \) -exec rm -f {} \;
 
 # Build architecture-independent files here.
@@ -89,7 +83,6 @@ binary-arch: build checkroot
 	$(checkdir)
 
 	cd obj-tcp && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
-	cd objfake-tcp && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
 	mv debian/tmp/usr/lib/libfakeroot/libfakeroot-0.so debian/tmp/usr/lib/libfakeroot/libfakeroot-tcp.so
 	rm debian/tmp/usr/lib/libfakeroot/libfakeroot.so
 
@@ -97,7 +90,6 @@ binary-arch: build checkroot
 	rm debian/tmp/usr/lib/libfakeroot.so
 
 	cd obj-sysv && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
-	cd objfake-sysv && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
 
 	mv debian/tmp/usr/lib/libfakeroot/libfakeroot-0.so debian/tmp/usr/lib/libfakeroot/libfakeroot-sysv.so
 	rm debian/tmp/usr/lib/libfakeroot/libfakeroot.so
@@ -109,13 +101,12 @@ binary-arch: build checkroot
 #	$(INSTALL_SCRIPT) scripts/fakeroot debian/tmp/usr/bin/
 	$(INSTALL_DIR) debian/tmp/usr/share/doc/fakeroot \
 		           debian/tmp/usr/lib/libfakeroot
-	$(INSTALL_FILE) README README.fake doc/README.saving DEBUG debian/tmp/usr/share/doc/fakeroot/
+	$(INSTALL_FILE) README doc/README.saving DEBUG debian/tmp/usr/share/doc/fakeroot/
 	( echo "fakeroot was written originally by"; \
 	  echo "joost witteveen"                   ; \
 	  echo "------------------------------------------------"; \
 	  cat COPYING) > debian/tmp/usr/share/doc/fakeroot/copyright
 #	cd obj-sysv && ./libtool --finish $(CURDIR)/debian/tmp/usr/lib/fakeroot
-#	cd objfake-sysv && ./libtool --finish $(CURDIR)/debian/tmp/usr/lib
 	rm -f debian/tmp/usr/lib/libfakeroot/libfakeroot.*a*
 	rm -f debian/tmp/usr/bin/simple debian/tmp/usr/lib/libfakeroot.la
 	rm debian/tmp/usr/lib/libfakeroot.a
@@ -243,11 +234,8 @@ binary: binary-indep binary-arch
 
 prebuild:
 	printf "define(FAKEROOT_VERSION, %s)\n" $(fakeroot_version) >acinclude.m4
-	ln -sf ../acinclude.m4 fake/acinclude.m4
-#	ln -f acinclude.m4 fake/acinclude.m4
 
 	autoreconf -fi
-	cd fake && autoreconf -fi
 
 	cd doc && po4a -k 0 --rm-backups --variable "srcdir=$(CURDIR)/doc/" po4a/po4a.cfg
 

@@ -1,3 +1,9 @@
+fakeroot (1.6.5) unstable; urgency=low
+
+  * Remove setuid fake libraries and README.fake explanation. 
+
+ -- Clint Adams <schizo@debian.org>  Mon, 19 Mar 2007 11:20:58 -0400
+
 fakeroot (1.6.4) unstable; urgency=low
 
   * Apply patch from Martijn Dekker to add Dutch man page translations.
