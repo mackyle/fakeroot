@@ -948,7 +948,6 @@ int WRAP_MKNOD MKNOD_ARG(int ver UNUSED,
   return 0;
 }
 
-FOKKO
 #ifdef HAVE_FSTATAT
 #ifdef HAVE_MKNODAT
 int WRAP_MKNODAT MKNODAT_ARG(int ver UNUSED,
