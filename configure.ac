@@ -144,6 +144,33 @@ AC_MSG_CHECKING([for type of arg of __xmknod])
   
   ])
 
+dnl Possibly this should only be done if we actually have mknodat
+dnl on the system.  Nothing  breaks by running the test itself though.
+AH_TEMPLATE([XMKNODAT_FIFTH_ARG], [fifth argument of __xmknodat])
+dnl glibc uses `* dev' as fifth argument of __xmknodat.
+dnl Although the test below should probably be more general
+dnl (not just __xmknodat, but also mknod etc), at the moment this
+dnl seems enough, as probably glibc is the only that does this.
+AC_MSG_CHECKING([for type of arg of __xmknodat])
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+       #include <sys/types.h>
+       #include <sys/stat.h>
+       #include <fcntl.h>
+       #include <unistd.h>
+  ]], [[  
+       int __xmknodat  ( int ver, 
+                         inf dirfd,
+                         const char *pathname ,  
+                         mode_t  mode ,  dev_t dev);
+  ]])],[
+   AC_DEFINE(XMKNODAT_FIFTH_ARG,)
+   AC_MSG_RESULT([no extra *])
+  ],[ 
+   AC_DEFINE(XMKNODAT_FIFTH_ARG,[*])
+   AC_MSG_RESULT([needs *])  
+  
+  ])
+
 AH_TEMPLATE([INITGROUPS_SECOND_ARG], [second argument of initgroups])
 dnl FreeBSD 4.7 uses int instead of gid_t
 AC_MSG_CHECKING([for type of arg of initgroups])
@@ -234,6 +261,8 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
   ])
 done
 
+AC_CHECK_FUNCS(fchmodat fchownat fstatat mkdirat mknodat openat renameat unlinkat)
+
 dnl find out how stat() etc are called. On linux systems, we really
 dnl need to wrap (IIRC):
 dnl  Linux       : __xstat
@@ -243,7 +272,7 @@ dnl  Digital Unix: stat
 
 :>fakerootconfig.h.tmp
 
-for SEARCH in %stat f%stat l%stat %stat64 f%stat64 l%stat64 %mknod; do
+for SEARCH in %stat f%stat l%stat f%statat %stat64 f%stat64 l%stat64 f%statat64 %mknod %mknodat; do
   FUNC=`echo $SEARCH|sed -e 's/.*%//'`
   PRE=`echo $SEARCH|sed -e 's/%.*//'`
   FOUND=
@@ -271,6 +300,12 @@ dnl    FOUND=$WRAPPED
       fi
       if test "${FUNC}" = "mknod"; then
         DEF_END=",d"
+      elif test "${FUNC}" = "mknodat"; then
+        DEF_END=",d,e"
+      elif test "${FUNC}" = "statat"; then
+        DEF_END=",d,e"
+      elif test "${FUNC}" = "statat64"; then
+        DEF_END=",d,e"
       else
         DEF_END=""
       fi
@@ -389,6 +424,11 @@ AH_VERBATIM([WRAP_STAT],
 #define TMP_FSTAT  __astat 
 #define NEXT_FSTAT_NOARG  next___astat 
 
+#define WRAP_FSTATAT_QUOTE  __astatat 
+#define WRAP_FSTATAT  __astatat 
+#define TMP_FSTATAT  __astatat 
+#define NEXT_FSTATAT_NOARG  next___astatat 
+
 #define WRAP_STAT64_QUOTE  __astat64 
 #define WRAP_STAT64  __astat64 
 #define TMP_STAT64  __astat64 
@@ -404,10 +444,20 @@ AH_VERBATIM([WRAP_STAT],
 #define TMP_FSTAT64  __astat64
 #define NEXT_FSTAT64_NOARG  next___astat64 
 
+#define WRAP_FSTATAT64_QUOTE  __astatat64
+#define WRAP_FSTATAT64  __astatat64
+#define TMP_FSTATAT64  __astatat64
+#define NEXT_FSTATAT64_NOARG  next___astatat64 
+
 #define WRAP_MKNOD_QUOTE  __amknod 
 #define WRAP_MKNOD  __amknod 
 #define TMP_MKNOD  __amknod 
 #define NEXT_MKNOD_NOARG  next___amknod 
+
+#define WRAP_MKNODAT_QUOTE  __amknodat 
+#define WRAP_MKNODAT  __amknodat 
+#define TMP_MKNODAT  __amknodat 
+#define NEXT_MKNODAT_NOARG  next___amknodat 
 ])
 dnl kludge end
 

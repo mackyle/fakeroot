@@ -22,14 +22,26 @@ freopen;FILE *;(const char *pathname, const char *mode, FILE *stream);(pathname,
 WRAP_LSTAT;int;LSTAT_ARG(int ver, const char *file_name, struct stat *buf);LSTAT_ARG(ver, file_name, buf);LSTAT
 WRAP_STAT;int;STAT_ARG(int ver, const char *file_name, struct stat *buf);STAT_ARG(ver, file_name, buf);STAT
 WRAP_FSTAT;int;FSTAT_ARG(int ver, int fd, struct stat *buf);FSTAT_ARG(ver, fd, buf);FSTAT
+#ifdef HAVE_FSTATAT
+WRAP_FSTATAT;int;FSTATAT_ARG(int ver, int dir_fd, const char *path, struct stat *buf, int flags);FSTATAT_ARG(ver, dir_fd, path, buf, flags);FSTATAT
+#endif /* HAVE_FSTATAT */
 
 #ifdef STAT64_SUPPORT
 WRAP_LSTAT64;int;LSTAT64_ARG(int ver, const char *file_name, struct stat64 *buf);LSTAT64_ARG(ver, file_name, buf);LSTAT64
 WRAP_STAT64;int;STAT64_ARG(int ver, const char *file_name, struct stat64 *buf);STAT64_ARG(ver, file_name, buf);STAT64
 WRAP_FSTAT64;int;FSTAT64_ARG(int ver, int fd, struct stat64 *buf);FSTAT64_ARG(ver, fd, buf);FSTAT64
-#endif
+#ifdef HAVE_FSTATAT
+WRAP_FSTATAT64;int;FSTATAT64_ARG(int ver, int dir_fd, const char *path, struct stat64 *buf, int flags);FSTATAT64_ARG(ver, dir_fd, path, buf, flags);FSTATAT64
+#endif /* HAVE_FSTATAT */
+#endif /* STAT64_SUPPORT */
 
 WRAP_MKNOD;int;MKNOD_ARG(int ver, const char *pathname, mode_t mode, dev_t XMKNOD_FRTH_ARG dev);MKNOD_ARG(ver, pathname, mode, dev);MKNOD
+
+#ifdef HAVE_FSTATAT
+#ifdef HAVE_MKNODAT
+WRAP_MKNODAT;int;MKNODAT_ARG(int ver, int dir_fd, const char *pathname, mode_t mode, dev_t dev);MKNODAT_ARG(ver, dir_fd, pathname, mode, dev);MKNODAT
+#endif /* HAVE_MKNODAT */
+#endif /* HAVE_FSTATAT */
 
 /*opendir;DIR *;(const char *name);(name)*/
 /*closedir;int;(DIR *dir);(dir)*/
@@ -89,3 +101,26 @@ setfsgid;gid_t;(gid_t fsgid);(fsgid)
 #endif /* HAVE_SETFSGID */
 initgroups;int;(const char *user, INITGROUPS_SECOND_ARG group);(user, group)
 setgroups;int;(SETGROUPS_SIZE_TYPE size, const gid_t *list);(size, list)
+
+#ifdef HAVE_FSTATAT
+#ifdef HAVE_FCHMODAT
+fchmodat;int;(int dir_fd, const char *path, mode_t mode, int flags);(dir_fd, path, mode, flags)
+#endif /* HAVE_FCHMODAT */
+#ifdef HAVE_FCHOWNAT
+fchownat;int;(int dir_fd, const char *path, uid_t owner, gid_t group, int flags);(dir_fd, path, owner, group, flags)
+#endif /* HAVE_FCHOWNAT */
+#ifdef HAVE_MKDIRAT
+mkdirat;int;(int dir_fd, const char *pathname, mode_t mode);(dir_fd, pathname, mode)
+#endif /* HAVE_MKDIRAT */
+#ifdef HAVE_OPENAT
+openat;int;(int dir_fd, const char *pathname, int flags);(dir_fd, pathname, flags)
+#endif /* HAVE_OPENAT */
+#ifdef HAVE_RENAMEAT
+renameat;int;(int olddir_fd, const char *oldpath, int newdir_fd, const char *newpath);(olddir_fd, oldpath, newdir_fd, newpath)
+#endif /* HAVE_RENAMEAT */
+#ifdef HAVE_UNLINKAT
+unlinkat;int;(int dir_fd, const char *pathname, int flags);(dir_fd, pathname, flags)
+#endif /* HAVE_UNLINKAT */
+#endif /* HAVE_FSTATAT */
+
+
