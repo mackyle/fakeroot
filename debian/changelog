@@ -1,3 +1,10 @@
+fakeroot (1.7.0.1) unstable; urgency=low
+
+  * Build-depend on gcc-multilib on biarch architectures.
+  * Consolidate biarch build-dependencies.
+
+ -- Clint Adams <schizo@debian.org>  Sun, 06 May 2007 19:30:34 -0400
+
 fakeroot (1.7) unstable; urgency=low
 
   * Forward-port and apply patch from Henrik Eriksson to add support
