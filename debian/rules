@@ -134,7 +134,6 @@ ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	strip --remove-section=.comment --remove-section=.note debian/tmp/usr/bin/faked-tcp
 #	strip --strip-debug debian/tmp/usr/lib/libfakeroot.a
 endif
-	$(INSTALL_FILE) debian/shlibs debian/tmp/DEBIAN/shlibs
 	$(INSTALL_SCRIPT) debian/fakeroot.postrm debian/tmp/DEBIAN/postrm
 	$(INSTALL_SCRIPT) debian/fakeroot.prerm debian/tmp/DEBIAN/prerm
 ifneq ($(DEB_HOST_GNU_SYSTEM),gnu)

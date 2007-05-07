@@ -1,3 +1,9 @@
+fakeroot (1.7.0.2) unstable; urgency=low
+
+  * Drop shlibs file, as it is no longer necessary.
+
+ -- Clint Adams <schizo@debian.org>  Sun, 06 May 2007 20:40:09 -0400
+
 fakeroot (1.7.0.1) unstable; urgency=low
 
   * Build-depend on gcc-multilib on biarch architectures.
@@ -992,7 +998,7 @@ fakeroot (0.4.5) unstable; urgency=low
   * Only change: add a *fake* setuid /usr/lib/libfakeroot.so*,
     to fix the problems caused by the prev patch that caused
     LD_LIBRARY_PATH to be set. *should* fix a whole host of problems
- -- joost witteveen <joostje@debian.org>  Wen, 26 Sep 2001 10:14:03 +0200
+ -- joost witteveen <joostje@debian.org>  Wed, 26 Sep 2001 10:14:03 +0200
 
 fakeroot (0.4.4-9.2) unstable; urgency=low
 
