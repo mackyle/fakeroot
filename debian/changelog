@@ -1,3 +1,10 @@
+fakeroot (1.7.1) unstable; urgency=low
+
+  * Apply patch from Alexey Shabalovskiy to cope with save-files
+    that are named pipes.
+
+ -- Clint Adams <schizo@debian.org>  Thu, 10 May 2007 10:54:23 -0400
+
 fakeroot (1.7.0.2) unstable; urgency=low
 
   * Drop shlibs file, as it is no longer necessary.

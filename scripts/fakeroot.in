@@ -71,7 +71,7 @@ while test "X$1" != "X--"; do
     -s)
        shift
        FAKEDOPTS=$FAKEDOPTS" --save-file $1"
-       WAITINTRAP=1
+       [ -p $1 ] || WAITINTRAP=1
        ;;
     -u|--unknown-is-real)
        FAKEDOPTS=$FAKEDOPTS" --unknown-is-real"
