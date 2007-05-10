@@ -464,6 +464,22 @@ int save_database(const uint32_t remote)
     roots = "/";
 #endif
 
+  do {
+    int r,fd=0;
+    struct stat s;
+    r=stat(save_file,&s);
+    if (r<0) return 0;
+    if (!(s.st_mode&S_IFIFO)) break;
+    fd=open(save_file,O_WRONLY|O_NONBLOCK);
+    if (fd<0) {
+      sleep(1);
+      continue;
+    }
+    close(fd);
+    break;
+  } while (1);
+
+
   f=fopen(save_file, "w");
   if(!f)
     return 0;
