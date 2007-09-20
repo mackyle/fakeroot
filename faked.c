@@ -454,7 +454,7 @@ int save_database(const uint32_t remote)
   FILE *f;
 
   if(!save_file)
-    return 1;
+    return 0;
 
 #ifdef FAKEROOT_DB_PATH
   path[DB_PATH_LEN] = '\0';
@@ -468,7 +468,7 @@ int save_database(const uint32_t remote)
     int r,fd=0;
     struct stat s;
     r=stat(save_file,&s);
-    if (r<0) return 0;
+    if (r<0 && errno != ENOENT) return EOF;
     if (!(s.st_mode&S_IFIFO)) break;
     fd=open(save_file,O_WRONLY|O_NONBLOCK);
     if (fd<0) {
@@ -482,7 +482,7 @@ int save_database(const uint32_t remote)
 
   f=fopen(save_file, "w");
   if(!f)
-    return 0;
+    return EOF;
 
   for (i = data_begin(); i != data_end(); i = data_node_next(i)) {
     if (i->remote != remote)
@@ -878,12 +878,13 @@ void get_msg(const int listen_sd)
 /***********/
 
 void save(int dummy){
-  if(!save_database(0)) {
-    if(debug)
+  int savedb_state;
+  savedb_state = save_database(0);
+  if(!savedb_state) {
+    if(debug && save_file)
       fprintf(stderr, "fakeroot: saved database in %s\n", save_file);
   } else
-    if(debug)
-      fprintf(stderr, "fakeroot: database save FAILED\n");
+    fprintf(stderr, "fakeroot: database save FAILED\n");
 }
 
 #ifdef FAKEROOT_FAKENET

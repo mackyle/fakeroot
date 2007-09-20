@@ -1,3 +1,10 @@
+fakeroot (1.8) unstable; urgency=medium
+
+  * Apply patch from Jan Kluka to fix up database saving.
+    closes: #443307.
+
+ -- Clint Adams <schizo@debian.org>  Thu, 20 Sep 2007 13:46:25 -0400
+
 fakeroot (1.7.1) unstable; urgency=low
 
   * Apply patch from Alexey Shabalovskiy to cope with save-files
