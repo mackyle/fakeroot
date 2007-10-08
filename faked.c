@@ -468,7 +468,12 @@ int save_database(const uint32_t remote)
     int r,fd=0;
     struct stat s;
     r=stat(save_file,&s);
-    if (r<0 && errno != ENOENT) return EOF;
+    if (r<0) {
+       if (errno == ENOENT)
+	  break;
+       else
+	  return EOF;
+    }
     if (!(s.st_mode&S_IFIFO)) break;
     fd=open(save_file,O_WRONLY|O_NONBLOCK);
     if (fd<0) {

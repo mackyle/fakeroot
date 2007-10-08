@@ -1,3 +1,10 @@
+fakeroot (1.8.1) unstable; urgency=low
+
+  * Apply patch from Jan Kluka to avoid possibility of faked dropping
+    into an endless loop with nonexistent save file.
+
+ -- Clint Adams <schizo@debian.org>  Sun, 07 Oct 2007 20:24:04 -0400
+
 fakeroot (1.8) unstable; urgency=medium
 
   * Apply patch from Jan Kluka to fix up database saving.
