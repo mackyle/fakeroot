@@ -1,3 +1,10 @@
+fakeroot (1.8.2) unstable; urgency=low
+
+  * Apply fix from Dominique Quatravaux to avoid race condition with
+    save files.  closes: #446351, #381016.
+
+ -- Clint Adams <schizo@debian.org>  Fri, 12 Oct 2007 10:09:48 -0400
+
 fakeroot (1.8.1) unstable; urgency=low
 
   * Apply patch from Jan Kluka to avoid possibility of faked dropping
