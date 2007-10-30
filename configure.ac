@@ -285,10 +285,10 @@ dnl
 dnl  for WRAPPED in _${PRE}${FUNC}; do
 dnl    FOUND=$WRAPPED
     if test -n "$FOUND"; then
-      PF=`echo ${PRE}${FUNC}| tr '[a-z]' '[A-Z]'` 
-      DEFINE_WRAP=`echo wrap_${PRE}${FUNC}| tr '[a-z]' '[A-Z]'` 
-      DEFINE_NEXT=`echo wrap_${FOUND}| tr '[a-z]' '[A-Z]'` 
-      DEFINE_ARG=`echo wrap_${FOUND}| tr '[a-z]' '[A-Z]'` 
+      PF=[`echo ${PRE}${FUNC}| tr '[a-z]' '[A-Z]'`] 
+      DEFINE_WRAP=[`echo wrap_${PRE}${FUNC}| tr '[a-z]' '[A-Z]'`] 
+      DEFINE_NEXT=[`echo wrap_${FOUND}| tr '[a-z]' '[A-Z]'`] 
+      DEFINE_ARG=[`echo wrap_${FOUND}| tr '[a-z]' '[A-Z]'`] 
       AC_DEFINE_UNQUOTED(WRAP_${PF}, $FOUND)
       AC_DEFINE_UNQUOTED(WRAP_${PF}_QUOTE, "$FOUND")
       AC_DEFINE_UNQUOTED(TMP_${PF}, tmp_$FOUND)

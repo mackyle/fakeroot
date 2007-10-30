@@ -1,3 +1,10 @@
+fakeroot (1.8.3) unstable; urgency=low
+
+  * Apply patch from Andrew Benham to handle building with non-GNU
+    tr.  closes: #448631.
+
+ -- Clint Adams <schizo@debian.org>  Tue, 30 Oct 2007 12:39:09 -0400
+
 fakeroot (1.8.2) unstable; urgency=low
 
   * Apply fix from Dominique Quatravaux to avoid race condition with
