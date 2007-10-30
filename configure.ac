@@ -1,12 +1,12 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT([fakeroot],[FAKEROOT_VERSION],[schizo@debian.org],[fakeroot])
-AC_PREREQ(2.59)
+AC_PREREQ(2.61)
+LT_PREREQ(2.1a)
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE
 AM_MAINTAINER_MODE
 AC_CONFIG_HEADERS([config.h])
 AC_PROG_MAKE_SET
-AM_PROG_LIBTOOL
 LT_INIT
 LT_LANG(C)
 
