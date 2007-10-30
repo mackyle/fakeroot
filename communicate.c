@@ -381,7 +381,7 @@ void stat32from64(struct stat *s32, const struct stat64 *s64)
 void semaphore_up(){
   struct sembuf op;
   if(sem_id==-1)
-    sem_id=semget(get_ipc_key()+2,1,IPC_CREAT|0600);
+    sem_id=semget(get_ipc_key(0)+2,1,IPC_CREAT|0600);
   op.sem_num=0;
   op.sem_op=-1;
   op.sem_flg=SEM_UNDO;
@@ -401,7 +401,7 @@ void semaphore_up(){
 void semaphore_down(){
   struct sembuf op;
   if(sem_id==-1)
-    sem_id=semget(get_ipc_key()+2,1,IPC_CREAT|0600);
+    sem_id=semget(get_ipc_key(0)+2,1,IPC_CREAT|0600);
   op.sem_num=0;
   op.sem_op=1;
   op.sem_flg=SEM_UNDO;
@@ -766,13 +766,15 @@ void send_get_stat64(struct stat64 *st
 
 #ifndef FAKEROOT_FAKENET
 
-key_t get_ipc_key()
+key_t get_ipc_key(key_t new_key)
 {
   const char *s;
   static key_t key=-1;
 
   if(key==-1){
-    if((s=env_var_set(FAKEROOTKEY_ENV)))
+    if(new_key!=0)
+      key=new_key;
+    else if((s=env_var_set(FAKEROOTKEY_ENV)))
       key=atoi(s);
     else
       key=0;
@@ -791,10 +793,10 @@ int init_get_msg(){
   key_t key;
 
   if((!done)&&(msg_get==-1)){
-    key=get_ipc_key();
+    key=get_ipc_key(0);
     if(key){
-      msg_snd=msgget(get_ipc_key(),IPC_CREAT|00600);
-      msg_get=msgget(get_ipc_key()+1,IPC_CREAT|00600);
+      msg_snd=msgget(get_ipc_key(0),IPC_CREAT|00600);
+      msg_get=msgget(get_ipc_key(0)+1,IPC_CREAT|00600);
     }
     else{
       msg_get=-1;
@@ -803,6 +805,32 @@ int init_get_msg(){
     done=1;
   }
   return msg_snd;
+}
+
+int fake_get_owner(int is_lstat, const char *key, const char *path,
+                  uid_t *uid, gid_t *gid){
+  struct stat st;
+  int i;
+
+  if (!key || !strlen(key))
+    return 0;
+
+  /* Do the stat or lstat */
+  i = (is_lstat ? lstat(path, &st) : stat(path, &st));
+  if (i < 0)
+    return i;
+
+  /* Now give pass it to faked */
+  get_ipc_key(atoi(key));
+  send_get_stat(&st);
+
+  /* Now return the values inside the pointers */
+  if (uid)
+    *uid = st.st_uid;
+  if (gid)
+    *gid = st.st_gid;
+
+  return 0;
 }
 
 #endif /* ! FAKEROOT_FAKENET */
