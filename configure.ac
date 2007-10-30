@@ -67,6 +67,8 @@ AH_TEMPLATE([FAKEROOT_ATTR], [for packed])
 if test -n "$GCC";
 then
 AC_DEFINE_UNQUOTED(FAKEROOT_ATTR(x), [__attribute__ ((x))])
+else
+AC_DEFINE_UNQUOTED(FAKEROOT_ATTR(x), [])
 fi
 
 dnl The parameters to the wrapped functions have to match

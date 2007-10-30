@@ -2,6 +2,8 @@ fakeroot (1.8.3) unstable; urgency=low
 
   * Apply patch from Andrew Benham to handle building with non-GNU
     tr.  closes: #448631.
+  * Apply patch from Andrew Benham to handle building with a C
+    compiler other than GCC.  closes: #448631.
 
  -- Clint Adams <schizo@debian.org>  Tue, 30 Oct 2007 12:39:09 -0400
 
