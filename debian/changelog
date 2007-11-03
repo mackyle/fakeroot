@@ -1,3 +1,9 @@
+fakeroot (1.8.4) unstable; urgency=low
+
+  * Fix fake_get_owner() to build with STUPID_ALPHA_HACK. 
+
+ -- Clint Adams <schizo@debian.org>  Fri, 02 Nov 2007 21:41:27 -0400
+
 fakeroot (1.8.3) unstable; urgency=low
 
   * Apply patch from Andrew Benham to handle building with non-GNU
