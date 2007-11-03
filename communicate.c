@@ -822,7 +822,11 @@ int fake_get_owner(int is_lstat, const char *key, const char *path,
 
   /* Now give pass it to faked */
   get_ipc_key(atoi(key));
+#ifndef STUPID_ALPHA_HACK
   send_get_stat(&st);
+#else
+  send_get_stat(&st, _STAT_VER);
+#endif
 
   /* Now return the values inside the pointers */
   if (uid)
