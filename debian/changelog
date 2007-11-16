@@ -1,3 +1,10 @@
+fakeroot (1.8.5) unstable; urgency=low
+
+  * Add gcc-multilib to build dependencies for kfreebsd-amd64.
+    closes: #451504.
+
+ -- Clint Adams <schizo@debian.org>  Fri, 16 Nov 2007 09:24:00 -0500
+
 fakeroot (1.8.4) unstable; urgency=low
 
   * Fix fake_get_owner() to build with STUPID_ALPHA_HACK. 

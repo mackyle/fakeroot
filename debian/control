@@ -1,7 +1,7 @@
 Source: fakeroot
 Section: utils
 Priority: optional
-Build-Depends: sharutils, gcc-multilib [amd64 i386 powerpc s390 sparc], lib64c-dev [i386 powerpc s390 sparc], lib32c-dev [amd64 kfreebsd-amd64 ppc64]
+Build-Depends: sharutils, gcc-multilib [amd64 i386 kfreebsd-amd64 powerpc s390 sparc], lib64c-dev [i386 powerpc s390 sparc], lib32c-dev [amd64 kfreebsd-amd64 ppc64]
 Maintainer: Clint Adams <schizo@debian.org>
 Standards-Version: 3.7.2
 
