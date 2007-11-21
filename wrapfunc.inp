@@ -46,7 +46,7 @@ WRAP_MKNODAT;int;MKNODAT_ARG(int ver, int dir_fd, const char *pathname, mode_t m
 /*opendir;DIR *;(const char *name);(name)*/
 /*closedir;int;(DIR *dir);(dir)*/
 /*readdir;struct dirent *;(DIR *dir);(dir)*/
-/*readlink;int;(const char *path, READLINK_BUF_TYPE *buf, READLINK_BUFSIZE_TYPE bufsize);(path, buf, bufsize)*/
+/*readlink;READLINK_RETVAL_TYPE;(const char *path, READLINK_BUF_TYPE *buf, READLINK_BUFSIZE_TYPE bufsize);(path, buf, bufsize)*/
 /*telldir;off_t;(DIR *dir);(dir)*/
 
 chown;int;(const char *path, uid_t owner, gid_t group);(path, owner, group)
