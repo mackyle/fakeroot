@@ -807,8 +807,11 @@ int init_get_msg(){
   return msg_snd;
 }
 
+/* fake_get_owner() allows a process which has not set LD_PRELOAD to query
+   the fake ownership etc. of files.  That process needs to know the key
+   in use by faked - faked prints this at startup. */
 int fake_get_owner(int is_lstat, const char *key, const char *path,
-                  uid_t *uid, gid_t *gid){
+                  uid_t *uid, gid_t *gid, mode_t *mode){
   struct stat st;
   int i;
 
@@ -820,7 +823,7 @@ int fake_get_owner(int is_lstat, const char *key, const char *path,
   if (i < 0)
     return i;
 
-  /* Now give pass it to faked */
+  /* Now pass it to faked */
   get_ipc_key(atoi(key));
 #ifndef STUPID_ALPHA_HACK
   send_get_stat(&st);
@@ -828,11 +831,13 @@ int fake_get_owner(int is_lstat, const char *key, const char *path,
   send_get_stat(&st, _STAT_VER);
 #endif
 
-  /* Now return the values inside the pointers */
+  /* Return the values inside the pointers */
   if (uid)
     *uid = st.st_uid;
   if (gid)
     *gid = st.st_gid;
+  if (mode)
+    *mode = st.st_mode;
 
   return 0;
 }
