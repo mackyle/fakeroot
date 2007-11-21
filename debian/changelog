@@ -1,3 +1,10 @@
+fakeroot (1.8.6) unstable; urgency=low
+
+  * Apply patch from Andrew Benham to handle 64-bit builds on Solaris.
+    closes: #452095.
+
+ -- Clint Adams <schizo@debian.org>  Tue, 20 Nov 2007 21:56:58 -0500
+
 fakeroot (1.8.5) unstable; urgency=low
 
   * Add gcc-multilib to build dependencies for kfreebsd-amd64.
