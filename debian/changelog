@@ -2,6 +2,7 @@ fakeroot (1.8.7) unstable; urgency=low
 
   * Apply patch from Andrew Benham to handle platforms without
     setenv() and unsetenv().  closes: #452224.
+  * Use setenv compatibility code from GNU libc CVS HEAD.
 
  -- Clint Adams <schizo@debian.org>  Wed, 21 Nov 2007 09:39:29 -0500
 
