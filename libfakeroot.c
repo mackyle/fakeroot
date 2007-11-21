@@ -58,6 +58,14 @@
 #include <dirent.h>
 #include <errno.h>
 
+#if !HAVE_DECL_SETENV
+extern int setenv (const char *name, const char *value, int replace);
+#endif
+#if !HAVE_DECL_UNSETENV
+extern int unsetenv (const char *name);
+#endif
+
+
 /* 
    Where are those shared libraries? 
    If I knew of a configure/libtool way to find that out, I'd use it. Or
