@@ -74,20 +74,26 @@ fi
 dnl The parameters to the wrapped functions have to match
 dnl those in the system header files. I don't know how to
 dnl really get the names of the paramters, but this seems to work.
-AC_MSG_CHECKING([for second and third argument of readlink])
+AC_MSG_CHECKING([for return value and second and third argument of readlink])
 readlink_buf_arg=unknown
 readlink_bufsize_arg=unknown
-for second in void char; do
-  for third in size_t int; do
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <unistd.h>
-      int readlink(const char *path, $second *buf, $third bufsiz);]], [[puts("hello, world");]])],[readlink_buf_arg=$second
-       readlink_bufsize_arg=$third
-      ],[])
+for zeroth in ssize_t int; do
+  for second in void char; do
+    for third in size_t int; do
+      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <unistd.h>
+        $zeroth readlink(const char *path, $second *buf, $third bufsiz);]], [[puts("hello, world");]])],
+	[readlink_retval=$zeroth
+	 readlink_buf_arg=$second
+	 readlink_bufsize_arg=$third
+        ],[])
+    done
   done
 done
-AC_MSG_RESULT([$readlink_buf_arg, $readlink_bufsize_arg])
+AC_MSG_RESULT([$readlink_retval, $readlink_buf_arg, $readlink_bufsize_arg])
+AH_TEMPLATE([READLINK_RETVAL_TYPE], [type of readlink return value])
 AH_TEMPLATE([READLINK_BUF_TYPE], [type of readlink buf])
 AH_TEMPLATE([READLINK_BUFSIZE_TYPE], [type of readlink bufsize])
+AC_DEFINE_UNQUOTED(READLINK_RETVAL_TYPE, $readlink_retval)
 AC_DEFINE_UNQUOTED(READLINK_BUF_TYPE, $readlink_buf_arg)
 AC_DEFINE_UNQUOTED(READLINK_BUFSIZE_TYPE, $readlink_bufsize_arg)
 

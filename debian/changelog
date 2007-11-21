@@ -1,3 +1,10 @@
+fakeroot (1.8.8) unstable; urgency=low
+
+  * Fix configure test to handle platforms where the return value
+    of readlink is ssize_t and this is not the same size as int.
+
+ -- Clint Adams <schizo@debian.org>  Wed, 21 Nov 2007 16:57:33 -0500
+
 fakeroot (1.8.7) unstable; urgency=low
 
   * Apply patch from Andrew Benham to handle platforms without
