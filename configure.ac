@@ -408,6 +408,9 @@ AC_SUBST(LDEXTRAVAR)
 dnl Checks for library functions.
 AC_CHECK_FUNCS(strdup strstr getresuid setresuid getresgid setresgid setfsuid setfsgid)
 
+AC_CHECK_DECLS([setenv, unsetenv])
+AC_REPLACE_FUNCS([setenv unsetenv])
+
 dnl kludge
 AH_VERBATIM([WRAP_STAT],
 [/* Stuff.  */
