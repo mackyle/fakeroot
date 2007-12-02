@@ -5,7 +5,7 @@ Build-Depends: sharutils, gcc-multilib [amd64 i386 kfreebsd-amd64 powerpc s390 s
 Maintainer: Clint Adams <schizo@debian.org>
 Standards-Version: 3.7.2
 Vcs-Arch: http://arch.debian.org/arch/fakeroot/fakeroot/
-Vcs-Browse: http://arch.debian.org/cgi-bin/archzoom.cgi/fakeroot@packages.debian.org--fakeroot?expand
+Vcs-Browser: http://arch.debian.org/cgi-bin/archzoom.cgi/fakeroot@packages.debian.org--fakeroot?expand
 
 Package: fakeroot
 Architecture: any
