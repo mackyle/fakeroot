@@ -1,3 +1,9 @@
+fakeroot (1.8.10) unstable; urgency=medium
+
+  * Call biarch target in a parallel-build-friendly way. 
+
+ -- Clint Adams <schizo@debian.org>  Sun, 02 Dec 2007 17:33:42 -0500
+
 fakeroot (1.8.9) unstable; urgency=low
 
   * Apply patch from Andrew Benham to handle platforms without
