@@ -2,6 +2,7 @@ fakeroot (1.8.9) unstable; urgency=low
 
   * Apply patch from Andrew Benham to handle platforms without
     __builtin_expect support in the compiler.  closes: #453303.
+  * Add Vcs-Arch and Vcs-Browse fields to control file.
 
  -- Clint Adams <schizo@debian.org>  Sun, 02 Dec 2007 16:13:44 -0500
 
