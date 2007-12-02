@@ -10,6 +10,10 @@ AC_PROG_MAKE_SET
 LT_INIT
 LT_LANG(C)
 
+AH_BOTTOM([#if ! HAVE_BUILTIN_EXPECT
+#define __builtin_expect(x, expected_value) (x)
+#endif])
+
 AC_ARG_WITH([ipc],
 	    AS_HELP_STRING([--with-ipc@<:@=IPCTYPE@:>@],
 			   [method of IPC to use: either sysv (default) or tcp]),
@@ -416,6 +420,13 @@ AC_CHECK_FUNCS(strdup strstr getresuid setresuid getresgid setresgid setfsuid se
 
 AC_CHECK_DECLS([setenv, unsetenv])
 AC_REPLACE_FUNCS([setenv])
+
+dnl Checks for __builtin_expect
+AC_TRY_LINK(
+  [int foo (int a) { a = __builtin_expect (a, 10); return a == 10 ? 0 : 1; }],
+  [],
+  [AC_DEFINE([HAVE_BUILTIN_EXPECT], 1,
+     [Define to 1 if the compiler understands __builtin_expect.])])
 
 dnl kludge
 AH_VERBATIM([WRAP_STAT],
