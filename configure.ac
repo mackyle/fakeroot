@@ -59,7 +59,9 @@ AC_SUBST(signal)
 dnl Checks for header files.
 AC_HEADER_DIRENT
 AC_HEADER_STDC
-AC_CHECK_HEADERS(fcntl.h unistd.h features.h sys/feature_tests.h pthread.h stdint.h inttypes.h grp.h endian.h sys/sysmacros.h sys/socket.h)
+AC_CHECK_HEADERS(fcntl.h unistd.h features.h sys/feature_tests.h pthread.h
+		 stdint.h inttypes.h grp.h endian.h sys/sysmacros.h
+		 sys/socket.h sys/acl.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -273,7 +275,8 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
   ])
 done
 
-AC_CHECK_FUNCS(fchmodat fchownat fstatat mkdirat mknodat openat renameat unlinkat)
+AC_CHECK_FUNCS(fchmodat fchownat fstatat mkdirat mknodat openat renameat
+	       unlinkat acl_set_fd acl_set_file)
 
 dnl find out how stat() etc are called. On linux systems, we really
 dnl need to wrap (IIRC):
