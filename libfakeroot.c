@@ -57,6 +57,8 @@
 #include <unistd.h> 
 #include <dirent.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/acl.h>
 
 #if !HAVE_DECL_SETENV
 extern int setenv (const char *name, const char *value, int replace);
@@ -1460,4 +1462,14 @@ int fakeroot_disable(int new)
 int fakeroot_isdisabled(void)
 {
   return fakeroot_disabled;
+}
+
+int acl_set_fd(int fd, acl_t acl) {
+  errno = ENOTSUP;
+  return -1;
+}
+
+int acl_set_file(const char *path_p, acl_type_t type, acl_t acl) {
+  errno = ENOTSUP;
+  return -1;
 }

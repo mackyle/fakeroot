@@ -1,6 +1,9 @@
 fakeroot (1.9) unstable; urgency=low
 
   * Bump to Standards-Version 3.7.3. 
+  * Apply patch from Thomas Bächler to work around fakeroot's
+    inability to handle acls by pretending that the underlying
+    filesystem does not support acls.  closes: #361306.
 
  -- Clint Adams <schizo@debian.org>  Sat, 05 Jan 2008 13:53:26 -0500
 
