@@ -58,7 +58,9 @@
 #include <dirent.h>
 #include <errno.h>
 #include <sys/types.h>
+#ifdef HAVE_SYS_ACL_H
 #include <sys/acl.h>
+#endif /* HAVE_SYS_ACL_H */
 
 #if !HAVE_DECL_SETENV
 extern int setenv (const char *name, const char *value, int replace);
@@ -1464,12 +1466,16 @@ int fakeroot_isdisabled(void)
   return fakeroot_disabled;
 }
 
+#ifdef HAVE_ACL_SET_FD
 int acl_set_fd(int fd, acl_t acl) {
   errno = ENOTSUP;
   return -1;
 }
+#endif /* HAVE_ACL_SET_FD */
 
+#ifdef HAVE_ACL_SET_FILE
 int acl_set_file(const char *path_p, acl_type_t type, acl_t acl) {
   errno = ENOTSUP;
   return -1;
 }
+#endif /* HAVE_ACL_SET_FILE */
