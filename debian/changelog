@@ -1,3 +1,9 @@
+fakeroot (1.9) unstable; urgency=low
+
+  * Bump to Standards-Version 3.7.3. 
+
+ -- Clint Adams <schizo@debian.org>  Sat, 05 Jan 2008 13:53:26 -0500
+
 fakeroot (1.8.10) unstable; urgency=medium
 
   * Call biarch target in a parallel-build-friendly way. 
