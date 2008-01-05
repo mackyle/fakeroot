@@ -422,11 +422,9 @@ AC_CHECK_DECLS([setenv, unsetenv])
 AC_REPLACE_FUNCS([setenv])
 
 dnl Checks for __builtin_expect
-AC_TRY_LINK(
-  [int foo (int a) { a = __builtin_expect (a, 10); return a == 10 ? 0 : 1; }],
-  [],
-  [AC_DEFINE([HAVE_BUILTIN_EXPECT], 1,
-     [Define to 1 if the compiler understands __builtin_expect.])])
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[int foo (int a) { a = __builtin_expect (a, 10); return a == 10 ? 0 : 1; }]],
+     [[]])],[AC_DEFINE([HAVE_BUILTIN_EXPECT], 1,
+     [Define to 1 if the compiler understands __builtin_expect.])],[])
 
 dnl kludge
 AH_VERBATIM([WRAP_STAT],
