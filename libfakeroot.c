@@ -1466,16 +1466,14 @@ int fakeroot_isdisabled(void)
   return fakeroot_disabled;
 }
 
-#ifdef HAVE_ACL_SET_FD
+#ifdef HAVE_SYS_ACL_H
 int acl_set_fd(int fd, acl_t acl) {
   errno = ENOTSUP;
   return -1;
 }
-#endif /* HAVE_ACL_SET_FD */
 
-#ifdef HAVE_ACL_SET_FILE
 int acl_set_file(const char *path_p, acl_type_t type, acl_t acl) {
   errno = ENOTSUP;
   return -1;
 }
-#endif /* HAVE_ACL_SET_FILE */
+#endif /* HAVE_SYS_ACL_H */

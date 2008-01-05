@@ -123,9 +123,7 @@ unlinkat;int;(int dir_fd, const char *pathname, int flags);(dir_fd, pathname, fl
 #endif /* HAVE_UNLINKAT */
 #endif /* HAVE_FSTATAT */
 
-#ifdef HAVE_ACL_SET_FD
+#ifdef HAVE_SYS_ACL_H
 acl_set_fd;int;(int fd, acl_t acl);(fd, acl)
-#endif /* HAVE_ACL_SET_FD */
-#ifdef HAVE_ACL_SET_FILE
 acl_set_file;int;(const char *path_p, acl_type_t type, acl_t acl);(path_p, type, acl)
-#endif /* HAVE_ACL_SET_FILE */
+#endif /* HAVE_SYS_ACL_H */
