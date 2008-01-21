@@ -2,10 +2,10 @@
 set -e
 echo compare-tar:
 
-gzip -dc $1 | tar -tvf - |perl -p -e 's/^((.*?)(\t+|\s\s+)\d+).*\s(\S+)$/$1 $4/' |sort > tmp-1
-gzip -dc $2 | tar -tvf - |perl -p -e 's/^((.*?)(\t+|\s\s+)\d+).*\s(\S+)$/$1 $4/' |sort > tmp-2
+gzip -dc $1 | tar -tvf - |awk '{print $1, $2, $3, $NF}' |sort > tmp-1
+gzip -dc $2 | tar -tvf - |awk '{print $1, $2, $3, $NF}' |sort > tmp-2
 
-diff -u tmp-1 tmp-2 > tmp-diff
+diff tmp-1 tmp-2 > tmp-diff || true
 
 if test -s tmp-diff; then
   echo tar files differ:
