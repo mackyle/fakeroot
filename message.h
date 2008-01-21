@@ -30,6 +30,9 @@ typedef uint32_t fake_gid_t;
 typedef uint32_t fake_mode_t;
 typedef uint32_t fake_nlink_t;
 
+#if __SUNPRO_C
+#pragma pack(4)
+#endif
 struct fakestat {
 	fake_uid_t   uid;
 	fake_gid_t   gid;
@@ -39,7 +42,13 @@ struct fakestat {
 	fake_mode_t  mode;
 	fake_nlink_t nlink;
 } FAKEROOT_ATTR(packed);
+#if __SUNPRO_C
+#pragma pack()
+#endif
 
+#if __SUNPRO_C
+#pragma pack(4)
+#endif
 struct fake_msg {
 #ifndef FAKEROOT_FAKENET
 	long mtype; /* message type in SYSV message sending */
@@ -52,5 +61,8 @@ struct fake_msg {
 	struct fakestat st;
 	uint32_t        remote;
 } FAKEROOT_ATTR(packed);
+#if __SUNPRO_C
+#pragma pack()
+#endif
 
 #endif
