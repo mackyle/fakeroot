@@ -1,3 +1,10 @@
+fakeroot (1.9.2) unstable; urgency=low
+
+  * debian/copyright: add pointers to the GPL and Artistic licenses
+    in /usr/share/common-licenses.
+
+ -- Clint Adams <schizo@debian.org>  Wed, 30 Jan 2008 14:54:52 -0500
+
 fakeroot (1.9.1) unstable; urgency=low
 
   * Apply patch from Andrew Benham to handle padding under Sun Studio

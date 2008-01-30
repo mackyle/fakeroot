@@ -8,3 +8,8 @@ is licensed thusly:
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
+On Debian systems, the GNU GPL can be found at
+/usr/share/common-licenses/GPL
+and the Artistic license can be found at
+/usr/share/common-licenses/Artistic
+
