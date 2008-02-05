@@ -1,3 +1,11 @@
+fakeroot (1.9.3) unstable; urgency=medium
+
+  * configure.ac: patch from Ralf Wildenhues to not override $SHELL
+    late in configure.ac, by means of undocumented Autoconf interface
+    _AS_DETECT_REQUIRED to require $(...) command replacement.
+
+ -- Clint Adams <schizo@debian.org>  Tue, 05 Feb 2008 18:55:36 -0500
+
 fakeroot (1.9.2) unstable; urgency=low
 
   * debian/copyright: add pointers to the GPL and Artistic licenses
