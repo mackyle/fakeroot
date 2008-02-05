@@ -482,21 +482,9 @@ AH_VERBATIM([WRAP_STAT],
 dnl kludge end
 
 dnl check for b0rked Solaris (and other shells) and find one that works
-AC_MSG_CHECKING(for a working shell...)
-for i in /usr/xpg6/bin/sh /usr/xpg4/bin/sh /usr/ccs/bin/sh /bin/sh /usr/bin/sh /bin/ksh /bin/bash /usr/local/bin/bash ; do
-    $i -c 'if ! false ; then echo $(echo ok) ; fi' >config.$$ 2>/dev/null
-    j=`cat config.$$`
-    rm -f config.$$
-    if test "x$j" = "xok" ; then
-        SHELL=$i
-        AC_SUBST(SHELL)
-        break
-    fi
-done
-AC_MSG_RESULT($SHELL)
-if test "x$SHELL" = "x" ; then
-    AC_MSG_ERROR(no SUS compliant shell found - on Solaris, install SUNWxcu4)
-fi
+_AS_DETECT_REQUIRED([echo $(echo ok) > config.$$ 2>/dev/null
+		      j=`cat config.$$`
+		      test "x$j" = "xok"])
 
 case "$target_cpu:$target_os" in
 	(alpha*:linux*)
