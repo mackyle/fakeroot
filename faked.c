@@ -570,10 +570,10 @@ void debug_stat(const struct fakestat *st){
   fprintf(stderr,"dev:ino=(%llx:%lli), mode=0%lo, own=(%li,%li), nlink=%li, rdev=%lli\n",
 	  st->dev,
 	  st->ino,
-	  st->mode,
-	  st->uid,
-	  st->gid,
-	  st->nlink,
+	  (long)st->mode,
+	  (long)st->uid,
+	  (long)st->gid,
+	  (long)st->nlink,
 	  st->rdev);
 }
 
@@ -649,7 +649,7 @@ void process_chmod(struct fake_msg *buf){
   
   if(debug)
     fprintf(stderr,"FAKEROOT: chmod, mode=%lo\n",
-	    buf->st.mode);
+	    (long)buf->st.mode);
   
   i = data_find(&buf->st, buf->remote);
   if (i != data_end()) {
@@ -670,7 +670,7 @@ void process_mknod(struct fake_msg *buf){
   
   if(debug)
     fprintf(stderr,"FAKEROOT: mknod, mode=%lo\n",
-	    buf->st.mode);
+	    (long)buf->st.mode);
   
   i = data_find(&buf->st, buf->remote);
   if (i != data_end()) {
@@ -763,7 +763,7 @@ void get_msg()
   int r = 0;
 
   if(debug)
-    fprintf(stderr,"FAKEROOT: msg=%i, key=%i\n",msg_get,msg_key);
+    fprintf(stderr,"FAKEROOT: msg=%i, key=%li\n",msg_get,(long)msg_key);
   do {
     r=msgrcv(msg_get,&buf,sizeof(struct fake_msg),0,0);
     if(debug)
@@ -1070,7 +1070,7 @@ int main(int argc, char **argv){
   }
     
   if(debug)
-    fprintf(stderr,"using %i as msg key\n",msg_key);
+    fprintf(stderr,"using %li as msg key\n",(long)msg_key);
   
   msg_get=msgget(msg_key,IPC_CREAT|0600);
   msg_snd=msgget(msg_key+1,IPC_CREAT|0600);
@@ -1086,7 +1086,7 @@ int main(int argc, char **argv){
   }
 
   if(debug)
-    fprintf(stderr,"msg_key=%i\n",msg_key);
+    fprintf(stderr,"msg_key=%li\n",(long)msg_key);
 
   if(justcleanup)
     cleanup(0);
@@ -1185,12 +1185,12 @@ int main(int argc, char **argv){
 	  close(fl);
       setsid();
     } else {
-      printf("%i:%i\n",FAKE_KEY,pid);
+      printf("%li:%i\n",(long)FAKE_KEY,pid);
 
       exit(0);
     }
   } else {
-    printf("%i:%i\n",FAKE_KEY,getpid());
+    printf("%li:%i\n",(long)FAKE_KEY,getpid());
     fflush(stdout);
   }
 

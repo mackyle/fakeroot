@@ -381,8 +381,16 @@ case $target_cpu:$target_os in
 	(*:netbsd*)
 		libcpath="/usr/lib/libc.so.12"
 		;;
-	(*:openbsd*)
-		libcpath="/usr/lib/libc.so.25.2"
+	(*:openbsd*|*:mirbsd*)
+		libcpath=$(/bin/ls -1 /usr/lib/libc.so.* | \
+		    sort -nt. -k3 | tail -1)
+		;;
+	(*:midnightbsd*)
+		libcpath=$(/bin/ls -1 /lib/libc.so.* | \
+		    sort -nt. -k3 | tail -1)
+		;;
+	(*:darwin*)
+		libcpath="/usr/lib/libSystem.dylib"
 		;;
 	(*:hpux*)
 		libcpath="/usr/lib/hpux32/libc.so.1"

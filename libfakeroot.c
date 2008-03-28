@@ -149,7 +149,7 @@ void load_library_symbols(void){
 
   static int done=0;
   int i;
-  char* msg;
+  const char *msg;
   
   if(!done){
     for(i=0; next_wrap[i].doit; i++){

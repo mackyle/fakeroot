@@ -1,3 +1,14 @@
+fakeroot (1.9.4) unstable; urgency=low
+
+  * configure.ac: patch from Thorsten Glaser to add MirBSD, MidnightBSD,
+    Darwin support
+  * configure.ac: patch from Thorsten Glaser to not hardcode libc version
+    number on OpenBSD.
+  * faked.c: patch from Thorsten Glaser to fix printf format strings
+  * libfakeroot.c: patch from Thorsten Glaser to fix const cleanness
+
+ -- Clint Adams <schizo@debian.org>  Fri, 28 Mar 2008 17:45:08 -0400
+
 fakeroot (1.9.3) unstable; urgency=medium
 
   * configure.ac: patch from Ralf Wildenhues to not override $SHELL
