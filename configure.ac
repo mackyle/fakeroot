@@ -171,7 +171,7 @@ AC_MSG_CHECKING([for type of arg of __xmknodat])
        #include <unistd.h>
   ]], [[  
        int __xmknodat  ( int ver, 
-                         inf dirfd,
+                         int dirfd,
                          const char *pathname ,  
                          mode_t  mode ,  dev_t dev);
   ]])],[
