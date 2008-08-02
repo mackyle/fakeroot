@@ -856,6 +856,10 @@ int chmod(const char *path, mode_t mode){
   r=next_chmod(path, mode);
   if(r&&(errno==EPERM))
     r=0;
+#ifdef EFTYPE		/* available under FreeBSD kernel */
+  if(r&&(errno==EFTYPE))
+    r=0;
+#endif
   return r;
 }
 
@@ -884,6 +888,10 @@ int fchmod(int fd, mode_t mode){
   r=next_fchmod(fd, mode);
   if(r&&(errno==EPERM))
     r=0;
+#ifdef EFTYPE		/* available under FreeBSD kernel */
+  if(r&&(errno==EFTYPE))
+    r=0;
+#endif
   return r;
 }
 
@@ -916,6 +924,10 @@ int fchmodat(int dir_fd, const char *path, mode_t mode, int flags) {
   r=next_fchmodat(dir_fd, path, mode, flags);
   if(r&&(errno==EPERM))
     r=0;
+#ifdef EFTYPE		/* available under FreeBSD kernel */
+  if(r&&(errno==EFTYPE))
+    r=0;
+#endif
   return r;
 }
 #endif /* HAVE_FCHMODAT */
