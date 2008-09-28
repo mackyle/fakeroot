@@ -1,3 +1,9 @@
+fakeroot (1.9.7) unstable; urgency=low
+
+  * chmod fakeroot libraries to 0644.  closes: #393983.
+
+ -- Clint Adams <schizo@debian.org>  Sun, 28 Sep 2008 11:25:12 -0400
+
 fakeroot (1.9.6) unstable; urgency=low
 
   * libfakeroot.c: patch from Petr Salinger to fix chmod 1755 on
