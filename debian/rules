@@ -81,11 +81,14 @@ binary-arch: build checkroot
 	$(checkdir)
 
 	cd obj-tcp && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
+
+	chmod 644 debian/tmp/usr/lib/libfakeroot/libfakeroot-0.so
 	mv debian/tmp/usr/lib/libfakeroot/libfakeroot-0.so debian/tmp/usr/lib/libfakeroot/libfakeroot-tcp.so
 	rm debian/tmp/usr/lib/libfakeroot/libfakeroot.so
 
 	cd obj-sysv && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
 
+	chmod 644 debian/tmp/usr/lib/libfakeroot/libfakeroot-0.so
 	mv debian/tmp/usr/lib/libfakeroot/libfakeroot-0.so debian/tmp/usr/lib/libfakeroot/libfakeroot-sysv.so
 	rm debian/tmp/usr/lib/libfakeroot/libfakeroot.so
 
@@ -193,20 +196,18 @@ endif
 	cd obj64-tcp && $(SHELL) ./libtool --mode=install install libfakeroot.la \
 		$(CURDIR)/debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot.la
 	rm -f debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot.*a*
+	chmod 644 debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-0.so
 	mv debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-0.so debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-tcp.so
-#	mv debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot.so.0.0.1 debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot-tcp.so.0.0.1
-#	mv debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot.so.0 debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot-tcp.so.0
 
 	cd obj64-sysv && $(MAKE) libfakeroot.la
 	$(INSTALL_DIR) debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot
 	cd obj64-sysv && $(SHELL) ./libtool --mode=install install libfakeroot.la \
 		$(CURDIR)/debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot.la
-#	cd obj64-sysv && ./libtool --finish debian/fakeroot-sparc/$(BIARCH_LIB_DIR)/fakeroot
 	rm -f debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot.*a*
+	chmod 644 debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-0.so
 	mv debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-0.so debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-sysv.so
 
 	rm debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot.so
-#	rm debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot.so
 ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-sysv.so
 	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/$(BIARCH_LIB_DIR)/libfakeroot/libfakeroot-tcp.so
