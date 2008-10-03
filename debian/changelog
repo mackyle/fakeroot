@@ -1,3 +1,11 @@
+fakeroot (1.10) unstable; urgency=low
+
+  * Patch from Joe Malicki (with root-cause analysis credit to Mike Itz) to
+    cope better with inodes that are reused outside of fakeroot's knowledge
+    (such as by ldconfig or other static binaries).  closes: #366067.
+
+ -- Clint Adams <schizo@debian.org>  Fri, 03 Oct 2008 19:10:21 -0400
+
 fakeroot (1.9.7) unstable; urgency=low
 
   * chmod fakeroot libraries to 0644.  closes: #393983.
