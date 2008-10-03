@@ -654,7 +654,27 @@ void process_chmod(struct fake_msg *buf){
   i = data_find(&buf->st, buf->remote);
   if (i != data_end()) {
     st = data_node_get(i);
-    st->mode = (buf->st.mode&~S_IFMT) | (st->mode&S_IFMT);
+    /* Statically linked binaries can remove inodes without us knowing.
+       ldconfig is a prime offender.  Also, some packages run tests without
+       LD_PRELOAD.
+
+       While those cases can be fixed in other ways, we shouldn't continue to
+       cache stale file information.
+
+       mknod() creates a regular file, everything else should have the same
+       file type on disk and in our database.  Therefore, we check to see if
+       it's a regular file before blindly applying the new file type.
+    */
+
+    if ((buf->st.mode&S_IFMT) != S_IFREG &&
+        (buf->st.mode&S_IFMT) != (st->mode&S_IFMT)) {
+      fprintf(stderr,"FAKEROOT: chmod mode=%lo incompatible with "
+              "existing mode=%lo\n", buf->st.mode, st->mode);
+      st->mode = buf->st.mode;
+    }
+    else{
+      st->mode = (buf->st.mode&~S_IFMT) | (st->mode&S_IFMT);
+    }
   }
   else{
     st=&buf->st;

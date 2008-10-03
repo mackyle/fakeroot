@@ -1,7 +1,7 @@
 AUTOMAKE_OPTIONS=foreign
 
 TESTS = t.echoarg t.mknod t.tar t.truereturn t.falsereturn t.option \
-	t.touchinstall
+	t.touchinstall t.no_ld_preload
 
 suffix =
 TESTS_ENVIRONMENT = libfakeroot=libfakeroot-0.so suffix=$(suffix) posixshell=$(SHELL)
