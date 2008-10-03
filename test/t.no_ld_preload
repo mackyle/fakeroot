@@ -1,0 +1,4 @@
+#!/bin/sh
+
+../scripts/fakeroot${tcp} -f ../faked${tcp} -l ../.libs/${libfakeroot} -- \
+ ${posixshell} -c 'touch justafile; LD_PRELOAD= rm justafile; mkdir justafile; ls -ld justafile' | grep "^d"
