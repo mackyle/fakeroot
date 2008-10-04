@@ -1,0 +1,8 @@
+#!/bin/sh
+
+mkdir tmp
+../scripts/fakeroot${tcp} -f ../faked${tcp} -l ../.libs/${libfakeroot} -- \
+ ${posixshell} -c 'touch tmp/justafile && ln -s justafile tmp/alink && LD_PRELOAD= rm tmp/alink && touch tmp/alink && ls -ld tmp/alink' | grep "^-"
+TEMP=$?
+rm -rf tmp
+exit $TEMP
