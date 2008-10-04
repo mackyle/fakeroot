@@ -1,3 +1,11 @@
+fakeroot (1.10.1) unstable; urgency=low
+
+  * Patch from Joe Malicki to increase number of cases where fakeroot
+    will cope better with inode reuse.
+  * Remove test tmp dirs in EXIT traps.
+
+ -- Clint Adams <schizo@debian.org>  Sat, 04 Oct 2008 14:48:09 -0400
+
 fakeroot (1.10) unstable; urgency=low
 
   * Patch from Joe Malicki (with root-cause analysis credit to Mike Itz) to
