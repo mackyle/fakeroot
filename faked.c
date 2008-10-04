@@ -662,12 +662,17 @@ void process_chmod(struct fake_msg *buf){
        cache stale file information.
 
        mknod() creates a regular file, everything else should have the same
-       file type on disk and in our database.  Therefore, we check to see if
-       it's a regular file before blindly applying the new file type.
+       file type on disk and in our database.  Therefore, we check the file's
+       type first.  If we have something in our database as a device node and
+       we get a request to change it to regular file, it might be a chmod of
+       a device node that was created from within fakeroot, which is a device
+       file on disk - there's no way to distinguish.   For anything else, we
+       trust the new type and assume the inode got unlinked from something that
+       wasn't using the LD_PRELOAD library.
     */
 
-    if ((buf->st.mode&S_IFMT) != S_IFREG &&
-        (buf->st.mode&S_IFMT) != (st->mode&S_IFMT)) {
+    if ((buf->st.mode&S_IFMT) != (st->mode&S_IFMT) &&
+        ((buf->st.mode&S_IFMT) != S_IFREG || (!st->mode&(S_IFBLK|S_IFCHR)))) {
       fprintf(stderr,"FAKEROOT: chmod mode=%lo incompatible with "
               "existing mode=%lo\n", buf->st.mode, st->mode);
       st->mode = buf->st.mode;

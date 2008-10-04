@@ -1,0 +1,8 @@
+#!/bin/sh
+
+mkdir tmp
+../scripts/fakeroot${tcp} -f ../faked${tcp} -l ../.libs/${libfakeroot} -- \
+ ${posixshell} -c 'mknod tmp/hda3 b 3 0 && chmod 644 tmp/hda3 && ls -ld tmp/hda3' | grep "^b"
+TEMP=$?
+rm -rf tmp
+exit $TEMP
