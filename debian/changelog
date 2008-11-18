@@ -1,3 +1,10 @@
+fakeroot (1.11) unstable; urgency=medium
+
+  * communicate.c: patch from dann frazier to fix race condition when
+    SysV IPC is used with a threaded application.  closes: #499142.
+
+ -- Clint Adams <schizo@debian.org>  Tue, 18 Nov 2008 18:20:37 -0500
+
 fakeroot (1.10.1) unstable; urgency=low
 
   * Patch from Joe Malicki to increase number of cases where fakeroot
