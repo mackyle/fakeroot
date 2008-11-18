@@ -521,9 +521,9 @@ void send_get_fakem(struct fake_msg *buf)
 
   if(init_get_msg()!=-1){
     pid=getpid();
+    semaphore_up();
     serial++;
     buf->serial=serial;
-    semaphore_up();
     buf->pid=pid;
     send_fakem(buf);
 
