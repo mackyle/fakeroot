@@ -389,9 +389,6 @@ case $target_cpu:$target_os in
 		libcpath=$(/bin/ls -1 /lib/libc.so.* | \
 		    sort -nt. -k3 | tail -1)
 		;;
-	(*:darwin*)
-		libcpath="/usr/lib/libSystem.dylib"
-		;;
 	(*:hpux*)
 		libcpath="/usr/lib/hpux32/libc.so.1"
 		;;
