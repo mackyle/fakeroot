@@ -1,3 +1,10 @@
+fakeroot (1.11.1) unstable; urgency=low
+
+  * configure.ac: Remove duplicate Darwin case, patch from Akim
+    Demaille.
+
+ -- Clint Adams <schizo@debian.org>  Tue, 09 Dec 2008 20:01:31 -0500
+
 fakeroot (1.11) unstable; urgency=medium
 
   * communicate.c: patch from dann frazier to fix race condition when
