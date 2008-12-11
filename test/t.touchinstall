@@ -1,8 +1,7 @@
 #!/bin/sh
+. defs || exit 1
 
-trap 'rm -rf tmp' EXIT
-mkdir tmp
-../scripts/fakeroot${tcp} -f ../faked${tcp} -l ../.libs/${libfakeroot} -- \
+run_fakeroot -- \
  ${posixshell} -c "touch tmp/iamnotuser; ls -al tmp/iamnotuser" | grep root
 TEMP=$?
 exit $TEMP

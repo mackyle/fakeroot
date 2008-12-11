@@ -1,8 +1,11 @@
 #!/bin/sh
+. defs || exit 1
 
-trap 'rm -rf tmp' EXIT
-mkdir tmp
-../scripts/fakeroot${tcp} -f ../faked${tcp} -l ../.libs/${libfakeroot} -- \
- ${posixshell} -c 'touch tmp/justafile && LD_PRELOAD= rm tmp/justafile && mkdir tmp/justafile && ls -ld tmp/justafile' | grep "^d"
+mkdir $tmp
+run_fakeroot -- \
+ ${posixshell} -c "touch $tmp/justafile &&
+                   $LDPRELOADVAR= rm $tmp/justafile &&
+                   mkdir $tmp/justafile &&
+                   ls -ld $tmp/justafile" | grep "^d"
 TEMP=$?
 exit $TEMP

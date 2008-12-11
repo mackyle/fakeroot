@@ -1,6 +1,4 @@
 #!/bin/sh
+. defs || exit 1
 
-tdir=`cd ..; pwd -P`
-
-../scripts/fakeroot${tcp} -f ${tdir}/faked${tcp} -l ${tdir}/.libs/${libfakeroot} -- \
- ${srcdir}/tartest
+run_fakeroot -- ${srcdir}/tartest
