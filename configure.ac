@@ -125,10 +125,10 @@ AC_MSG_CHECKING([for union semun])
        # include <sys/types.h>
        # include <sys/ipc.h>
        # include <sys/sem.h>
-  ]], [[  
+  ]], [[
        union semun s;
   ]])],[AC_DEFINE(HAVE_SEMUN_DEF)
-   AC_MSG_RESULT([yes])  
+   AC_MSG_RESULT([yes])
   ],[ AC_MSG_RESULT([no])
   ])
 
@@ -143,17 +143,17 @@ AC_MSG_CHECKING([for type of arg of __xmknod])
        #include <sys/stat.h>
        #include <fcntl.h>
        #include <unistd.h>
-  ]], [[  
-       int __xmknod  ( int ver, 
-                       const char *pathname ,  
+  ]], [[
+       int __xmknod  ( int ver,
+                       const char *pathname ,
                        mode_t  mode ,  dev_t dev);
   ]])],[
    AC_DEFINE(XMKNOD_FRTH_ARG,)
    AC_MSG_RESULT([no extra *])
-  ],[ 
+  ],[
    AC_DEFINE(XMKNOD_FRTH_ARG,[*])
-   AC_MSG_RESULT([needs *])  
-  
+   AC_MSG_RESULT([needs *])
+
   ])
 
 dnl Possibly this should only be done if we actually have mknodat
@@ -169,18 +169,18 @@ AC_MSG_CHECKING([for type of arg of __xmknodat])
        #include <sys/stat.h>
        #include <fcntl.h>
        #include <unistd.h>
-  ]], [[  
-       int __xmknodat  ( int ver, 
+  ]], [[
+       int __xmknodat  ( int ver,
                          int dirfd,
-                         const char *pathname ,  
+                         const char *pathname ,
                          mode_t  mode ,  dev_t dev);
   ]])],[
    AC_DEFINE(XMKNODAT_FIFTH_ARG,)
    AC_MSG_RESULT([no extra *])
-  ],[ 
+  ],[
    AC_DEFINE(XMKNODAT_FIFTH_ARG,[*])
-   AC_MSG_RESULT([needs *])  
-  
+   AC_MSG_RESULT([needs *])
+
   ])
 
 AH_TEMPLATE([INITGROUPS_SECOND_ARG], [second argument of initgroups])
@@ -189,14 +189,14 @@ AC_MSG_CHECKING([for type of arg of initgroups])
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
        #include <sys/types.h>
        #include <unistd.h>
-  ]], [[  
+  ]], [[
        int initgroups ( const char *user, gid_t group );
   ]])],[
    AC_DEFINE(INITGROUPS_SECOND_ARG, gid_t)
    AC_MSG_RESULT([gid_t])
-  ],[ 
+  ],[
    AC_DEFINE(INITGROUPS_SECOND_ARG, int)
-   AC_MSG_RESULT([not gid_t; will assume int])  
+   AC_MSG_RESULT([not gid_t; will assume int])
   ])
 
 AH_TEMPLATE([SETREUID_ARG], [argument of setreuid])
@@ -205,14 +205,14 @@ AC_MSG_CHECKING([for type of arg of setreuid])
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
        #include <sys/types.h>
        #include <unistd.h>
-  ]], [[  
+  ]], [[
        int setreuid ( uid_t ruid, uid_t euid );
   ]])],[
    AC_DEFINE(SETREUID_ARG, gid_t)
    AC_MSG_RESULT([gid_t])
-  ],[ 
+  ],[
    AC_DEFINE(SETREUID_ARG, int)
-   AC_MSG_RESULT([not uid_t; will assume int])  
+   AC_MSG_RESULT([not uid_t; will assume int])
   ])
 
 AH_TEMPLATE([SETREGID_ARG], [argument of setregid])
@@ -221,14 +221,14 @@ AC_MSG_CHECKING([for type of arg of setregid])
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
        #include <sys/types.h>
        #include <unistd.h>
-  ]], [[  
+  ]], [[
        int setreuid ( gid_t rgid, gid_t egid );
   ]])],[
    AC_DEFINE(SETREGID_ARG, gid_t)
    AC_MSG_RESULT([gid_t])
-  ],[ 
+  ],[
    AC_DEFINE(SETREGID_ARG, int)
-   AC_MSG_RESULT([not gid_t; will assume int])  
+   AC_MSG_RESULT([not gid_t; will assume int])
   ])
 
 AH_TEMPLATE([STAT_SECOND_ARG], [second argument of stat])
@@ -238,22 +238,22 @@ AC_MSG_CHECKING([for type of second arg to stat])
        #include <sys/stat.h>
        #include <sys/types.h>
        #include <unistd.h>
-  ]], [[  
+  ]], [[
        int stat ( const char *file_name, struct stat *buf);
   ]])],[
    AC_DEFINE(STAT_SECOND_ARG, struct stat *)
    AC_MSG_RESULT([struct stat *])
-  ],[ 
+  ],[
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
        #include <sys/stat.h>
        #include <sys/types.h>
        #include <unistd.h>
-  ]], [[  
+  ]], [[
        int stat ( const char *file_name, stat *buf);
   ]])],[
    AC_DEFINE(STAT_SECOND_ARG, stat *)
    AC_MSG_RESULT([stat *])
-  ],[ 
+  ],[
   AC_MSG_ERROR(cannot determine second stat argument)
   ])
 ])
@@ -263,12 +263,12 @@ AC_MSG_CHECKING([for ${field} in struct dirent])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
        #include <sys/types.h>
        #include <dirent.h>
-  ]], [[  
+  ]], [[
 
        struct dirent d;
        d.${field}=0
   ]])],[AC_DEFINE_UNQUOTED(STAT_HAS_${field},1)
-   AC_MSG_RESULT([yes])  
+   AC_MSG_RESULT([yes])
   ],[ AC_MSG_RESULT([no])
   ])
 done
@@ -297,10 +297,10 @@ dnl
 dnl  for WRAPPED in _${PRE}${FUNC}; do
 dnl    FOUND=$WRAPPED
     if test -n "$FOUND"; then
-      PF=[`echo ${PRE}${FUNC}| tr '[a-z]' '[A-Z]'`] 
-      DEFINE_WRAP=[`echo wrap_${PRE}${FUNC}| tr '[a-z]' '[A-Z]'`] 
-      DEFINE_NEXT=[`echo wrap_${FOUND}| tr '[a-z]' '[A-Z]'`] 
-      DEFINE_ARG=[`echo wrap_${FOUND}| tr '[a-z]' '[A-Z]'`] 
+      PF=[`echo ${PRE}${FUNC}| tr '[a-z]' '[A-Z]'`]
+      DEFINE_WRAP=[`echo wrap_${PRE}${FUNC}| tr '[a-z]' '[A-Z]'`]
+      DEFINE_NEXT=[`echo wrap_${FOUND}| tr '[a-z]' '[A-Z]'`]
+      DEFINE_ARG=[`echo wrap_${FOUND}| tr '[a-z]' '[A-Z]'`]
       AC_DEFINE_UNQUOTED(WRAP_${PF}, $FOUND)
       AC_DEFINE_UNQUOTED(WRAP_${PF}_QUOTE, "$FOUND")
       AC_DEFINE_UNQUOTED(TMP_${PF}, tmp_$FOUND)
@@ -324,12 +324,12 @@ dnl    FOUND=$WRAPPED
       dnl no matter what I do, the resulting define looks like
       dnl #define macro (a,b,c) (a,b,c)
       dnl with a space in between "macro" and "(". To prevent this,
-      dnl I leave the space here, and remove it later with sed 
+      dnl I leave the space here, and remove it later with sed
       dnl at (end of configure.in)
-      dnl AC_DEFINE_UNQUOTED(NEXT_${PF}(a,b,c${DEF_END}), 
-      dnl 		     next_$FOUND(${DEF_BEGIN}b,c${DEF_END}))
-      dnl AC_DEFINE_UNQUOTED(${PF}[_ARG(a,b,c${DEF_END})], 
-      dnl 		     (${DEF_BEGIN}b,c${DEF_END}))
+      dnl AC_DEFINE_UNQUOTED(NEXT_${PF}(a,b,c${DEF_END}),
+      dnl		     next_$FOUND(${DEF_BEGIN}b,c${DEF_END}))
+      dnl AC_DEFINE_UNQUOTED(${PF}[_ARG(a,b,c${DEF_END})],
+      dnl		     (${DEF_BEGIN}b,c${DEF_END}))
 
       dnl Anyway the trickery above also leads to automake problems
       dnl (tries to remake config.h.in, but fails). So, as a way
@@ -341,7 +341,7 @@ dnl    FOUND=$WRAPPED
 
       break
     fi
-  done      
+  done
 done
 
 if test -r fakerootconfig.h
@@ -367,7 +367,7 @@ LDPRELOADABS=0
 LDEXTRAVAR=""
 case $target_cpu:$target_os in
 	(alpha*:linux*|ia64*:linux*)
-      		libcpath="/lib/libc.so.6.1"
+		libcpath="/lib/libc.so.6.1"
 		;;
 	(*:linux*)
 	        libcpath="/lib/libc.so.6"
@@ -434,55 +434,55 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[int foo (int a) { a = __builtin_expect (a, 10)
 dnl kludge
 AH_VERBATIM([WRAP_STAT],
 [/* Stuff.  */
-#define WRAP_STAT  __astat 
-#define WRAP_STAT_QUOTE  __astat 
-#define TMP_STAT  __astat 
+#define WRAP_STAT  __astat
+#define WRAP_STAT_QUOTE  __astat
+#define TMP_STAT  __astat
 #define NEXT_STAT_NOARG  next___astat
 
-#define WRAP_LSTAT_QUOTE  __astat 
-#define WRAP_LSTAT  __astat 
-#define TMP_LSTAT  __astat 
-#define NEXT_LSTAT_NOARG  next___astat 
+#define WRAP_LSTAT_QUOTE  __astat
+#define WRAP_LSTAT  __astat
+#define TMP_LSTAT  __astat
+#define NEXT_LSTAT_NOARG  next___astat
 
-#define WRAP_FSTAT_QUOTE  __astat 
-#define WRAP_FSTAT  __astat 
-#define TMP_FSTAT  __astat 
-#define NEXT_FSTAT_NOARG  next___astat 
+#define WRAP_FSTAT_QUOTE  __astat
+#define WRAP_FSTAT  __astat
+#define TMP_FSTAT  __astat
+#define NEXT_FSTAT_NOARG  next___astat
 
-#define WRAP_FSTATAT_QUOTE  __astatat 
-#define WRAP_FSTATAT  __astatat 
-#define TMP_FSTATAT  __astatat 
-#define NEXT_FSTATAT_NOARG  next___astatat 
+#define WRAP_FSTATAT_QUOTE  __astatat
+#define WRAP_FSTATAT  __astatat
+#define TMP_FSTATAT  __astatat
+#define NEXT_FSTATAT_NOARG  next___astatat
 
-#define WRAP_STAT64_QUOTE  __astat64 
-#define WRAP_STAT64  __astat64 
-#define TMP_STAT64  __astat64 
-#define NEXT_STAT64_NOARG  next___astat64 
+#define WRAP_STAT64_QUOTE  __astat64
+#define WRAP_STAT64  __astat64
+#define TMP_STAT64  __astat64
+#define NEXT_STAT64_NOARG  next___astat64
 
-#define WRAP_LSTAT64_QUOTE  __astat64 
-#define WRAP_LSTAT64  __astat64 
-#define TMP_LSTAT64  __astat64 
-#define NEXT_LSTAT64_NOARG  next___astat64 
+#define WRAP_LSTAT64_QUOTE  __astat64
+#define WRAP_LSTAT64  __astat64
+#define TMP_LSTAT64  __astat64
+#define NEXT_LSTAT64_NOARG  next___astat64
 
 #define WRAP_FSTAT64_QUOTE  __astat64
 #define WRAP_FSTAT64  __astat64
 #define TMP_FSTAT64  __astat64
-#define NEXT_FSTAT64_NOARG  next___astat64 
+#define NEXT_FSTAT64_NOARG  next___astat64
 
 #define WRAP_FSTATAT64_QUOTE  __astatat64
 #define WRAP_FSTATAT64  __astatat64
 #define TMP_FSTATAT64  __astatat64
-#define NEXT_FSTATAT64_NOARG  next___astatat64 
+#define NEXT_FSTATAT64_NOARG  next___astatat64
 
-#define WRAP_MKNOD_QUOTE  __amknod 
-#define WRAP_MKNOD  __amknod 
-#define TMP_MKNOD  __amknod 
-#define NEXT_MKNOD_NOARG  next___amknod 
+#define WRAP_MKNOD_QUOTE  __amknod
+#define WRAP_MKNOD  __amknod
+#define TMP_MKNOD  __amknod
+#define NEXT_MKNOD_NOARG  next___amknod
 
-#define WRAP_MKNODAT_QUOTE  __amknodat 
-#define WRAP_MKNODAT  __amknodat 
-#define TMP_MKNODAT  __amknodat 
-#define NEXT_MKNODAT_NOARG  next___amknodat 
+#define WRAP_MKNODAT_QUOTE  __amknodat
+#define WRAP_MKNODAT  __amknodat
+#define TMP_MKNODAT  __amknodat
+#define NEXT_MKNODAT_NOARG  next___amknodat
 ])
 dnl kludge end
 
