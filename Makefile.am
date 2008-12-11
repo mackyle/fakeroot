@@ -1,4 +1,5 @@
 AUTOMAKE_OPTIONS=foreign
+ACLOCAL_AMFLAGS = -I build-aux
 SUBDIRS=scripts doc test
 
 noinst_LTLIBRARIES = libcommunicate.la
@@ -29,9 +30,9 @@ EXTRA_DIST=wrapawk wrapfunc.inp                        \
 CLEAN_FILES=fakerootconfig.h
 
 wrapped.h wrapdef.h wrapstruct.h wraptmpf.h:wrapawk wrapfunc.inp
-	awk -f $(srcdir)/wrapawk < $(srcdir)/wrapfunc.inp  
+	awk -f $(srcdir)/wrapawk < $(srcdir)/wrapfunc.inp
 
-libfakeroot.lo:libfakeroot.c wrapdef.h wrapstruct.h wraptmpf.h 
+libfakeroot.lo:libfakeroot.c wrapdef.h wrapstruct.h wraptmpf.h
 
 fakerootconfig.h: ./config.status
 	CONFIG_FILES= CONFIG_HEADERS= /bin/sh ./config.status

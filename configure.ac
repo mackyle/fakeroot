@@ -1,6 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT([fakeroot],[FAKEROOT_VERSION],[schizo@debian.org],[fakeroot])
 AC_PREREQ(2.61)
+AC_CONFIG_MACRO_DIR([build-aux])
 LT_PREREQ(2.1a)
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE
