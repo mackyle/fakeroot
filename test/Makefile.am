@@ -6,6 +6,7 @@ TESTS = t.echoarg t.mknod t.tar t.truereturn t.falsereturn t.option \
 suffix =
 TESTS_ENVIRONMENT =							\
   libfakeroot=libfakeroot-0.so						\
+  srcdir=$(srcdir)							\
   suffix=$(suffix)							\
   posixshell=$(SHELL)
 

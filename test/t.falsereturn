@@ -1,7 +1,7 @@
 #!/bin/sh
+. defs || exit 1
 
-if ../scripts/fakeroot${tcp} -f ../faked${tcp} -l ../.libs/${libfakeroot} -- \
- false
+if run_fakeroot -- false
 then
  false
 else

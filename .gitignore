@@ -2,6 +2,7 @@ Makefile.in
 acinclude.m4
 aclocal.m4
 autom4te.cache/
+build-aux/
 config.guess
 config.h.in
 config.h.in~

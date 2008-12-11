@@ -1,4 +1,4 @@
 #!/bin/sh
+. defs || exit 1
 
-../scripts/fakeroot${tcp} -f ../faked${tcp} -l ../.libs/${libfakeroot} -- \
- echo -1 -2 | grep -- -1
+run_fakeroot -- echo -1 -2 | grep -- -1
