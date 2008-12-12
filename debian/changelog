@@ -1,3 +1,14 @@
+fakeroot (1.11.2) unstable; urgency=low
+
+  [ Akim Demaille ]
+  * Formatting changes.
+  * Make bootstrapping easier.
+
+  [ Clint Adams ]
+  * Change formatting of TESTS_ENVIRONMENT assignment.
+
+ -- Clint Adams <schizo@debian.org>  Fri, 12 Dec 2008 12:36:49 -0500
+
 fakeroot (1.11.1) unstable; urgency=low
 
   * configure.ac: Remove duplicate Darwin case, patch from Akim
@@ -89,7 +100,7 @@ fakeroot (1.9.1) unstable; urgency=low
 
 fakeroot (1.9) unstable; urgency=low
 
-  * Bump to Standards-Version 3.7.3. 
+  * Bump to Standards-Version 3.7.3.
   * Apply patch from Thomas Bächler to work around fakeroot's
     inability to handle acls by pretending that the underlying
     filesystem does not support acls.  closes: #361306.
@@ -99,7 +110,7 @@ fakeroot (1.9) unstable; urgency=low
 
 fakeroot (1.8.10) unstable; urgency=medium
 
-  * Call biarch target in a parallel-build-friendly way. 
+  * Call biarch target in a parallel-build-friendly way.
 
  -- Clint Adams <schizo@debian.org>  Sun, 02 Dec 2007 17:33:42 -0500
 
@@ -144,7 +155,7 @@ fakeroot (1.8.5) unstable; urgency=low
 
 fakeroot (1.8.4) unstable; urgency=low
 
-  * Fix fake_get_owner() to build with STUPID_ALPHA_HACK. 
+  * Fix fake_get_owner() to build with STUPID_ALPHA_HACK.
 
  -- Clint Adams <schizo@debian.org>  Fri, 02 Nov 2007 21:41:27 -0400
 
@@ -210,7 +221,7 @@ fakeroot (1.7) unstable; urgency=low
 
 fakeroot (1.6.5) unstable; urgency=low
 
-  * Remove setuid fake libraries and README.fake explanation. 
+  * Remove setuid fake libraries and README.fake explanation.
 
  -- Clint Adams <schizo@debian.org>  Mon, 19 Mar 2007 11:20:58 -0400
 
@@ -259,7 +270,7 @@ fakeroot (1.5.13) unstable; urgency=low
 
 fakeroot (1.5.12) unstable; urgency=low
 
-  * Fix build-dep for kfreebsd-amd64. 
+  * Fix build-dep for kfreebsd-amd64.
 
  -- Clint Adams <schizo@debian.org>  Sun,  7 Jan 2007 19:56:21 -0500
 
@@ -323,7 +334,7 @@ fakeroot (1.5.5) unstable; urgency=low
 
 fakeroot (1.5.4) unstable; urgency=low
 
-  * On i386, build-depend on lib64gcc1. 
+  * On i386, build-depend on lib64gcc1.
 
  -- Clint Adams <schizo@debian.org>  Sun,  2 Oct 2005 19:52:18 -0400
 
@@ -464,7 +475,7 @@ fakeroot (1.2.9) unstable; urgency=medium
 
 fakeroot (1.2.8) unstable; urgency=medium
 
-  * Fix typo in debian/rules preventing testsuite from being run. 
+  * Fix typo in debian/rules preventing testsuite from being run.
 
  -- Clint Adams <schizo@debian.org>  Thu, 24 Mar 2005 07:09:26 -0500
 
@@ -520,7 +531,7 @@ fakeroot (1.2.1) unstable; urgency=low
 
   * debian/rules: Do configure --host on cross build.
     Don't invoke 'make check' on cross build.
-        
+
  -- NIIBE Yutaka <gniibe@fsij.org>  Wed,  8 Dec 2004 15:55:52 +0900
 
 fakeroot (1.2) unstable; urgency=low
@@ -638,7 +649,7 @@ fakeroot (1.0.6) unstable; urgency=low
 
 fakeroot (1.0.5) unstable; urgency=low
 
-  * gzip faked-tcp and fakeroot-tcp manpages. 
+  * gzip faked-tcp and fakeroot-tcp manpages.
 
  -- Clint Adams <schizo@debian.org>  Mon, 12 Jul 2004 20:33:34 -0400
 
@@ -650,8 +661,8 @@ fakeroot (1.0.4) unstable; urgency=medium
   * faked.c: Correct a typo in the usage information.
 
   + Daniel Schepler <schepler@debian.org>  Sun, 27 Jun 2004 15:47:54 -0700
- 
-  * test/tartest: order arguments to chown and chmod in a sane way. 
+
+  * test/tartest: order arguments to chown and chmod in a sane way.
 
  -- Clint Adams <schizo@debian.org>  Tue, 22 Jun 2004 13:15:16 -0400
 
@@ -680,7 +691,7 @@ fakeroot (1.0.2) unstable; urgency=low
 
 fakeroot (1.0.1) unstable; urgency=low
 
-  * Fix library rename thinko. 
+  * Fix library rename thinko.
   * Handle platforms with inttypes.h but not stdint.h.
   * Handle platforms where first argument to setgroups() is int.
   * Handle platforms without endian.h.
@@ -710,7 +721,7 @@ fakeroot (1.0.0) unstable; urgency=low
 
 fakeroot (0.9.6) unstable; urgency=low
 
-  * communicate.c, communicate.h, faked.cc: Rename func_id to func_id_t. 
+  * communicate.c, communicate.h, faked.cc: Rename func_id to func_id_t.
   * configure.ac: add check for libpthread.
   * communicate.c, communicate.h, libfakeroot.c, wrapfunc.inp: add in
     TCP modifications from Tivo Savola's fakeroot-net, ifdef'd (FAKENET).
@@ -730,7 +741,7 @@ fakeroot (0.9.5) unstable; urgency=high
 
 fakeroot (0.9.4) unstable; urgency=medium
 
-  * Remove extraneous build dependencies on file and gcc-3.3. 
+  * Remove extraneous build dependencies on file and gcc-3.3.
   * Remove -pedantic from CXXFLAGS.
   * Change references in DEBUG from libtricks to libfakeroot.
   * communicate.c: change error message to say libfakeroot instead of
@@ -743,7 +754,7 @@ fakeroot (0.9.4) unstable; urgency=medium
 
 fakeroot (0.9.3) unstable; urgency=low
 
-  * Convert tartest to a /bin/sh script. 
+  * Convert tartest to a /bin/sh script.
 
  -- Clint Adams <schizo@debian.org>  Mon,  3 May 2004 09:22:29 -0400
 
@@ -834,7 +845,7 @@ fakeroot (0.7.6) unstable; urgency=low
 
 fakeroot (0.7.5) unstable; urgency=medium
 
-  * configure.ac: cosmetic changes 
+  * configure.ac: cosmetic changes
   * Remove gcc-3.3 build-dep for sparc.  closes: #201253.
   * No longer ship fakerootconfig.h.  closes: #201355.
   * Bump Standards-Version to 3.6.0.
@@ -849,7 +860,7 @@ fakeroot (0.7.4) unstable; urgency=medium
 
 fakeroot (0.7.3) unstable; urgency=medium
 
-  * Use --build and --host for sparc64 now. 
+  * Use --build and --host for sparc64 now.
 
  -- Clint Adams <schizo@debian.org>  Tue, 13 May 2003 16:59:54 -0400
 
@@ -875,20 +886,20 @@ fakeroot (0.7.0) unstable; urgency=low
 
 fakeroot (0.6.9) unstable; urgency=low
 
-  * Re-enable sparc64 build. 
+  * Re-enable sparc64 build.
 
  -- Clint Adams <schizo@debian.org>  Thu, 10 Apr 2003 19:24:57 -0400
 
 fakeroot (0.6.8) unstable; urgency=low
 
-  * Build-dep on file, since libtool wants it. 
+  * Build-dep on file, since libtool wants it.
 
  -- Clint Adams <schizo@debian.org>  Thu, 27 Mar 2003 01:41:52 -0500
 
 fakeroot (0.6.7) unstable; urgency=low
 
-  * doc/fakeroot.1: Fix hyphens in manpage. 
-  * doc/fakeroot.1: Fix single quotes in manpage. 
+  * doc/fakeroot.1: Fix hyphens in manpage.
+  * doc/fakeroot.1: Fix single quotes in manpage.
   * Ship md5sums.
 
  -- Clint Adams <schizo@debian.org>  Wed, 26 Mar 2003 15:17:51 -0500
@@ -902,13 +913,13 @@ fakeroot (0.6.6) unstable; urgency=low
 fakeroot (0.6.5) unstable; urgency=low
 
   * Since s390 buildd is 31-bit, attempt to cross-compile 64-bit fakeroot
-    libs. 
+    libs.
 
  -- Clint Adams <schizo@debian.org>  Sun, 16 Mar 2003 02:27:08 -0500
 
 fakeroot (0.6.4) unstable; urgency=low
 
-  * Build-dep on gcc-3.3 on s390. 
+  * Build-dep on gcc-3.3 on s390.
 
  -- Clint Adams <schizo@debian.org>  Fri, 14 Mar 2003 18:01:39 -0500
 
@@ -1037,7 +1048,7 @@ fakeroot (0.4.15) unstable; urgency=low
 
 fakeroot (0.4.14) unstable; urgency=low
 
-  * Fix path in French manpage.  closes: #168413. 
+  * Fix path in French manpage.  closes: #168413.
 
  -- Clint Adams <schizo@debian.org>  Sat,  9 Nov 2002 12:44:13 -0500
 
@@ -1050,7 +1061,7 @@ fakeroot (0.4.13) unstable; urgency=low
 
 fakeroot (0.4.12) unstable; urgency=low
 
-  * Apply Aaron Lehmann's sanity-check patch to faked.  closes: #98648. 
+  * Apply Aaron Lehmann's sanity-check patch to faked.  closes: #98648.
 
  -- Clint Adams <schizo@debian.org>  Fri,  8 Nov 2002 13:56:49 -0500
 
@@ -1066,7 +1077,7 @@ fakeroot (0.4.11) unstable; urgency=high
 
 fakeroot (0.4.10) unstable; urgency=low
 
-  * Apply Yann Dirson's robustness fixes.  closes: #150160. 
+  * Apply Yann Dirson's robustness fixes.  closes: #150160.
 
  -- Clint Adams <schizo@debian.org>  Wed,  6 Nov 2002 11:29:04 -0500
 
@@ -1085,13 +1096,13 @@ fakeroot (0.4.8) unstable; urgency=low
 
 fakeroot (0.4.7) unstable; urgency=low
 
-  * Cope when building with bash. 
+  * Cope when building with bash.
 
  -- Clint Adams <schizo@debian.org>  Mon, 28 Oct 2002 19:37:12 -0500
 
 fakeroot (0.4.6) unstable; urgency=low
 
-  * Hijack. 
+  * Hijack.
   * Fake seteuid and setegid.  closes: #107734.
   * Fake setreuid and setregid.
   * Fake setresuid and setresgid.  closes: #153995.
@@ -1149,7 +1160,7 @@ fakeroot (0.4.5-2.4) unstable; urgency=low
 fakeroot (0.4.5-2.3) unstable; urgency=low
 
   * Non-maintainer upload.
-    
+
   * Add dependency on libc6-dev-sparc64 [sparc].  Closes: #143454.
 
  -- Ben Pfaff <pfaffben@debian.org>  Fri, 19 Apr 2002 10:20:48 -0700
@@ -1256,7 +1267,7 @@ fakeroot (0.4.4-5) unstable; urgency=low
     setups, and wrapping open() does cause problems (either now, or in
     future versions of libc when some function suddenly starts to use
     open()).
-  
+
  -- joost witteveen <joostje@debian.org>  Sat, 11 Mar 2000 18:21:41 +0200
 
 fakeroot (0.4.4-4) unstable; urgency=low
@@ -1287,7 +1298,7 @@ fakeroot (0.4.4-2) unstable; urgency=low
   * fix version number in configure.in
   * invert test for type of third argument of __xmknod.
   * another automake bug workaround in doc/Makefile.am from Yann DIRSON
-  
+
  -- joost witteveen <joostje@debian.org>  Wed,  8 Sep 1999 21:25:56 +0200
 
 fakeroot (0.4.4-1) unstable; urgency=low
@@ -1295,14 +1306,14 @@ fakeroot (0.4.4-1) unstable; urgency=low
   * Solaris changes from Yann DIRSON. (Include several fixes for
     incorrect automake/autoconfig usage).
   * correct handling of HAVE_SEMUN_DEF. Closes: #44447
-  
+
  -- joost witteveen <joostje@debian.org>  Tue,  7 Sep 1999 22:40:41 +0200
 
 fakeroot (0.4.3-3) unstable; urgency=low
 
   * Use exit value of command run as fakeroot. Closes: 43811
     (used patch from aj, also added test for this, finally)
-  
+
   * OK, my configure etc scripts to find out whether to wrap stat(),
     _stat, __xstat were not quite OK. More fixes.
 
@@ -1319,7 +1330,7 @@ fakeroot (0.4.3-1) unstable; urgency=low
   * spelling fixes by Yann DIRSON.
   * fakeroot script can find libfakeroot also if not installed in
     /usr/lib/... (Yann DIRSON)
-  
+
  -- joost witteveen <joostje@debian.org>  Wed, 25 Aug 1999 00:34:39 +0200
 
 fakeroot (0.4.2-2) unstable; urgency=low
@@ -1337,7 +1348,7 @@ fakeroot (0.4.2-1) unstable; urgency=low
     thanks Thomas Quinot!)
   * manually changed the /var/lib/dpkg/info/fakeroot.shlibs on my system,
     to remove the extra `libc6'. Closes: #43247.
-  
+
  -- joost witteveen <joostje@debian.org>  Sun, 22 Aug 1999 17:55:04 +0200
 
 fakeroot (0.4.1-3) unstable; urgency=low
@@ -1379,7 +1390,7 @@ fakeroot (0.0-17.6) unstable; urgency=low
 
   *  Non-maintainer release.
   *  Made the lchown() wrapper actually call lchown() instead of chown(),
-     this makes it work on systems with a pure chown() (ie kernel 2.2 and 
+     this makes it work on systems with a pure chown() (ie kernel 2.2 and
      glibc 2.1.1 without patches, a la sparc/powerpc)
 
  -- Ben Collins <bcollins@debian.org>  Tue, 20 Jul 1999 10:36:57 -0600
@@ -1390,7 +1401,7 @@ fakeroot (0.0-17.5) unstable; urgency=low
   * Merge Jason Gunthorpe's changes:
     - Added lchown support and fixed a few typos (closes:Bug#38941,Bug#38928,Bug#38869).
     - Disabled libc 'ldd' hack to speed it up
-  
+
  -- Joel Klecker <espy@debian.org>  Fri,  4 Jun 1999 08:43:48 -0700
 
 fakeroot (0.0-17.4) unstable; urgency=low
@@ -1398,7 +1409,7 @@ fakeroot (0.0-17.4) unstable; urgency=low
   * Add wrapper for lchown.
 
  -- Joel Klecker <espy@debian.org>  Mon, 19 Apr 1999 12:00:14 -0700
-  
+
 fakeroot (0.0-17.3) unstable; urgency=low
 
   * Regenerate the shlibs file, and do it correctly for potato.
@@ -1440,7 +1451,7 @@ fakeroot (0.0-15) frozen unstable; urgency=low
   * Recompiled with libc6-2.0.7u-6.
   * partly applied patch from Matt McLean <keys@yikes.com>, to make
     fakeroot compile with libc 2.1.
-  
+
  -- joost witteveen <joostje@debian.org>  Sat, 28 Nov 1998 21:49:11 +0100
 
 fakeroot (0.0-14.4) unstable; urgency=medium
@@ -1467,8 +1478,8 @@ fakeroot (0.0-14.3) unstable; urgency=low
 
 fakeroot (0.0-14.2) frozen unstable; urgency=high
 
-  * Current hamm version (0.0-13) broke with libc6_2.0.7r-1 
-    (`fakeroot "anything"' fails; strace shows the process run inside the 
+  * Current hamm version (0.0-13) broke with libc6_2.0.7r-1
+    (`fakeroot "anything"' fails; strace shows the process run inside the
     fakeroot environment segfaulting) (Similar to #21669 and #22013).
     Recompiled with libc6_2.0.7r-1 and matching -dev so that it works again.
     The changes between 0.0-13 (hamm version) and 0.0-14.1 (slink version)
@@ -1495,7 +1506,7 @@ fakeroot (0.0-14) unstable; urgency=low
 fakeroot (0.0-13) frozen unstable; urgency=low
 
   * 2 Minor changes to allow fakeroot to compile with egcs.
-    However, as egcs is the only c++ compiler with debian, I think 
+    However, as egcs is the only c++ compiler with debian, I think
     it is essential (even to comply with the DFSG) that this is put in
     frozen too.
   * Added a "umask 022" to the test/tartest script, as otherwise it will only
@@ -1530,19 +1541,19 @@ fakeroot (0.0-10) frozen unstable; urgency=low
  -- joost witteveen <joost@rulcmc.leidenuniv.nl>  Wed, 28 Jan 1998 14:53:14 +0100
 
 fakeroot (0.0-9a) unstable; urgency=low
-  
+
   * I'd like the next "real" release to include VIRTUAL_ROOT. So, this
     is not a "debian" release. (but use as you wish)
   * dpkg-shlibdeps appears not to complain if fakeroot.shlibs just says:
     "/usr/lib/libfakeroot      0" (without any package name). So I use
-    that. 
+    that.
   * Debian Changelog is now called changelog.Debian.gz (not changelog)
   * fakeroot children now inherit parent's environment.
   * Applied Joey's isell patch (plus Dirk's addition, and Mark's programme
     comment (Checked it, yes my Consise Oxford also says that), and some
     corrections of my own). That should probably fix about half of the
     spelling errors, I guess.
-  
+
  -- joost witteveen <joost@rulcmc.leidenuniv.nl>  Tue,  9 Sep 1997 22:54:38 +0200
 
 fakeroot (0.0-9) unstable; urgency=low
@@ -1563,7 +1574,7 @@ fakeroot (0.0-8) unstable; urgency=low
   * Added strip --strip-unneeded libfakeroot in rules "binary" target.
   * really return EPERM on things like "chmod 0 file"
   * changed --nodebian to be the default again.
-  
+
  -- joost witteveen <joost@rulcmc.leidenuniv.nl>  Sun,  3 Aug 1997 15:32:40 +0200
 
 fakeroot (0.0-7) unstable; urgency=low
@@ -1594,20 +1605,20 @@ fakeroot (0.0-6) unstable; urgency=low
   * work around "touch f; chmod 000 f; echo>f" problem (works for
     root, but not for user/fakeroot): a "chmod 000" call will
     be translated into "chmod 600 (or 700)" to the kernel (and thus
-    the real filesystem), but the "fakedata" will record the 000 
+    the real filesystem), but the "fakedata" will record the 000
     permissions.
   * also wrap mkdir call, as that can create dirs with
     permission 000 too (thus unwritable, shows up in tar).
   * Prevent lost IPC messages causing havoc
-    (losses were due to signals sent to process)    
+    (losses were due to signals sent to process)
   * code-cleanups.
-  * Added options: 
+  * Added options:
      --lib library    location of libfakeroot.so.0.0
                      (make sure you specify a absolute path here).
      --mixedlibhack   test for libc5 binaries, and remove LD_PRELOAD for them.
      --nomixedlibhack don't test for libc5 binaries (significantly faster).
   * Added a few autmatic tests for fakeroot.
-  
+
  -- joost witteveen <joost@rulcmc.leidenuniv.nl>  Wed, 16 Jul 1997 22:00:57 +0200
 
 fakeroot (0.0-5) unstable; urgency=low
@@ -1615,48 +1626,48 @@ fakeroot (0.0-5) unstable; urgency=low
   * fixed "internal error" message.
   * stat's are compared with dev number now, not just inodes.
   * some README changes.
-  
+
  -- joost witteveen <joost@rulcmc.leidenuniv.nl>  Sat, 12 Jul 1997 15:19:13 +0200
 
 fakeroot (0.0-4) unstable; urgency=low
 
   * now also builds "tar" succesfully, this was done by fixing:
-  
+
   * after a chdir (that the deamon doesnt follow), unlink and friends
     didn't work any more, causing 'interesting' results.
   * after a chown(file), fakeroot would report only the "fake"
-    filesize (from the moment of the chown/chomd), not 
+    filesize (from the moment of the chown/chomd), not
     the "real" filesize.
   * also wrap "remove", "rmdir" functions.
-  
+
   * Now I'm finally also wrapping "stat" (seems not to be used by
     any programmes, they all use eigher fstat or lstat).
   * As noted by a user, I left some debugging binaries (with "debugging"
     permission mods) in the source archive. Sorry, removed those.
-  
+
  -- joost witteveen <joost@rulcmc.leidenuniv.nl>  Fri,  4 Jul 1997 16:36:58 +0200
 
 fakeroot (0.0-3) unstable; urgency=low
-  
+
   * First release to be uploaded to master.
   * "dpkg-buildpackage -rfakeroot" works reliably now (but you
     do need libc6 versions of dpkg, tar, fileutils, bash, make, (...?)
-    
+
   * fixed bug when two programmes were running simultiniosly, messing up
     the deamon input and output stuff. (using IPC semaphones now)
   * Oops, cannot even use "printf"'s in the wrapper for debugging!
     Debugging now handled via IPC messages, too.
-  
+
   * this package was built as non-root! (first debian package ever, I
     think!)
-  
+
  -- joost witteveen <joost@rulcmc.leidenuniv.nl>  Fri,  4 Jul 1997 00:13:07 +0200
 
 fakeroot (0.0-2) unstable; urgency=low
 
   * Added code to detect libc5 programmes, and run those without
     LD_PRELOAD set.
-  
+
  -- joost witteveen <joost@rulcmc.leidenuniv.nl>  Wed,  2 Jul 1997 23:20:14 +0200
 
 fakeroot (0.0-1) unstable; urgency=low
@@ -1674,14 +1685,14 @@ fakeroot (0.0-0) unstable; urgency=low
     I've done so far than to be actually usefull.
   * BUG: doesn't depend on libg++272 (sue me).
   * More BUGS: see /usr/doc/fakeroot/BUGS
-  * You'll need libc6 versions of the commands you want to 
+  * You'll need libc6 versions of the commands you want to
     execute within fakeroot (tar, gzip, dpkg, ... (see README)).
   * Because I cannot rebuild dpkg (see seperate message in
     debian-devel), I haven't been able to actually test
     this with dpkg-build -rfakeroot. But stuff like
       touch file;          ls -al file;
       chown root:adm file; ls -l file;
-      mknod block b 3 1;   ls -l block; 
+      mknod block b 3 1;   ls -l block;
     work OK. (BUG: chmod u+s file doesn't).
 
  -- joost witteveen <joost@rulcmc.leidenuniv.nl>  Fri, 27 Jun 1997 22:01:38 +0200
