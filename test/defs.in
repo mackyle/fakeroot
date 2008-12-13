@@ -8,5 +8,5 @@ LDPRELOADVAR=@LDPRELOADVAR@
 
 run_fakeroot ()
 {
-  ../scripts/fakeroot${tcp} -f ../faked${tcp} -l ../.libs/${libfakeroot} "$@"
+  tmp="$tmp" $PWD/../scripts/fakeroot${tcp} -f $PWD/../faked${tcp} -l $PWD/../.libs/${libfakeroot} "$@"
 }

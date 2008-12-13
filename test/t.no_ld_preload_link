@@ -1,5 +1,5 @@
 #!/bin/sh
-. defs || exit 1
+. ./defs || exit 1
 mkdir $tmp
 run_fakeroot -- \
  ${posixshell} -c "touch $tmp/justafile &&
