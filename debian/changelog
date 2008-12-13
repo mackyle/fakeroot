@@ -1,3 +1,13 @@
+fakeroot (1.11.3) unstable; urgency=low
+
+  [ Akim Demaille ]
+  * Improve test suite.
+
+  [ Clint Adams ]
+  * Tweak testsuite for robustness.
+
+ -- Clint Adams <schizo@debian.org>  Fri, 12 Dec 2008 19:01:19 -0500
+
 fakeroot (1.11.2) unstable; urgency=low
 
   [ Akim Demaille ]
