@@ -1,5 +1,5 @@
 #!/bin/sh
-. defs || exit 1
+. ./defs || exit 1
 
 run_fakeroot -- \
   ${posixshell} -c 'mknod hda3 b 3 1; ls -l hda3' | grep "^b"

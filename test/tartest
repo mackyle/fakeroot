@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 echo tartest:
-TMP=./tmp
+TMP="$tmp"
 SRCDIR=`cd ${srcdir}; pwd -P`
 PATH=$PATH:/usr/bin/X11
 export PATH
