@@ -28,8 +28,8 @@ for f in $LIST; do
   touch     $f/$f/file
 done
 
-#do some mv/rm stuff. 
-#The "mv" part used to confuse fakeroot_0.0-6 
+#do some mv/rm stuff.
+#The "mv" part used to confuse fakeroot_0.0-6
 #   (inodes weren't removed from cache)
 FILES=`for f in $LIST; do for c in mv rm ; do echo $c.$f ; done ; done`
 touch $FILES
@@ -47,26 +47,26 @@ for f in $LIST; do
 done
 
 chown -R daemon:sys 2
-chown -R daemon:root 3 4 
+chown -R daemon:root 3 4
 chmod -R u+xs 2
 chmod u+s  5
 
 # see bugs (not wraping open()) in manual page: don't `chmod 0'
 # the file hello itself (only the directories in it).
-chmod 0 hello hello/* #tar/hello/vn.34.654l./{,file} 
+chmod 0 hello hello/* #tar/hello/vn.34.654l./{,file}
 echo "0123456789012" > hello/hello
- 
+
 
 cd ..
 
 
 rm -f tartest.tar.gz
-uudecode ${SRCDIR}/tartest.tar.gz.uue 
+uudecode ${SRCDIR}/tartest.tar.gz.uue
 
 tar -cf - tar | gzip -9 > faketar.tar.gz
 
-${SRCDIR}/compare-tar tartest.tar.gz faketar.tar.gz 
- 
+${SRCDIR}/compare-tar tartest.tar.gz faketar.tar.gz
+
 #test 2: try to unpack, pack the tar archive, and
 #        see if the result is the same archive
 #        (yes, I've created bugs that would past test1, but
@@ -77,7 +77,7 @@ rm -rf tar
 gzip -dc tartest.tar.gz | tar xf -
 tar cf - tar | gzip -9 >tartest.test.tar.gz
 
-${SRCDIR}/compare-tar tartest.tar.gz tartest.test.tar.gz 
+${SRCDIR}/compare-tar tartest.tar.gz tartest.test.tar.gz
 
 #Would like to do this, but fakedebug doens't generate stdout (yet), so
 #I cannot do this yet.
