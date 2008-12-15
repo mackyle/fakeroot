@@ -14,10 +14,11 @@ EOF
   exit 1
 }
 
+
 # strip /bin/fakeroot to find install prefix
 PREFIX=@prefix@
 BINDIR=@bindir@
-    
+
 USEABSLIBPATH=@LDPRELOADABS@
 LIB=lib@fakeroot_transformed@@DLSUFFIX@
 PATHS=@libdir@:${PREFIX}/lib64/libfakeroot:${PREFIX}/lib32/libfakeroot
@@ -116,7 +117,7 @@ fi
 
 if test $libfound = no
 then
-    echo >&2 "fakeroot: preload library not found, aborting."
+    echo >&2 "fakeroot: preload library \`$LIB' not found, aborting."
     exit 1
 fi
 
@@ -166,3 +167,7 @@ else
 fi
 
 exit $RESULT
+
+# Local Variables:
+# mode: shell-script
+# End:
