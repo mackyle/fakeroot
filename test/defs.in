@@ -1,3 +1,5 @@
+#                                          -*- shell-script -*-
+
 me=`basename $0`
 tmp=$me.dir
 rm -rf $tmp
@@ -6,7 +8,16 @@ trap 'rm -rf $tmp' EXIT
 # The name of LD_PRELOAD on this platform.
 LDPRELOADVAR=@LDPRELOADVAR@
 
+case $VERBOSE in
+  (x)  set -x;;                # Debug mode.
+  ('') exec >/dev/null 2>&1;;  # By default, be silent.
+esac
+
 run_fakeroot ()
 {
-  tmp="$tmp" $PWD/../scripts/fakeroot${tcp} -f $PWD/../faked${tcp} -l $PWD/../.libs/${libfakeroot} "$@"
+  tmp="$tmp"                                    \
+  $PWD/../scripts/fakeroot${tcp}                \
+      -f $PWD/../faked${tcp}                    \
+      -l $PWD/../.libs/${libfakeroot}           \
+       "$@"
 }
