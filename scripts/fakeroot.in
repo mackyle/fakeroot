@@ -14,6 +14,20 @@ EOF
   exit 1
 }
 
+stderr ()
+{
+  local i
+  for i
+  do
+      echo >&2 "fakeroot: $i"
+  done
+}
+
+fatal ()
+{
+  stderr "$@"
+  exit 1
+}
 
 # strip /bin/fakeroot to find install prefix
 PREFIX=@prefix@
@@ -66,7 +80,7 @@ while test "X$1" != "X--"; do
          FAKEDOPTS=$FAKEDOPTS" --load"
          PIPEIN="<$1"
        else
-         echo 1>&2 "fakeroot: database file \`$1' does not exist."
+         stderr "database file \`$1' does not exist."
        fi
        ;;
     -s)
@@ -117,15 +131,13 @@ fi
 
 if test $libfound = no
 then
-    echo >&2 "fakeroot: preload library \`$LIB' not found, aborting."
-    exit 1
+    fatal "preload library \`$LIB' not found, aborting."
 fi
 
 if test -n "$FAKEROOTKEY"
 then
-    echo >&2 "fakeroot: FAKEROOTKEY set to $FAKEROOTKEY"
-    echo >&2 "fakeroot: nested operation not yet supported"
-    exit 1
+    fatal "FAKEROOTKEY set to $FAKEROOTKEY" \
+          "nested operation not yet supported"
 fi
 
 unset FAKEROOTKEY
@@ -140,8 +152,7 @@ else
 fi
 
 if test -z "$FAKEROOTKEY" || test -z "$PID"; then
-  echo >&2 "fakeroot: error while starting the \`faked' daemon."
-  exit 1
+  fatal "error while starting the \`faked' daemon."
 fi
 
 if test $USEABSLIBPATH -ne 0 ; then
