@@ -1,7 +1,16 @@
 AUTOMAKE_OPTIONS=foreign
 
-TESTS = t.echoarg t.mknod t.tar t.truereturn t.falsereturn t.option \
-	t.touchinstall t.no_ld_preload t.no_ld_preload_link t.chmod_dev
+TESTS =						\
+  t.chmod_dev					\
+  t.echoarg					\
+  t.falsereturn					\
+  t.mknod					\
+  t.no_ld_preload				\
+  t.no_ld_preload_link				\
+  t.option					\
+  t.tar						\
+  t.touchinstall				\
+  t.truereturn
 
 suffix =
 TESTS_ENVIRONMENT =				\
