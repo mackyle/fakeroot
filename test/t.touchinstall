@@ -5,4 +5,4 @@ mkdir $tmp
 run_fakeroot -- \
  ${posixshell} -c "touch $tmp/iamnotuser; ls -al $tmp/iamnotuser" >$tmp/out
 cat $tmp/out
-exec grep root $tmp/out
+grep root $tmp/out
