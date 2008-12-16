@@ -5,4 +5,4 @@ mkdir $tmp
 run_fakeroot -- \
     ${posixshell} -c 'mknod $tmp/hda3 b 3 0 && chmod 644 $tmp/hda3 && ls -ld $tmp/hda3' > $tmp/out
 cat $tmp/out
-exec grep '^b' $tmp/out
+grep '^b' $tmp/out
