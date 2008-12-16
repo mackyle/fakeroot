@@ -1,3 +1,19 @@
+fakeroot (1.11.4) unstable; urgency=low
+
+  [ Akim Demaille ]
+  * Improve test suite.
+  * Add a bootstrap script
+  * Use DLSUFFIX in the tests.
+  * Formatting changes.
+  * Use functions in scripts.
+  * Make failure more readable.
+  * Formatting changes.
+
+  [ Clint Adams ]
+  * Have testsuite clean up better after itself.
+
+ -- Clint Adams <schizo@debian.org>  Mon, 15 Dec 2008 20:22:19 -0500
+
 fakeroot (1.11.3) unstable; urgency=low
 
   [ Akim Demaille ]
