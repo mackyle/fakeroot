@@ -34,7 +34,7 @@ PREFIX=@prefix@
 BINDIR=@bindir@
 
 USEABSLIBPATH=@LDPRELOADABS@
-LIB=lib@fakeroot_transformed@@DLSUFFIX@
+LIB=libfakeroot@DLSUFFIX@
 PATHS=@libdir@:${PREFIX}/lib64/libfakeroot:${PREFIX}/lib32/libfakeroot
 FAKED=${BINDIR}/@faked_transformed@
 
