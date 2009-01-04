@@ -61,6 +61,9 @@
 #ifdef HAVE_SYS_ACL_H
 #include <sys/acl.h>
 #endif /* HAVE_SYS_ACL_H */
+#if HAVE_FTS_H
+#include <fts.h>
+#endif /* HAVE_FTS_H */
 
 #if !HAVE_DECL_SETENV
 extern int setenv (const char *name, const char *value, int replace);
@@ -661,9 +664,6 @@ int WRAP_FSTATAT64 FSTATAT64_ARG(int ver,
 #endif /* HAVE_FSTATAT */
 
 #endif /* STAT64_SUPPORT */
-
-
-
 
 /*************************************************************/
 /*
@@ -1489,3 +1489,20 @@ int acl_set_file(const char *path_p, acl_type_t type, acl_t acl) {
   return -1;
 }
 #endif /* HAVE_SYS_ACL_H */
+
+#ifdef HAVE_FTS_READ
+FTSENT *fts_read(FTS *ftsp) {
+  FTSENT *r;
+
+  r=next_fts_read(ftsp);
+  if(r) {
+#ifndef STUPID_ALPHA_HACK
+  send_get_stat64(r->fts_statp);
+#else
+  send_get_stat64(r->fts_statp,ver);
+#endif
+  }
+
+  return r;
+}
+#endif /* HAVE_FTS_READ */
