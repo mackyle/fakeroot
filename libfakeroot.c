@@ -1496,11 +1496,7 @@ FTSENT *fts_read(FTS *ftsp) {
 
   r=next_fts_read(ftsp);
   if(r) {
-#ifndef STUPID_ALPHA_HACK
-  send_get_stat64(r->fts_statp);
-#else
-  send_get_stat64(r->fts_statp,ver);
-#endif
+    send_get_stat64(r->fts_statp);
   }
 
   return r;
