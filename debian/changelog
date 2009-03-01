@@ -1,3 +1,10 @@
+fakeroot (1.12.2) unstable; urgency=low
+
+  * Replace and (hopefully) fix broken alpha stat version hack in
+    fts_read.
+
+ -- Clint Adams <schizo@debian.org>  Sun, 01 Mar 2009 15:17:31 -0500
+
 fakeroot (1.12.1) unstable; urgency=low
 
   * Remove broken alpha stat version hack from fts_read.
