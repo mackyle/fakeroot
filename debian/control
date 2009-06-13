@@ -10,6 +10,7 @@ Vcs-Browser: http://git.debian.org/?p=private/schizo/fakeroot.git;a=summary
 Package: fakeroot
 Architecture: any
 Depends: ${shlibs:Depends}
+Conflicts: libc6-dev-i386 (<= 2.9-13)
 Description: Gives a fake root environment
  This package is intended to enable something like:
    dpkg-buildpackage -rfakeroot
