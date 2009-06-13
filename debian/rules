@@ -24,7 +24,7 @@ INSTALL_PROGRAM += -s
 endif
 
 ifeq (x86_64-linux-gnu,$(DEB_HOST_GNU_TYPE))
-BIARCH_LIB_DIR=emul/ia32-linux/usr/lib
+BIARCH_LIB_DIR=usr/lib32
 else
 ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), ppc64-linux-gnu x86_64-kfreebsd-gnu))
 BIARCH_LIB_DIR=usr/lib32
