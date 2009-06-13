@@ -1,3 +1,12 @@
+fakeroot (1.12.3) unstable; urgency=low
+
+  * Bump to Standards-Version 3.8.1.
+  * Conflict with older libc6-dev-i386 packages that put files into
+    /emul/ia32-linux.
+  * Install amd64 biarch files into /usr/lib32.  closes: #492699.
+
+ -- Clint Adams <schizo@debian.org>  Sat, 13 Jun 2009 12:58:28 -0400
+
 fakeroot (1.12.2) unstable; urgency=low
 
   * Replace and (hopefully) fix broken alpha stat version hack in
