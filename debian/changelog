@@ -1,3 +1,10 @@
+fakeroot (1.12.4) unstable; urgency=medium
+
+  * libfakeroot.c: avoid crashing on fts_read() error conditions.
+    closes: #533456.
+
+ -- Clint Adams <schizo@debian.org>  Thu, 18 Jun 2009 09:21:10 -0400
+
 fakeroot (1.12.3) unstable; urgency=low
 
   * Bump to Standards-Version 3.8.1.
