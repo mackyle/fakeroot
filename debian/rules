@@ -104,7 +104,7 @@ binary-arch: build checkroot
 #	cd obj-sysv && ./libtool --finish $(CURDIR)/debian/tmp/usr/lib/fakeroot
 	rm -f debian/tmp/usr/lib/libfakeroot/libfakeroot.*a*
 	rm -f debian/tmp/usr/bin/simple
-ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu x86_64-linux-gnu i486-linux-gnu powerpc-linux-gnu ppc64-linux-gnui x86_64-kfreebsd-gnu))
+ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu i486-linux-gnu powerpc-linux-gnu ppc64-linux-gnui x86_64-kfreebsd-gnu))
 	$(MAKE) -f debian/rules binary-biarch
 endif
 	$(INSTALL_FILE) debian/copyright debian/tmp/usr/share/doc/fakeroot/copyright
