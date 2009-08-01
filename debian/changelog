@@ -1,3 +1,10 @@
+fakeroot (1.12.5) unstable; urgency=low
+
+  * Disable biarch support on amd64.  closes: #538037.
+  * Bump to Standards-Version 3.8.2.
+
+ -- Clint Adams <schizo@debian.org>  Sat, 01 Aug 2009 01:47:39 -0400
+
 fakeroot (1.12.4) unstable; urgency=medium
 
   * libfakeroot.c: avoid crashing on fts_read() error conditions.
