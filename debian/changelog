@@ -1,3 +1,10 @@
+fakeroot (1.13) unstable; urgency=low
+
+  * libfakeroot.c: apply fix from lorenz schori to properly deal with
+    STAT64_SUPPORT in fts_read.  closes: #541335.
+
+ -- Clint Adams <schizo@debian.org>  Thu, 13 Aug 2009 15:25:28 -0400
+
 fakeroot (1.12.5) unstable; urgency=low
 
   * Disable biarch support on amd64.  closes: #538037.
