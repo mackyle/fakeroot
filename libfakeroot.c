@@ -1496,10 +1496,18 @@ FTSENT *fts_read(FTS *ftsp) {
 
   r=next_fts_read(ftsp);
   if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
-# ifndef STUPID_ALPHA_HACK
+# ifdef STAT64_SUPPORT
+#  ifndef STUPID_ALPHA_HACK
     send_get_stat64(r->fts_statp);
-# else
+#  else
     send_get_stat64(r->fts_statp, _STAT_VER);
+#  endif
+# else
+#  ifndef STUPID_ALPHA_HACK
+    send_get_stat(r->fts_statp);
+#  else
+    send_get_stat(r->fts_statp, _STAT_VER);
+#  endif
 # endif
   }
 
