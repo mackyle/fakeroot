@@ -1,3 +1,11 @@
+fakeroot (1.13.1) unstable; urgency=low
+
+  * Apply patch from U.V. Ravindra to use native htonll()/ntohll() on Solaris.
+  * Apply patch from U.V. Ravindra to properly typecast uid_t/gid_t
+    assignments.
+
+ -- Clint Adams <schizo@debian.org>  Mon, 28 Sep 2009 21:19:21 -0400
+
 fakeroot (1.13) unstable; urgency=low
 
   * libfakeroot.c: apply fix from lorenz schori to properly deal with
