@@ -213,14 +213,14 @@ static int write_id(const char *key, int id) {
 
 /* Fake ID storage */
 
-static uid_t faked_real_uid = -1;
-static gid_t faked_real_gid = -1;
-static uid_t faked_effective_uid = -1;
-static gid_t faked_effective_gid = -1;
-static uid_t faked_saved_uid = -1;
-static gid_t faked_saved_gid = -1;
-static uid_t faked_fs_uid = -1;
-static gid_t faked_fs_gid = -1;
+static uid_t faked_real_uid = (uid_t)-1;
+static gid_t faked_real_gid = (gid_t)-1;
+static uid_t faked_effective_uid = (uid_t)-1;
+static gid_t faked_effective_gid = (gid_t)-1;
+static uid_t faked_saved_uid = (uid_t)-1;
+static gid_t faked_saved_gid = (gid_t)-1;
+static uid_t faked_fs_uid = (uid_t)-1;
+static gid_t faked_fs_gid = (gid_t)-1;
 
 /* Read user ID */
 
