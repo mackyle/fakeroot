@@ -11,6 +11,8 @@
 # endif
 #endif
 
+/* On Solaris, use the native htonll(n)/ntohll(n) */
+#if !defined(sun) && !defined(_NETINET_IN_H)
 #if __BYTE_ORDER == __BIG_ENDIAN
 # define htonll(n)  (n)
 # define ntohll(n)  (n)
@@ -18,6 +20,7 @@
 # define htonll(n)  ((((uint64_t) htonl(n)) << 32LL) | htonl((n) >> 32LL))
 # define ntohll(n)  ((((uint64_t) ntohl(n)) << 32LL) | ntohl((n) >> 32LL))
 #endif
+#endif /* !defined(sun) && !defined(_NETINET_IN_H) */
 
 #define FAKEROOTKEY_ENV "FAKEROOTKEY"
 
