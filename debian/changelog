@@ -1,3 +1,11 @@
+fakeroot (1.13.2) unstable; urgency=low
+
+  * Apply patch from Stuart Prescott to rename TEMP variable.
+    closes: #550215.
+  * Rename PREFIX and BINDIR variables.
+
+ -- Clint Adams <schizo@debian.org>  Thu, 08 Oct 2009 23:12:19 -0400
+
 fakeroot (1.13.1) unstable; urgency=low
 
   * Apply patch from U.V. Ravindra to use native htonll()/ntohll() on Solaris.
