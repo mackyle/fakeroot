@@ -1514,3 +1514,28 @@ FTSENT *fts_read(FTS *ftsp) {
   return r;
 }
 #endif /* HAVE_FTS_READ */
+
+#ifdef HAVE_FTS_CHILDREN
+FTSENT *fts_children(FTS *ftsp, int options) {
+  FTSENT *r;
+
+  r=next_fts_children(ftsp, options);
+  if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
+# ifdef STAT64_SUPPORT
+#  ifndef STUPID_ALPHA_HACK
+    send_get_stat64(r->fts_statp);
+#  else
+    send_get_stat64(r->fts_statp, _STAT_VER);
+#  endif
+# else
+#  ifndef STUPID_ALPHA_HACK
+    send_get_stat(r->fts_statp);
+#  else
+    send_get_stat(r->fts_statp, _STAT_VER);
+#  endif
+# endif
+  }
+
+  return r;
+}
+#endif /* HAVE_FTS_CHILDREN */
