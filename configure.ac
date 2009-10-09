@@ -422,7 +422,7 @@ AC_SUBST(LDPRELOADABS)
 AC_SUBST(LDEXTRAVAR)
 
 dnl Checks for library functions.
-AC_CHECK_FUNCS(strdup strstr getresuid setresuid getresgid setresgid setfsuid setfsgid fts_read)
+AC_CHECK_FUNCS(strdup strstr getresuid setresuid getresgid setresgid setfsuid setfsgid fts_read fts_children)
 
 AC_CHECK_DECLS([setenv, unsetenv])
 AC_REPLACE_FUNCS([setenv])
