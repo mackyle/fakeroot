@@ -131,3 +131,6 @@ acl_set_file;int;(const char *path_p, acl_type_t type, acl_t acl);(path_p, type,
 #ifdef HAVE_FTS_READ
 fts_read;FTSENT *;(FTS *ftsp);(ftsp)
 #endif /* HAVE_FTS_READ */
+#ifdef HAVE_FTS_CHILDREN
+fts_children;FTSENT *;(FTS *ftsp, int options);(ftsp, options)
+#endif /* HAVE_FTS_CHILDREN */
