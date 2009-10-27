@@ -1,3 +1,13 @@
+fakeroot (1.14.1) unstable; urgency=low
+
+  * Apply patch from VMware: "Get rid of a bunch of STUPID_ALPHA_HACK
+    checks by always passing 3 arguments to INT_SEND_STAT."
+  * Apply patch from VMware: "Get rid of all remaining STUPID_ALPHA_HACK
+    checks (except one at the top) by abstracting the difference of
+    number of parameters into new SEND_STAT* and SEND_GET_STAT* macros."
+
+ -- Clint Adams <schizo@debian.org>  Mon, 26 Oct 2009 23:48:26 -0400
+
 fakeroot (1.14) unstable; urgency=low
 
   * Wrap fts_children.
