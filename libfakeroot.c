@@ -30,7 +30,7 @@
 #define INT_NEXT_LSTAT(a,b,c) NEXT_LSTAT64(a,b,c)
 #define INT_NEXT_FSTAT(a,b,c) NEXT_FSTAT64(a,b,c)
 #ifndef STUPID_ALPHA_HACK
-#define INT_SEND_STAT(a,b) send_stat64(a,b)
+#define INT_SEND_STAT(a,b,c) send_stat64(a,b)
 #else
 #define INT_SEND_STAT(a,b,c) send_stat64(a,b,c)
 #endif
@@ -40,7 +40,7 @@
 #define INT_NEXT_LSTAT(a,b,c) NEXT_LSTAT(a,b,c)
 #define INT_NEXT_FSTAT(a,b,c) NEXT_FSTAT(a,b,c)
 #ifndef STUPID_ALPHA_HACK
-#define INT_SEND_STAT(a,b) send_stat(a,b)
+#define INT_SEND_STAT(a,b,c) send_stat(a,b)
 #else
 #define INT_SEND_STAT(a,b,c) send_stat(a,b,c)
 #endif
@@ -710,11 +710,7 @@ int chown(const char *path, uid_t owner, gid_t group){
     return r;
   st.st_uid=owner;
   st.st_gid=group;
-#ifndef STUPID_ALPHA_HACK
-  INT_SEND_STAT(&st,chown_func);
-#else
   INT_SEND_STAT(&st,chown_func, _STAT_VER);
-#endif
   if(!dont_try_chown())
     r=next_lchown(path,owner,group);
   else
@@ -835,11 +831,7 @@ int chmod(const char *path, mode_t mode){
   
   st.st_mode=(mode&ALLPERMS)|(st.st_mode&~ALLPERMS);
     
-#ifndef STUPID_ALPHA_HACK
-  INT_SEND_STAT(&st, chmod_func);
-#else
   INT_SEND_STAT(&st, chmod_func, _STAT_VER);
-#endif
   
   /* if a file is unwritable, then root can still write to it
      (no matter who owns the file). If we are fakeroot, the only
@@ -874,11 +866,7 @@ int fchmod(int fd, mode_t mode){
     return(r);
   
   st.st_mode=(mode&ALLPERMS)|(st.st_mode&~ALLPERMS);
-#ifndef STUPID_ALPHA_HACK
-  INT_SEND_STAT(&st,chmod_func);  
-#else
   INT_SEND_STAT(&st,chmod_func, _STAT_VER);  
-#endif
   
   /* see chmod() for comment */
   mode |= 0600;
@@ -1041,11 +1029,7 @@ int mkdir(const char *path, mode_t mode){
   
   st.st_mode=(mode&~old_mask&ALLPERMS)|(st.st_mode&~ALLPERMS)|S_IFDIR;
 
-#ifndef STUPID_ALPHA_HACK
-  INT_SEND_STAT(&st, chmod_func);
-#else
   INT_SEND_STAT(&st, chmod_func, _STAT_VER);
-#endif
 
   return 0;
 }
@@ -1115,11 +1099,7 @@ int unlink(const char *pathname){
   if(r)
     return -1;
   
-#ifndef STUPID_ALPHA_HACK
-  INT_SEND_STAT(&st, unlink_func);
-#else
   INT_SEND_STAT(&st, unlink_func, _STAT_VER);
-#endif
   
   return 0;
 }
@@ -1173,11 +1153,7 @@ int rmdir(const char *pathname){
   if(r)
     return -1;
 
-#ifndef STUPID_ALPHA_HACK
-  INT_SEND_STAT(&st,unlink_func);  
-#else
   INT_SEND_STAT(&st,unlink_func, _STAT_VER);  
-#endif
 
   return 0;
 }
@@ -1196,11 +1172,7 @@ int remove(const char *pathname){
   r=next_remove(pathname);  
   if(r)
     return -1;
-#ifndef STUPID_ALPHA_HACK
-  INT_SEND_STAT(&st,unlink_func);  
-#else
   INT_SEND_STAT(&st,unlink_func, _STAT_VER);  
-#endif
   
   return r;
 }
@@ -1230,11 +1202,7 @@ int rename(const char *oldpath, const char *newpath){
   if(s)
     return -1;
   if(!r)
-#ifndef STUPID_ALPHA_HACK
-    INT_SEND_STAT(&st,unlink_func);
-#else
     INT_SEND_STAT(&st,unlink_func, _STAT_VER);
-#endif
 
   return 0;
 }
