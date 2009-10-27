@@ -61,6 +61,7 @@
 #include <fts.h>
 #endif /* HAVE_FTS_H */
 
+#include "patchattr.h"
 #include "wrapped.h"
 
 extern int fakeroot_disabled;
@@ -159,5 +160,29 @@ int setregid(SETREGID_ARG rgid, SETREGID_ARG egid){
   if (fakeroot_disabled)
     return next_setregid$UNIX2003(rgid, egid);
   return set_faked_regid(rgid, egid);
+}
+
+int
+getattrlist(const char *path, void *attrList, void *attrBuf,
+            size_t attrBufSize, unsigned long options)
+{
+  int r;
+  struct stat st;
+
+  r=next_getattrlist$UNIX2003(path, attrList, attrBuf, attrBufSize, options);
+  if (r) {
+    return r;
+  }
+  if (options & FSOPT_NOFOLLOW) {
+    r=lstat(path, &st);
+  } else {
+    r=stat(path, &st);
+  }
+  if (r) {
+    return r;
+  }
+  patchattr(attrList, attrBuf, st.st_uid, st.st_gid);
+
+  return 0;
 }
 #endif /* if defined __APPLE__ && !defined __LP64__ */
