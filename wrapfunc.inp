@@ -12,9 +12,6 @@
 /* value. After that come the function arguments with types, and the last */
 /* field contains the function arguments without types.                   */
 /**/
-open;int;(const char *pathname, int flags, int mode);(pathname, flags, mode)
-fopen;FILE *;(const char *pathname, const char *mode);(pathname, mode)
-freopen;FILE *;(const char *pathname, const char *mode, FILE *stream);(pathname, mode, stream)
 
 /* __*xstat are used on glibc systems instead of just *xstat. */
 /**/
