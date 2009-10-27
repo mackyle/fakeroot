@@ -149,6 +149,7 @@ int fakeroot_disabled = 0;
 
 void load_library_symbols(void){
   /* this function loads all original functions from the C library.
+     This function is only called once.
      I ran into problems when  each function individually
      loaded it's original counterpart, as RTLD_NEXT seems to have
      a different meaning in files with different names than libtricks.c
@@ -160,17 +161,14 @@ void load_library_symbols(void){
      to this function. The other generated .h files do even more tricky
      things :) */
 
-  static int done=0;
   int i;
   const char *msg;
   
-  if(!done){
-    for(i=0; next_wrap[i].doit; i++){
-      *(next_wrap[i].doit)=dlsym(get_libc(), next_wrap[i].name);
-      if ( (msg = dlerror()) != NULL){
-	fprintf (stderr, "dlsym(%s): %s\n", next_wrap[i].name, msg);
-/*	abort ();*/
-      }
+  for(i=0; next_wrap[i].doit; i++){
+    *(next_wrap[i].doit)=dlsym(get_libc(), next_wrap[i].name);
+    if ( (msg = dlerror()) != NULL){
+      fprintf (stderr, "dlsym(%s): %s\n", next_wrap[i].name, msg);
+/*    abort ();*/
     }
   }
 }
