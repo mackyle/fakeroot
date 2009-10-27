@@ -1397,25 +1397,19 @@ FTSENT *fts_read(FTS *ftsp) {
 
 #ifdef HAVE_FTS_CHILDREN
 FTSENT *fts_children(FTS *ftsp, int options) {
-  FTSENT *r;
+  FTSENT *first, *r;
 
-  r=next_fts_children(ftsp, options);
-  if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
+  first=next_fts_children(ftsp, options);
+  for(r = first; r; r = r->fts_link) {
+    if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
 # ifdef STAT64_SUPPORT
-#  ifndef STUPID_ALPHA_HACK
-    send_get_stat64(r->fts_statp);
-#  else
-    send_get_stat64(r->fts_statp, _STAT_VER);
-#  endif
+      SEND_GET_STAT64(r->fts_statp, _STAT_VER);
 # else
-#  ifndef STUPID_ALPHA_HACK
-    send_get_stat(r->fts_statp);
-#  else
-    send_get_stat(r->fts_statp, _STAT_VER);
-#  endif
+      SEND_GET_STAT(r->fts_statp, _STAT_VER);
 # endif
+    }
   }
 
-  return r;
+  return first;
 }
 #endif /* HAVE_FTS_CHILDREN */
