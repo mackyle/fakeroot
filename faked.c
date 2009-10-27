@@ -68,6 +68,14 @@
    (def in ./linux/msg.h, couldn't find other def in /usr/include/ 
    */
 
+#ifdef __APPLE__
+/*
+   In this file, we want 'struct stat' to have a 32-bit 'ino_t'.
+   We use 'struct stat64' when we need a 64-bit 'ino_t'.
+*/
+#define _DARWIN_NO_64_BIT_INODE
+#endif
+
 #include "config.h"
 #include "communicate.h"
 #ifndef FAKEROOT_FAKENET
