@@ -749,7 +749,7 @@ int fchownat(int dir_fd, const char *path, uid_t owner, gid_t group, int flags) 
   int r;
   /* If AT_SYMLINK_NOFOLLOW is set in the fchownat call it should
      be when we stat it. */
-  INT_STRUCT_STAT st
+  INT_STRUCT_STAT st;
   r=INT_NEXT_FSTATAT(dir_fd, path, &st, (flags & AT_SYMLINK_NOFOLLOW));
   
   if(r)
