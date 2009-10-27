@@ -1,3 +1,19 @@
+fakeroot (1.14.2) unstable; urgency=low
+
+  * Apply (tweaked) patch from VMware: "Fix places which were
+    incorrectly not using the INT_* macros. This gets rid of a bunch
+    of STAT64_SUPPORT checks."
+  * Apply patch from VMware: "Move the _STAT_VER argument of all INT_*
+    macros from the call site to the definition of the macros."
+  * Incorporate fts_children wrapper fixes from VMware version.
+  * Apply VMware patch: "Remove the unused 'done' variable in
+    load_library_symbols(): the function can only be called once, so
+    there is no need for the variable anyway."
+  * Apply VMware patch: "Remove from wrapfunc.inp the function which are
+    not actually wrapped in libfakeroot.c."
+
+ -- Clint Adams <schizo@debian.org>  Tue, 27 Oct 2009 01:16:22 -0400
+
 fakeroot (1.14.1) unstable; urgency=low
 
   * Apply patch from VMware: "Get rid of a bunch of STUPID_ALPHA_HACK
