@@ -42,18 +42,18 @@
 */
 #ifdef STAT64_SUPPORT 
 #define INT_STRUCT_STAT struct stat64
-#define INT_NEXT_STAT(a,b,c) NEXT_STAT64(a,b,c)
-#define INT_NEXT_LSTAT(a,b,c) NEXT_LSTAT64(a,b,c)
-#define INT_NEXT_FSTAT(a,b,c) NEXT_FSTAT64(a,b,c)
-#define INT_NEXT_FSTATAT(a,b,c,d,e) NEXT_FSTATAT64(a,b,c,d,e)
-#define INT_SEND_STAT(a,b,c) SEND_STAT64(a,b,c)
+#define INT_NEXT_STAT(a,b) NEXT_STAT64(_STAT_VER,a,b)
+#define INT_NEXT_LSTAT(a,b) NEXT_LSTAT64(_STAT_VER,a,b)
+#define INT_NEXT_FSTAT(a,b) NEXT_FSTAT64(_STAT_VER,a,b)
+#define INT_NEXT_FSTATAT(a,b,c,d) NEXT_FSTATAT64(_STAT_VER,a,b,c,d)
+#define INT_SEND_STAT(a,b) SEND_STAT64(a,b,_STAT_VER)
 #else
 #define INT_STRUCT_STAT struct stat
-#define INT_NEXT_STAT(a,b,c) NEXT_STAT(a,b,c)
-#define INT_NEXT_LSTAT(a,b,c) NEXT_LSTAT(a,b,c)
-#define INT_NEXT_FSTAT(a,b,c) NEXT_FSTAT(a,b,c)
-#define INT_NEXT_FSTATAT(a,b,c,d,e) NEXT_FSTATAT(a,b,c,d,e)
-#define INT_SEND_STAT(a,b,c) SEND_STAT(a,b,c)
+#define INT_NEXT_STAT(a,b) NEXT_STAT(_STAT_VER,a,b)
+#define INT_NEXT_LSTAT(a,b) NEXT_LSTAT(_STAT_VER,a,b)
+#define INT_NEXT_FSTAT(a,b) NEXT_FSTAT(_STAT_VER,a,b)
+#define INT_NEXT_FSTATAT(a,b,c,d) NEXT_FSTATAT(_STAT_VER,a,b,c,d)
+#define INT_SEND_STAT(a,b) SEND_STAT(a,b,_STAT_VER)
 #endif
 
 #include <stdlib.h>
@@ -678,17 +678,17 @@ int chown(const char *path, uid_t owner, gid_t group){
 #ifdef LCHOWN_SUPPORT
   /*chown(sym-link) works on the target of the symlink if lchown is
     present and enabled.*/
-  r=INT_NEXT_STAT(_STAT_VER, path, &st);
+  r=INT_NEXT_STAT(path, &st);
 #else
   /*chown(sym-link) works on the symlink itself, use lstat: */
-  r=INT_NEXT_LSTAT(_STAT_VER, path, &st);
+  r=INT_NEXT_LSTAT(path, &st);
 #endif
   
   if(r)
     return r;
   st.st_uid=owner;
   st.st_gid=group;
-  INT_SEND_STAT(&st,chown_func, _STAT_VER);
+  INT_SEND_STAT(&st,chown_func);
   if(!dont_try_chown())
     r=next_lchown(path,owner,group);
   else
@@ -705,12 +705,12 @@ int lchown(const char *path, uid_t owner, gid_t group){
   INT_STRUCT_STAT st;
   int r=0;
 
-  r=INT_NEXT_LSTAT(_STAT_VER, path, &st);
+  r=INT_NEXT_LSTAT(path, &st);
   if(r)
     return r;
   st.st_uid=owner;
   st.st_gid=group;
-  INT_SEND_STAT(&st,chown_func, _STAT_VER);
+  INT_SEND_STAT(&st,chown_func);
   if(!dont_try_chown())
     r=next_lchown(path,owner,group);
   else
@@ -726,13 +726,13 @@ int fchown(int fd, uid_t owner, gid_t group){
   INT_STRUCT_STAT st;
   int r;
 
-  r=INT_NEXT_FSTAT(_STAT_VER, fd, &st);
+  r=INT_NEXT_FSTAT(fd, &st);
   if(r)
     return r;
   
   st.st_uid=owner;
   st.st_gid=group;
-  INT_SEND_STAT(&st, chown_func, _STAT_VER);
+  INT_SEND_STAT(&st, chown_func);
   
   if(!dont_try_chown())
     r=next_fchown(fd,owner,group);
@@ -752,14 +752,14 @@ int fchownat(int dir_fd, const char *path, uid_t owner, gid_t group, int flags) 
   /* If AT_SYMLINK_NOFOLLOW is set in the fchownat call it should
      be when we stat it. */
   INT_STRUCT_STAT st
-  r=INT_NEXT_FSTATAT(_STAT_VER, dir_fd, path, &st, (flags & AT_SYMLINK_NOFOLLOW));
+  r=INT_NEXT_FSTATAT(dir_fd, path, &st, (flags & AT_SYMLINK_NOFOLLOW));
   
   if(r)
     return(r);
   
   st.st_uid=owner;
   st.st_gid=group;
-  INT_SEND_STAT(&st,chown_func, _STAT_VER);  
+  INT_SEND_STAT(&st,chown_func);  
   
   if(!dont_try_chown())
     r=next_fchownat(dir_fd,path,owner,group,flags);
@@ -778,13 +778,13 @@ int chmod(const char *path, mode_t mode){
   INT_STRUCT_STAT st;
   int r;
 
-  r=INT_NEXT_STAT(_STAT_VER, path, &st);
+  r=INT_NEXT_STAT(path, &st);
   if(r)
     return r;
   
   st.st_mode=(mode&ALLPERMS)|(st.st_mode&~ALLPERMS);
     
-  INT_SEND_STAT(&st, chmod_func, _STAT_VER);
+  INT_SEND_STAT(&st, chmod_func);
   
   /* if a file is unwritable, then root can still write to it
      (no matter who owns the file). If we are fakeroot, the only
@@ -813,13 +813,13 @@ int fchmod(int fd, mode_t mode){
   INT_STRUCT_STAT st;
 
 
-  r=INT_NEXT_FSTAT(_STAT_VER, fd, &st);
+  r=INT_NEXT_FSTAT(fd, &st);
   
   if(r)
     return(r);
   
   st.st_mode=(mode&ALLPERMS)|(st.st_mode&~ALLPERMS);
-  INT_SEND_STAT(&st,chmod_func, _STAT_VER);  
+  INT_SEND_STAT(&st,chmod_func);  
   
   /* see chmod() for comment */
   mode |= 0600;
@@ -845,13 +845,13 @@ int fchmodat(int dir_fd, const char *path, mode_t mode, int flags) {
 
   /* If AT_SYMLINK_NOFOLLOW is set in the fchownat call it should
      be when we stat it. */
-  r=INT_NEXT_FSTATAT(_STAT_VER, dir_fd, path, &st, flags & AT_SYMLINK_NOFOLLOW);
+  r=INT_NEXT_FSTATAT(dir_fd, path, &st, flags & AT_SYMLINK_NOFOLLOW);
   
   if(r)
     return(r);
   
   st.st_mode=(mode&ALLPERMS)|(st.st_mode&~ALLPERMS);
-  INT_SEND_STAT(&st,chmod_func, _STAT_VER);  
+  INT_SEND_STAT(&st,chmod_func);  
   
   /* see chmod() for comment */
   mode |= 0600;
@@ -892,7 +892,7 @@ int WRAP_MKNOD MKNOD_ARG(int ver UNUSED,
   close(fd);
   /* get the inode, to communicate with faked */
 
-  r=INT_NEXT_LSTAT(_STAT_VER, pathname, &st);
+  r=INT_NEXT_LSTAT(pathname, &st);
 
   if(r)
     return -1;
@@ -900,7 +900,7 @@ int WRAP_MKNOD MKNOD_ARG(int ver UNUSED,
   st.st_mode= mode & ~old_mask;
   st.st_rdev= XMKNOD_FRTH_ARG dev;
   
-  INT_SEND_STAT(&st,mknod_func, _STAT_VER);
+  INT_SEND_STAT(&st,mknod_func);
     
   return 0;
 }
@@ -932,7 +932,7 @@ int WRAP_MKNODAT MKNODAT_ARG(int ver UNUSED,
 
   /* The only known flag is AT_SYMLINK_NOFOLLOW and
      we don't want that here. */
-  r=INT_NEXT_FSTATAT(_STAT_VER, dir_fd, pathname, &st, 0);
+  r=INT_NEXT_FSTATAT(dir_fd, pathname, &st, 0);
 
   if(r)
     return -1;
@@ -940,7 +940,7 @@ int WRAP_MKNODAT MKNODAT_ARG(int ver UNUSED,
   st.st_mode= mode & ~old_mask;
   st.st_rdev= XMKNODAT_FIFTH_ARG dev;
   
-  INT_SEND_STAT(&st,mknod_func, _STAT_VER);
+  INT_SEND_STAT(&st,mknod_func);
     
   return 0;
 }
@@ -963,14 +963,14 @@ int mkdir(const char *path, mode_t mode){
   /* mode|0700: see comment in the chown() function above */
   if(r)
     return -1;
-  r=INT_NEXT_STAT(_STAT_VER, path, &st);
+  r=INT_NEXT_STAT(path, &st);
   
   if(r)
     return -1;
   
   st.st_mode=(mode&~old_mask&ALLPERMS)|(st.st_mode&~ALLPERMS)|S_IFDIR;
 
-  INT_SEND_STAT(&st, chmod_func, _STAT_VER);
+  INT_SEND_STAT(&st, chmod_func);
 
   return 0;
 }
@@ -993,14 +993,14 @@ int mkdirat(int dir_fd, const char *path, mode_t mode){
   /* mode|0700: see comment in the chown() function above */
   if(r)
     return -1;
-  r=INT_NEXT_FSTATAT(_STAT_VER, dir_fd, path, &st, 0);
+  r=INT_NEXT_FSTATAT(dir_fd, path, &st, 0);
 
   if(r)
     return -1;
   
   st.st_mode=(mode&~old_mask&ALLPERMS)|(st.st_mode&~ALLPERMS)|S_IFDIR;
 
-  INT_SEND_STAT(&st, chmod_func, _STAT_VER);
+  INT_SEND_STAT(&st, chmod_func);
 
   return 0;
 }
@@ -1027,7 +1027,7 @@ int unlink(const char *pathname){
   INT_STRUCT_STAT st;
 
 
-  r=INT_NEXT_LSTAT(_STAT_VER, pathname, &st);
+  r=INT_NEXT_LSTAT(pathname, &st);
   if(r)
     return -1;
 
@@ -1036,7 +1036,7 @@ int unlink(const char *pathname){
   if(r)
     return -1;
   
-  INT_SEND_STAT(&st, unlink_func, _STAT_VER);
+  INT_SEND_STAT(&st, unlink_func);
   
   return 0;
 }
@@ -1046,7 +1046,7 @@ int unlink(const char *pathname){
 int unlinkat(int dir_fd, const char *pathname, int flags){
   int r;
   INT_STRUCT_STAT st;
-  r=INT_NEXT_FSTATAT(_STAT_VER, dir_fd, pathname, &st, (flags&~AT_REMOVEDIR) | AT_SYMLINK_NOFOLLOW);
+  r=INT_NEXT_FSTATAT(dir_fd, pathname, &st, (flags&~AT_REMOVEDIR) | AT_SYMLINK_NOFOLLOW);
   if(r)
     return -1;
 
@@ -1055,7 +1055,7 @@ int unlinkat(int dir_fd, const char *pathname, int flags){
   if(r)
     return -1;
   
-  INT_SEND_STAT(&st, unlink_func, _STAT_VER);
+  INT_SEND_STAT(&st, unlink_func);
   
   return 0;
 }
@@ -1070,14 +1070,14 @@ int rmdir(const char *pathname){
   int r;
   INT_STRUCT_STAT st;
 
-  r=INT_NEXT_LSTAT(_STAT_VER, pathname, &st);
+  r=INT_NEXT_LSTAT(pathname, &st);
   if(r)
     return -1;
   r=next_rmdir(pathname);  
   if(r)
     return -1;
 
-  INT_SEND_STAT(&st,unlink_func, _STAT_VER);  
+  INT_SEND_STAT(&st,unlink_func);  
 
   return 0;
 }
@@ -1090,13 +1090,13 @@ int remove(const char *pathname){
   int r;
   INT_STRUCT_STAT st;
 
-  r=INT_NEXT_LSTAT(_STAT_VER, pathname, &st);
+  r=INT_NEXT_LSTAT(pathname, &st);
   if(r)
     return -1;
   r=next_remove(pathname);  
   if(r)
     return -1;
-  INT_SEND_STAT(&st,unlink_func, _STAT_VER);  
+  INT_SEND_STAT(&st,unlink_func);  
   
   return r;
 }
@@ -1120,13 +1120,13 @@ int rename(const char *oldpath, const char *newpath){
   /* we need the st_new struct in order to inform faked about the
      (possible) unlink of the file */
 
-  r=INT_NEXT_LSTAT(_STAT_VER, newpath, &st);
+  r=INT_NEXT_LSTAT(newpath, &st);
 
   s=next_rename(oldpath, newpath);
   if(s)
     return -1;
   if(!r)
-    INT_SEND_STAT(&st,unlink_func, _STAT_VER);
+    INT_SEND_STAT(&st,unlink_func);
 
   return 0;
 }
@@ -1144,13 +1144,13 @@ int renameat(int olddir_fd, const char *oldpath,
   /* we need the st_new struct in order to inform faked about the
      (possible) unlink of the file */
 
-  r=INT_NEXT_FSTATAT(_STAT_VER, newdir_fd, newpath, &st, AT_SYMLINK_NOFOLLOW);
+  r=INT_NEXT_FSTATAT(newdir_fd, newpath, &st, AT_SYMLINK_NOFOLLOW);
 
   s=next_renameat(olddir_fd, oldpath, newdir_fd, newpath);
   if(s)
     return -1;
   if(!r)
-    INT_SEND_STAT(&st,unlink_func, _STAT_VER);
+    INT_SEND_STAT(&st,unlink_func);
 
   return 0;
 }
