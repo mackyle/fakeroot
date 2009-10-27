@@ -156,6 +156,9 @@ void load_library_symbols(void);
 
 int fakeroot_disabled = 0;
 
+#ifdef __APPLE__
+#include "patchattr.h"
+#endif
 #include "wrapped.h"
 #include "wraptmpf.h"
 #include "wrapdef.h"
@@ -1426,3 +1429,61 @@ FTSENT *fts_children(FTS *ftsp, int options) {
   return first;
 }
 #endif /* HAVE_FTS_CHILDREN */
+
+#ifdef __APPLE__
+#ifdef __LP64__
+int
+getattrlist(const char *path, void *attrList, void *attrBuf,
+            size_t attrBufSize, unsigned int options)
+#else
+int
+getattrlist(const char *path, void *attrList, void *attrBuf,
+            size_t attrBufSize, unsigned long options)
+#endif
+{
+  int r;
+  struct stat st;
+
+  r=next_getattrlist(path, attrList, attrBuf, attrBufSize, options);
+  if (r) {
+    return r;
+  }
+  if (options & FSOPT_NOFOLLOW) {
+    r=lstat(path, &st);
+  } else {
+    r=stat(path, &st);
+  }
+  if (r) {
+    return r;
+  }
+  patchattr(attrList, attrBuf, st.st_uid, st.st_gid);
+
+  return 0;
+}
+
+#ifdef __LP64__
+int
+fgetattrlist(int fd, void *attrList, void *attrBuf,
+             size_t attrBufSize, unsigned int options)
+#else
+int
+fgetattrlist(int fd, void *attrList, void *attrBuf,
+             size_t attrBufSize, unsigned long options)
+#endif
+{
+  int r;
+  struct stat st;
+
+  r=next_fgetattrlist(fd, attrList, attrBuf, attrBufSize, options);
+  if (r) {
+    return r;
+  }
+  r=fstat(fd, &st);
+  if (r) {
+    return r;
+  }
+  patchattr(attrList, attrBuf, st.st_uid, st.st_gid);
+
+  return 0;
+}
+#endif /* ifdef __APPLE__ */
