@@ -155,6 +155,9 @@ void *get_libc(){
 void load_library_symbols(void);
 
 int fakeroot_disabled = 0;
+#ifdef LIBFAKEROOT_DEBUGGING
+int fakeroot_debug = 0;
+#endif /* LIBFAKEROOT_DEBUGGING */
 
 #ifdef __APPLE__
 #include "patchattr.h"
@@ -182,6 +185,15 @@ void load_library_symbols(void){
   int i;
   const char *msg;
   
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (getenv("FAKEROOT_DEBUG")) {
+    fakeroot_debug=1;
+  }
+  if (fakeroot_debug) {
+    fprintf(stderr, "load_library_symbols\n");
+  }
+
+#endif /* LIBFAKEROOT_DEBUGGING */
   for(i=0; next_wrap[i].doit; i++){
     *(next_wrap[i].doit)=dlsym(get_libc(), next_wrap[i].name);
     if ( (msg = dlerror()) != NULL){
@@ -542,6 +554,11 @@ int WRAP_LSTAT LSTAT_ARG(int ver,
 
   int r;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "lstat file_name %s\n", file_name);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=NEXT_LSTAT(ver, file_name, statbuf);
   if(r)
     return -1;
@@ -555,6 +572,11 @@ int WRAP_STAT STAT_ARG(int ver,
 		       struct stat *st){
   int r;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "stat file_name %s\n", file_name);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=NEXT_STAT(ver, file_name, st);
   if(r)
     return -1;
@@ -570,6 +592,11 @@ int WRAP_FSTAT FSTAT_ARG(int ver,
 
   int r;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "fstat fd %d\n", fd);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=NEXT_FSTAT(ver, fd, st);
   if(r)
     return -1;
@@ -603,6 +630,11 @@ int WRAP_LSTAT64 LSTAT64_ARG (int ver,
 
   int r;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "lstat64 file_name %s\n", file_name);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=NEXT_LSTAT64(ver, file_name, st);
 
   if(r)
@@ -618,6 +650,11 @@ int WRAP_STAT64 STAT64_ARG(int ver,
 			   struct stat64 *st){
   int r;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "stat64 file_name %s\n", file_name);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=NEXT_STAT64(ver,file_name,st);
   if(r)
     return -1;
@@ -631,6 +668,11 @@ int WRAP_FSTAT64 FSTAT64_ARG(int ver,
 			     struct stat64 *st){
   int r;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "fstat64 fd %d\n", fd);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=NEXT_FSTAT64(ver, fd, st);
   if(r)
     return -1;
@@ -691,6 +733,11 @@ int chown(const char *path, uid_t owner, gid_t group){
   int r=0;
 
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "chown path %s owner %d group %d\n", path, owner, group);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
 #ifdef LCHOWN_SUPPORT
   /*chown(sym-link) works on the target of the symlink if lchown is
     present and enabled.*/
@@ -721,6 +768,11 @@ int lchown(const char *path, uid_t owner, gid_t group){
   INT_STRUCT_STAT st;
   int r=0;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "lchown path %s owner %d group %d\n", path, owner, group);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=INT_NEXT_LSTAT(path, &st);
   if(r)
     return r;
@@ -794,6 +846,11 @@ int chmod(const char *path, mode_t mode){
   INT_STRUCT_STAT st;
   int r;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "chmod path %s\n", path);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=INT_NEXT_STAT(path, &st);
   if(r)
     return r;
@@ -829,6 +886,11 @@ int fchmod(int fd, mode_t mode){
   INT_STRUCT_STAT st;
 
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "fchmod fd %d\n", fd);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=INT_NEXT_FSTAT(fd, &st);
   
   if(r)
@@ -975,6 +1037,11 @@ int mkdir(const char *path, mode_t mode){
      to communicate with faked we need a struct stat, so we now
      do a stat of the new directory (just for the inode/dev) */
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "mkdir path %s\n", path);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=next_mkdir(path, mode|0700); 
   /* mode|0700: see comment in the chown() function above */
   if(r)
@@ -1313,12 +1380,22 @@ int setegid(uid_t id){
 }
 
 int setreuid(SETREUID_ARG ruid, SETREUID_ARG euid){
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "setreuid\n");
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   if (fakeroot_disabled)
     return next_setreuid(ruid, euid);
   return set_faked_reuid(ruid, euid);
 }
 
 int setregid(SETREGID_ARG rgid, SETREGID_ARG egid){
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "setregid\n");
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   if (fakeroot_disabled)
     return next_setregid(rgid, egid);
   return set_faked_regid(rgid, egid);
@@ -1398,6 +1475,11 @@ int acl_set_file(const char *path_p, acl_type_t type, acl_t acl) {
 FTSENT *fts_read(FTS *ftsp) {
   FTSENT *r;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "fts_read\n");
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=next_fts_read(ftsp);
   if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
 # if defined(STAT64_SUPPORT) && !defined(__APPLE__)
@@ -1415,6 +1497,11 @@ FTSENT *fts_read(FTS *ftsp) {
 FTSENT *fts_children(FTS *ftsp, int options) {
   FTSENT *first, *r;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "fts_children\n");
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   first=next_fts_children(ftsp, options);
   for(r = first; r; r = r->fts_link) {
     if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
@@ -1444,6 +1531,11 @@ getattrlist(const char *path, void *attrList, void *attrBuf,
   int r;
   struct stat st;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "getattrlist path %s\n", path);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=next_getattrlist(path, attrList, attrBuf, attrBufSize, options);
   if (r) {
     return r;
@@ -1474,6 +1566,11 @@ fgetattrlist(int fd, void *attrList, void *attrBuf,
   int r;
   struct stat st;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "fgetattrlist fd %d\n", fd);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=next_fgetattrlist(fd, attrList, attrBuf, attrBufSize, options);
   if (r) {
     return r;

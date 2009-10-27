@@ -25,11 +25,20 @@
 
 #include "wrapped.h"
 
+#ifdef LIBFAKEROOT_DEBUGGING
+extern int fakeroot_debug;
+
+#endif /* LIBFAKEROOT_DEBUGGING */
 int lstat(const char *file_name,
           struct stat *st){
 
   int r;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "lstat$INODE64 file_name %s\n", file_name);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=next_lstat$INODE64(file_name, st);
 
   if(r)
@@ -44,6 +53,11 @@ int stat(const char *file_name,
          struct stat *st){
   int r;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "stat$INODE64 file_name %s\n", file_name);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=next_stat$INODE64(file_name,st);
   if(r)
     return -1;
@@ -56,6 +70,11 @@ int fstat(int fd,
           struct stat *st){
   int r;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "fstat$INODE64 fd %d\n", fd);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=next_fstat$INODE64(fd, st);
   if(r)
     return -1;
@@ -68,6 +87,11 @@ int fstat(int fd,
 FTSENT *fts_read(FTS *ftsp) {
   FTSENT *r;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "fts_read$INODE64\n");
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=next_fts_read$INODE64(ftsp);
   if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
     send_get_stat64((struct stat64 *)r->fts_statp);
@@ -81,6 +105,11 @@ FTSENT *fts_children(FTS *ftsp,
   FTSENT *first;
   FTSENT *r;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "fts_children$INODE64\n");
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   first=next_fts_children$INODE64(ftsp, options);
   for(r = first; r; r = r->fts_link) {
     if(r->fts_statp) {  /* Should we bother checking fts_info here? */

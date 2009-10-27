@@ -71,6 +71,11 @@ int lchown(const char *path, uid_t owner, gid_t group){
   INT_STRUCT_STAT st;
   int r=0;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "lchown$UNIX2003 path %s owner %d group %d\n", path, owner, group);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=INT_NEXT_LSTAT(path, &st);
   if(r)
     return r;
@@ -92,6 +97,11 @@ int chmod(const char *path, mode_t mode){
   INT_STRUCT_STAT st;
   int r;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "chmod$UNIX2003 path %s\n", path);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=INT_NEXT_STAT(path, &st);
   if(r)
     return r;
@@ -127,6 +137,11 @@ int fchmod(int fd, mode_t mode){
   INT_STRUCT_STAT st;
 
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "fchmod$UNIX2003 fd %d\n", fd);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=INT_NEXT_FSTAT(fd, &st);
   
   if(r)
@@ -151,12 +166,22 @@ int fchmod(int fd, mode_t mode){
 }
 
 int setreuid(SETREUID_ARG ruid, SETREUID_ARG euid){
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "setreuid$UNIX2003\n");
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   if (fakeroot_disabled)
     return next_setreuid$UNIX2003(ruid, euid);
   return set_faked_reuid(ruid, euid);
 }
 
 int setregid(SETREGID_ARG rgid, SETREGID_ARG egid){
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "setregid$UNIX2003\n");
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   if (fakeroot_disabled)
     return next_setregid$UNIX2003(rgid, egid);
   return set_faked_regid(rgid, egid);
@@ -169,6 +194,11 @@ getattrlist(const char *path, void *attrList, void *attrBuf,
   int r;
   struct stat st;
 
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "getattrlist$UNIX2003 path %s\n", path);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
   r=next_getattrlist$UNIX2003(path, attrList, attrBuf, attrBufSize, options);
   if (r) {
     return r;
