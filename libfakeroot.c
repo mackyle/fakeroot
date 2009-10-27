@@ -24,26 +24,30 @@
 #include "config.h"
 #include "communicate.h"
 
+#ifdef STUPID_ALPHA_HACK
+#define SEND_STAT(a,b,c) send_stat(a,b,c)
+#define SEND_STAT64(a,b,c) send_stat64(a,b,c)
+#define SEND_GET_STAT(a,b) send_get_stat(a,b)
+#define SEND_GET_STAT64(a,b) send_get_stat64(a,b)
+#else
+#define SEND_STAT(a,b,c) send_stat(a,b)
+#define SEND_STAT64(a,b,c) send_stat64(a,b)
+#define SEND_GET_STAT(a,b) send_get_stat(a)
+#define SEND_GET_STAT64(a,b) send_get_stat64(a)
+#endif
+
 #ifdef STAT64_SUPPORT 
 #define INT_STRUCT_STAT struct stat64
 #define INT_NEXT_STAT(a,b,c) NEXT_STAT64(a,b,c)
 #define INT_NEXT_LSTAT(a,b,c) NEXT_LSTAT64(a,b,c)
 #define INT_NEXT_FSTAT(a,b,c) NEXT_FSTAT64(a,b,c)
-#ifndef STUPID_ALPHA_HACK
-#define INT_SEND_STAT(a,b,c) send_stat64(a,b)
-#else
-#define INT_SEND_STAT(a,b,c) send_stat64(a,b,c)
-#endif
+#define INT_SEND_STAT(a,b,c) SEND_STAT64(a,b,c)
 #else
 #define INT_STRUCT_STAT struct stat
 #define INT_NEXT_STAT(a,b,c) NEXT_STAT(a,b,c)
 #define INT_NEXT_LSTAT(a,b,c) NEXT_LSTAT(a,b,c)
 #define INT_NEXT_FSTAT(a,b,c) NEXT_FSTAT(a,b,c)
-#ifndef STUPID_ALPHA_HACK
-#define INT_SEND_STAT(a,b,c) send_stat(a,b)
-#else
-#define INT_SEND_STAT(a,b,c) send_stat(a,b,c)
-#endif
+#define INT_SEND_STAT(a,b,c) SEND_STAT(a,b,c)
 #endif
 
 #include <stdlib.h>
@@ -519,11 +523,7 @@ int WRAP_LSTAT LSTAT_ARG(int ver,
   r=NEXT_LSTAT(ver, file_name, statbuf);
   if(r)
     return -1;
-#ifndef STUPID_ALPHA_HACK
-  send_get_stat(statbuf);
-#else
-  send_get_stat(statbuf, ver);
-#endif
+  SEND_GET_STAT(statbuf, ver);
   return 0;
 }
 
@@ -536,11 +536,7 @@ int WRAP_STAT STAT_ARG(int ver,
   r=NEXT_STAT(ver, file_name, st);
   if(r)
     return -1;
-#ifndef STUPID_ALPHA_HACK
-  send_get_stat(st);
-#else
-  send_get_stat(st,ver);
-#endif
+  SEND_GET_STAT(st,ver);
   return 0;
 }
 
@@ -555,11 +551,7 @@ int WRAP_FSTAT FSTAT_ARG(int ver,
   r=NEXT_FSTAT(ver, fd, st);
   if(r)
     return -1;
-#ifndef STUPID_ALPHA_HACK
-  send_get_stat(st);
-#else
-  send_get_stat(st,ver);
-#endif
+  SEND_GET_STAT(st,ver);
   return 0;
 }
 
@@ -576,11 +568,7 @@ int WRAP_FSTATAT FSTATAT_ARG(int ver,
   r=NEXT_FSTATAT(ver, dir_fd, path, st, flags);
   if(r)
     return -1;
-#ifndef STUPID_ALPHA_HACK
-  send_get_stat(st);
-#else
-  send_get_stat(st,ver);
-#endif
+  SEND_GET_STAT(st,ver);
   return 0;
 }
 #endif /* HAVE_FSTATAT */
@@ -598,11 +586,7 @@ int WRAP_LSTAT64 LSTAT64_ARG (int ver,
   if(r)
     return -1;
 
-#ifndef STUPID_ALPHA_HACK
-  send_get_stat64(st);
-#else
-  send_get_stat64(st,ver);
-#endif
+  SEND_GET_STAT64(st,ver);
   return 0;
 }
 
@@ -615,11 +599,7 @@ int WRAP_STAT64 STAT64_ARG(int ver,
   r=NEXT_STAT64(ver,file_name,st);
   if(r)
     return -1;
-#ifndef STUPID_ALPHA_HACK
-  send_get_stat64(st);
-#else
-  send_get_stat64(st,ver);
-#endif
+  SEND_GET_STAT64(st,ver);
   return 0;
 }
 
@@ -632,11 +612,7 @@ int WRAP_FSTAT64 FSTAT64_ARG(int ver,
   r=NEXT_FSTAT64(ver, fd, st);
   if(r)
     return -1;
-#ifndef STUPID_ALPHA_HACK
-  send_get_stat64(st);
-#else
-  send_get_stat64(st,ver);
-#endif
+  SEND_GET_STAT64(st,ver);
 
   return 0;
 }
@@ -654,11 +630,7 @@ int WRAP_FSTATAT64 FSTATAT64_ARG(int ver,
   r=NEXT_FSTATAT64(ver, dir_fd, path, st, flags);
   if(r)
     return -1;
-#ifndef STUPID_ALPHA_HACK
-  send_get_stat64(st);
-#else
-  send_get_stat64(st,ver);
-#endif
+  SEND_GET_STAT64(st,ver);
   return 0;
 }
 #endif /* HAVE_FSTATAT */
@@ -732,11 +704,7 @@ int lchown(const char *path, uid_t owner, gid_t group){
     return r;
   st.st_uid=owner;
   st.st_gid=group;
-#ifndef STUPID_ALPHA_HACK
-  send_stat(&st,chown_func);
-#else
-  send_stat(&st,chown_func, _STAT_VER);
-#endif
+  SEND_STAT(&st,chown_func, _STAT_VER);
   if(!dont_try_chown())
     r=next_lchown(path,owner,group);
   else
@@ -758,11 +726,7 @@ int fchown(int fd, uid_t owner, gid_t group){
   
   st.st_uid=owner;
   st.st_gid=group;
-#ifndef STUPID_ALPHA_HACK
-  send_stat(&st, chown_func);
-#else
-  send_stat(&st, chown_func, _STAT_VER);
-#endif
+  SEND_STAT(&st, chown_func, _STAT_VER);
   
   if(!dont_try_chown())
     r=next_fchown(fd,owner,group);
@@ -795,17 +759,9 @@ int fchownat(int dir_fd, const char *path, uid_t owner, gid_t group, int flags) 
   st.st_uid=owner;
   st.st_gid=group;
 #ifdef STAT64_SUPPORT
-#ifndef STUPID_ALPHA_HACK
-  send_stat64(&st,chown_func);  
+  SEND_STAT64(&st,chown_func, _STAT_VER);  
 #else
-  send_stat64(&st,chown_func, _STAT_VER);  
-#endif
-#else
-#ifndef STUPID_ALPHA_HACK
-  send_stat(&st,chown_func);  
-#else
-  send_stat(&st,chown_func, _STAT_VER);  
-#endif
+  SEND_STAT(&st,chown_func, _STAT_VER);  
 #endif /* STAT64_SUPPORT */
   
   if(!dont_try_chown())
@@ -898,11 +854,7 @@ int fchmodat(int dir_fd, const char *path, mode_t mode, int flags) {
     return(r);
   
   st.st_mode=(mode&ALLPERMS)|(st.st_mode&~ALLPERMS);
-#ifndef STUPID_ALPHA_HACK
-  send_stat(&st,chmod_func);  
-#else
-  send_stat(&st,chmod_func, _STAT_VER);  
-#endif
+  SEND_STAT(&st,chmod_func, _STAT_VER);  
   
   /* see chmod() for comment */
   mode |= 0600;
@@ -951,11 +903,7 @@ int WRAP_MKNOD MKNOD_ARG(int ver UNUSED,
   st.st_mode= mode & ~old_mask;
   st.st_rdev= XMKNOD_FRTH_ARG dev;
   
-#ifndef STUPID_ALPHA_HACK
-  send_stat(&st,mknod_func);
-#else
-  send_stat(&st,mknod_func, _STAT_VER);
-#endif
+  SEND_STAT(&st,mknod_func, _STAT_VER);
     
   return 0;
 }
@@ -995,11 +943,7 @@ int WRAP_MKNODAT MKNODAT_ARG(int ver UNUSED,
   st.st_mode= mode & ~old_mask;
   st.st_rdev= XMKNODAT_FIFTH_ARG dev;
   
-#ifndef STUPID_ALPHA_HACK
-  send_stat(&st,mknod_func);
-#else
-  send_stat(&st,mknod_func, _STAT_VER);
-#endif
+  SEND_STAT(&st,mknod_func, _STAT_VER);
     
   return 0;
 }
@@ -1059,11 +1003,7 @@ int mkdirat(int dir_fd, const char *path, mode_t mode){
   
   st.st_mode=(mode&~old_mask&ALLPERMS)|(st.st_mode&~ALLPERMS)|S_IFDIR;
 
-#ifndef STUPID_ALPHA_HACK
-  send_stat(&st, chmod_func);
-#else
-  send_stat(&st, chmod_func, _STAT_VER);
-#endif
+  SEND_STAT(&st, chmod_func, _STAT_VER);
 
   return 0;
 }
@@ -1124,13 +1064,9 @@ int unlinkat(int dir_fd, const char *pathname, int flags){
     return -1;
   
 #ifdef STAT64_SUPPORT
-#ifndef STUPID_ALPHA_HACK
-  send_stat64(&st, unlink_func);
+  SEND_STAT64(&st, unlink_func, _STAT_VER);
 #else
-  send_stat64(&st, unlink_func, _STAT_VER);
-#endif
-#else
-  send_stat(&st, unlink_func);
+  SEND_STAT(&st, unlink_func, _STAT_VER);
 #endif
   
   return 0;
@@ -1226,11 +1162,7 @@ int renameat(int olddir_fd, const char *oldpath,
   if(s)
     return -1;
   if(!r)
-#ifndef STUPID_ALPHA_HACK
-    send_stat(&st,unlink_func);
-#else
-    send_stat(&st,unlink_func, _STAT_VER);
-#endif
+    SEND_STAT(&st,unlink_func, _STAT_VER);
 
   return 0;
 }
@@ -1465,17 +1397,9 @@ FTSENT *fts_read(FTS *ftsp) {
   r=next_fts_read(ftsp);
   if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
 # ifdef STAT64_SUPPORT
-#  ifndef STUPID_ALPHA_HACK
-    send_get_stat64(r->fts_statp);
-#  else
-    send_get_stat64(r->fts_statp, _STAT_VER);
-#  endif
+    SEND_GET_STAT64(r->fts_statp, _STAT_VER);
 # else
-#  ifndef STUPID_ALPHA_HACK
-    send_get_stat(r->fts_statp);
-#  else
-    send_get_stat(r->fts_statp, _STAT_VER);
-#  endif
+    SEND_GET_STAT(r->fts_statp, _STAT_VER);
 # endif
   }
 
