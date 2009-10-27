@@ -21,6 +21,21 @@
 
 #define FAKEROOT_LIBFAKEROOT
 
+#ifdef __APPLE__
+/*
+   In this file, we want 'struct stat' to have a 32-bit 'ino_t'.
+   We use 'struct stat64' when we need a 64-bit 'ino_t'.
+*/
+#define _DARWIN_NO_64_BIT_INODE
+
+#ifndef __LP64__
+/* 
+   This file is for 32-bit symbols which do not have the "$UNIX2003" version.
+*/
+#define _NONSTD_SOURCE
+#endif
+#endif
+
 #include "config.h"
 #include "communicate.h"
 
@@ -1382,7 +1397,7 @@ FTSENT *fts_read(FTS *ftsp) {
 
   r=next_fts_read(ftsp);
   if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
-# ifdef STAT64_SUPPORT
+# if defined(STAT64_SUPPORT) && !defined(__APPLE__)
     SEND_GET_STAT64(r->fts_statp, _STAT_VER);
 # else
     SEND_GET_STAT(r->fts_statp, _STAT_VER);
@@ -1400,7 +1415,7 @@ FTSENT *fts_children(FTS *ftsp, int options) {
   first=next_fts_children(ftsp, options);
   for(r = first; r; r = r->fts_link) {
     if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
-# ifdef STAT64_SUPPORT
+# if defined(STAT64_SUPPORT) && !defined(__APPLE__)
       SEND_GET_STAT64(r->fts_statp, _STAT_VER);
 # else
       SEND_GET_STAT(r->fts_statp, _STAT_VER);
