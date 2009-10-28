@@ -507,6 +507,21 @@ CPPFLAGS="$CPPFLAGS -I\$(srcdir)/statconv/glibc/linux/alpha"
         ;;
 esac
 
+dnl AH_TEMPLATE([MACOSX], [is __APPLE__ defined by the compiler])
+AC_MSG_CHECKING([for MacOS X/Darwin])
+  AC_PREPROC_IFELSE(
+    [AC_LANG_PROGRAM([[
+       #ifndef __APPLE__
+       #error We are somewhere better
+       #endif
+  ]])],
+    [macosx=true
+     AC_MSG_RESULT([yes])],
+    [AC_MSG_RESULT([no])
+     macosx=false]
+  )
+AM_CONDITIONAL([MACOSX], [test x$macosx = xtrue])
+
 AC_CONFIG_FILES([
    Makefile
    scripts/Makefile
