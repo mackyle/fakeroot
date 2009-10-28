@@ -150,12 +150,13 @@ acl_set_file;int;(const char *path_p, acl_type_t type, acl_t acl);(path_p, type,
 
 #ifdef HAVE_FTS_READ
 fts_read;FTSENT *;(FTS *ftsp);(ftsp)
-fts_children;FTSENT *;(FTS *ftsp, int options);(ftsp, options)
 #ifdef __APPLE__
 fts_read$INODE64;FTSENT *;(FTS *ftsp);(ftsp)
-fts_children$INODE64;FTSENT *;(FTS *ftsp, int options);(ftsp, options)
 #endif /* ifdef __APPLE__ */
 #endif /* HAVE_FTS_READ */
 #ifdef HAVE_FTS_CHILDREN
 fts_children;FTSENT *;(FTS *ftsp, int options);(ftsp, options)
+#ifdef __APPLE__
+fts_children$INODE64;FTSENT *;(FTS *ftsp, int options);(ftsp, options)
+#endif /* ifdef __APPLE__ */
 #endif /* HAVE_FTS_CHILDREN */
