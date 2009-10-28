@@ -1,3 +1,14 @@
+fakeroot (1.14.3) unstable; urgency=low
+
+  * Apply patch (tweaked) from VMware: "Make sure STAT64_SUPPORT is
+    defined on Mac OS, and wrap versioned symbols."
+  * Apply patch (tweaked) from VMware: "Wrap *getattrlist() functions
+    (Mac OS-specific, used on HFS+ filesystems)."
+  * Apply patch (guarded, tweaked) from VMware: "Add debug support."
+  * Conditionally build MacOS X symbol-versioned wrappers.
+
+ -- Clint Adams <schizo@debian.org>  Tue, 27 Oct 2009 21:55:29 -0400
+
 fakeroot (1.14.2) unstable; urgency=low
 
   * Apply (tweaked) patch from VMware: "Fix places which were
