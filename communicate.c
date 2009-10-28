@@ -12,11 +12,11 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
- This file contains the code (wrapper functions) that gets linked with 
+ This file contains the code (wrapper functions) that gets linked with
  the programes run from inside fakeroot. These programes then communicate
- with the fakeroot daemon, that keeps information about the "fake" 
+ with the fakeroot daemon, that keeps information about the "fake"
  ownerships etc. of the files etc.
-    
+
  */
 
 #ifdef __APPLE__
@@ -88,9 +88,9 @@ static void fail(const char *msg)
 
 const char *env_var_set(const char *env){
   const char *s;
-  
+
   s=getenv(env);
-  
+
   if(s && *s)
     return s;
   else
@@ -102,7 +102,7 @@ void cpyfakemstat(struct fake_msg *f, const struct stat *st
 		, int ver
 #endif
 		){
-  
+
 #ifndef STUPID_ALPHA_HACK
   f->st.mode =st->st_mode;
   f->st.ino  =st->st_ino ;
@@ -355,7 +355,7 @@ void cpyfakefake(struct fakestat *dest,
 
 void stat64from32(struct stat64 *s64, const struct stat *s32)
 {
-  /* I've added st_size and st_blocks here. 
+  /* I've added st_size and st_blocks here.
      Don't know why they were missing -- joost*/
    s64->st_dev = s32->st_dev;
    s64->st_ino = s32->st_ino;
@@ -589,7 +589,7 @@ static size_t read_all(int fd,void *buf,size_t count) {
 		  else fail("partial read");
 	  } else {
 		  remaining-=rc;
-	  }  
+	  }
   }
   return count-remaining;
 }
@@ -653,7 +653,7 @@ static void get_fakem_nr(struct fake_msg *buf)
       continue;
    fail("read");
   }
- 
+
   buf->id = ntohl(buf->id);
   buf->st.uid = ntohl(buf->st.uid);
   buf->st.gid = ntohl(buf->st.gid);
@@ -802,7 +802,7 @@ key_t get_ipc_key(key_t new_key)
 
 int init_get_msg(){
   /* a msgget call generates a fstat() call. As fstat() is wrapped,
-     that call will in turn call semaphore_up(). So, before 
+     that call will in turn call semaphore_up(). So, before
      the semaphores are setup, we should make sure we already have
      the msg_get and msg_set id.
      This is why semaphore_up() calls this function.*/
