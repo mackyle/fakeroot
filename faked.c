@@ -13,18 +13,18 @@
     GNU General Public License for more details.
 
   title       : fakeroot
-  description : create a "fake" root shell, by wrapping 
+  description : create a "fake" root shell, by wrapping
                 functions like chown, stat, etc. Useful for debian
                 packaging mechanism
 */
 
 /*
-  upon startup, the fakeroot script (/usr/bin/fakeroot) 
+  upon startup, the fakeroot script (/usr/bin/fakeroot)
   forks faked (this program), and the shell or user program that
   will run with the libtricks.so.0.0 wrapper.
-  
+
   These tree running programs have the following tasks:
-    
+
     fakeroot script
        starts the other two processes, waits for the user process to
        die, and then send a SIGTERM signal to faked, causing
@@ -33,13 +33,13 @@
     faked
        the ``main'' daemon, creates ipc message queues, and later
        receives ipc messages from the user program, maintains
-       fake inode<->ownership database (actually just a 
+       fake inode<->ownership database (actually just a
        lot of struct stat entries). Will clear ipc message ques
        upon receipt of a SIGTERM. Will show debug output upon
        receipt of a SIGUSR1 (if started with -d debug option)
 
     user program
-       Any shell or other programme, run with 
+       Any shell or other programme, run with
        LD_PRELOAD=libtricks.so.0.0, and FAKEROOT_DBKEY=ipc-key,
        thus the executed commands will communicate with
        faked. libtricks will wrap all file ownership etc modification
@@ -51,11 +51,11 @@
      getuid(), geteuid(), getgid(), getegid(),
      mknod()
      chown(), fchown() lchown()
-     chmod(), fchmod() 
+     chmod(), fchmod()
      mkdir(),
      lstat(), fstat(), stat() (actually, __xlstat, ...)
      unlink(), remove(), rmdir(), rename()
-    
+
   comments:
     I need to wrap unlink because of the following:
         install -o admin foo bar
@@ -67,16 +67,16 @@
     Same goes for all other ways to remove inodes form the filesystem,
     like rename(existing_file, any_file).
 
-    The communication between client (user progamme) and faked happens 
-    with inode/dev information, not filenames. This is 
+    The communication between client (user progamme) and faked happens
+    with inode/dev information, not filenames. This is
     needed, as the client is the only one who knows what cwd is,
     so it's much easier to stat in the client. Otherwise, the daemon
     needs to keep a list of client pids vs cwd, and I'd have to wrap
     fork e.d., as they inherit their parent's cwd. Very compilcated.
-    
+
     */
-/* ipc documentation bugs: msgsnd(2): MSGMAX=4056, not 4080 
-   (def in ./linux/msg.h, couldn't find other def in /usr/include/ 
+/* ipc documentation bugs: msgsnd(2): MSGMAX=4056, not 4080
+   (def in ./linux/msg.h, couldn't find other def in /usr/include/
    */
 
 #ifdef __APPLE__
@@ -232,7 +232,7 @@ static void data_insert(const struct fakestat *buf,
 			const uint32_t remote)
 {
   data_node_t *n, *last = NULL;
-  
+
   for (n = data_hash_table[data_hash_val(buf)]; n; last = n, n = n->next)
     if (fakestat_equal(&n->buf, buf) && n->remote == remote)
       break;
@@ -599,7 +599,7 @@ void debug_stat(const struct fakestat *st){
 void insert_or_overwrite(struct fakestat *st,
 			 const uint32_t remote){
   data_node_t *i;
-  
+
   i = data_find(st, remote);
   if (i == data_end()) {
     if(debug){
@@ -623,7 +623,7 @@ void process_chown(struct fake_msg *buf){
   struct fakestat *stptr;
   struct fakestat st;
   data_node_t *i;
-  
+
   if(debug){
     fprintf(stderr,"FAKEROOT: chown ");
     debug_stat(&buf->st);
@@ -631,11 +631,11 @@ void process_chown(struct fake_msg *buf){
   i = data_find(&buf->st, buf->remote);
   if (i != data_end()) {
     stptr = data_node_get(i);
-    /* From chown(2): If  the owner or group is specified as -1, 
-       then that ID is not changed. 
+    /* From chown(2): If  the owner or group is specified as -1,
+       then that ID is not changed.
        Cannot put that test in libtricks, as at that point it isn't
        known what the fake user/group is (so cannot specify `unchanged')
-       
+
        I typecast to (uint32_t), as st.uid may be bigger than uid_t.
        In that case, the msb in st.uid should be discarded.
        I don't typecaset to (uid_t), as the size of uid_t may vary
@@ -644,7 +644,7 @@ void process_chown(struct fake_msg *buf){
        concurrently. Yes, this does seem farfeched, but was
        actually the case with the libc5/6 transition.
     */
-    if ((uint32_t)buf->st.uid != (uint32_t)-1) 
+    if ((uint32_t)buf->st.uid != (uint32_t)-1)
       stptr->uid=buf->st.uid;
     if ((uint32_t)buf->st.gid != (uint32_t)-1)
       stptr->gid=buf->st.gid;
@@ -665,11 +665,11 @@ void process_chown(struct fake_msg *buf){
 void process_chmod(struct fake_msg *buf){
   struct fakestat *st;
   data_node_t *i;
-  
+
   if(debug)
     fprintf(stderr,"FAKEROOT: chmod, mode=%lo\n",
 	    (long)buf->st.mode);
-  
+
   i = data_find(&buf->st, buf->remote);
   if (i != data_end()) {
     st = data_node_get(i);
@@ -711,11 +711,11 @@ void process_chmod(struct fake_msg *buf){
 void process_mknod(struct fake_msg *buf){
   struct fakestat *st;
   data_node_t *i;
-  
+
   if(debug)
     fprintf(stderr,"FAKEROOT: mknod, mode=%lo\n",
 	    (long)buf->st.mode);
-  
+
   i = data_find(&buf->st, buf->remote);
   if (i != data_end()) {
     st = data_node_get(i);
@@ -750,7 +750,7 @@ void process_stat(struct fake_msg *buf){
     cpyfakefake(&buf->st, data_node_get(i));
     if(debug){
       fprintf(stderr,"FAKEROOT: (previously known): fake=");
-      debug_stat(&buf->st);      
+      debug_stat(&buf->st);
     }
 
   }
@@ -1112,10 +1112,10 @@ int main(int argc, char **argv){
 					 specially by libfake */
       msg_key=random();
   }
-    
+
   if(debug)
     fprintf(stderr,"using %li as msg key\n",(long)msg_key);
-  
+
   msg_get=msgget(msg_key,IPC_CREAT|0600);
   msg_snd=msgget(msg_key+1,IPC_CREAT|0600);
   sem_id=semget(msg_key+2,1,IPC_CREAT|0600);
@@ -1183,7 +1183,7 @@ int main(int argc, char **argv){
   sigemptyset(&sa_debug.sa_mask);
   sa_debug.sa_flags=0;
   //  sa_debug.sa_restorer=0;
-  
+
   sa_save.sa_handler=save;
   sigemptyset(&sa_save.sa_mask);
   sa_save.sa_flags=0;
@@ -1218,7 +1218,7 @@ int main(int argc, char **argv){
     if ((pid=fork()) == 0){
       int fl;
       int num_fds = getdtablesize();
-      
+
       fflush(stdout);
 
       /* This is the child closing its file descriptors. */

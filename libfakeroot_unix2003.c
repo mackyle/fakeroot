@@ -45,7 +45,7 @@
    These INT_* (which stands for internal) macros should always be used when
    the fakeroot library owns the storage of the stat variable.
 */
-#ifdef STAT64_SUPPORT 
+#ifdef STAT64_SUPPORT
 #define INT_STRUCT_STAT struct stat64
 #define INT_NEXT_STAT(a,b) NEXT_STAT64(_STAT_VER,a,b)
 #define INT_NEXT_LSTAT(a,b) NEXT_LSTAT64(_STAT_VER,a,b)
@@ -62,7 +62,7 @@
 #endif
 
 #include <stdio.h>
-#include <unistd.h> 
+#include <unistd.h>
 #include <errno.h>
 #ifdef HAVE_SYS_ACL_H
 #include <sys/acl.h>
@@ -115,11 +115,11 @@ int chmod(const char *path, mode_t mode){
   r=INT_NEXT_STAT(path, &st);
   if(r)
     return r;
-  
+
   st.st_mode=(mode&ALLPERMS)|(st.st_mode&~ALLPERMS);
-    
+
   INT_SEND_STAT(&st, chmod_func);
-  
+
   /* if a file is unwritable, then root can still write to it
      (no matter who owns the file). If we are fakeroot, the only
      way to fake this is to always make the file writable, readable
@@ -131,7 +131,7 @@ int chmod(const char *path, mode_t mode){
   mode |= 0600;
   if(S_ISDIR(st.st_mode))
     mode |= 0100;
-  
+
   r=next_chmod$UNIX2003(path, mode);
   if(r&&(errno==EPERM))
     r=0;
@@ -153,18 +153,18 @@ int fchmod(int fd, mode_t mode){
   }
 #endif /* LIBFAKEROOT_DEBUGGING */
   r=INT_NEXT_FSTAT(fd, &st);
-  
+
   if(r)
     return(r);
-  
+
   st.st_mode=(mode&ALLPERMS)|(st.st_mode&~ALLPERMS);
-  INT_SEND_STAT(&st,chmod_func);  
-  
+  INT_SEND_STAT(&st,chmod_func);
+
   /* see chmod() for comment */
   mode |= 0600;
   if(S_ISDIR(st.st_mode))
     mode |= 0100;
-  
+
   r=next_fchmod$UNIX2003(fd, mode);
   if(r&&(errno==EPERM))
     r=0;

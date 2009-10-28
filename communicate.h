@@ -23,21 +23,21 @@
 
 /* I've got a chicken-and-egg problem here. I want to have
    stat64 support, only running on glibc2.1 or later. To
-   find out what glibc we've got installed, I need to 
+   find out what glibc we've got installed, I need to
    #include <features.h>.
    But, before including that file, I have to define _LARGEFILE64_SOURCE
    etc, cause otherwise features.h will not define it's internal defines.
    As I assume that pre-2.1 libc's will just ignore those _LARGEFILE64_SOURCE
    defines, I hope I can get away with this approach:
 */
-  
+
 /*First, unconditionally define these, so that glibc 2.1 features.h defines
   the needed 64 bits defines*/
 #ifndef _LARGEFILE64_SOURCE
-# define _LARGEFILE64_SOURCE 
+# define _LARGEFILE64_SOURCE
 #endif
 #ifndef _LARGEFILE_SOURCE
-# define _LARGEFILE_SOURCE 
+# define _LARGEFILE_SOURCE
 #endif
 
 /* Then include features.h, to find out what glibc we run */
@@ -60,7 +60,7 @@
 # undef _LARGEFILE_SOURCE
 #endif
 
-/* Sparc glibc 2.0.100 is broken, dlsym segfaults on --fxstat64.. 
+/* Sparc glibc 2.0.100 is broken, dlsym segfaults on --fxstat64..
 #define STAT64_SUPPORT */
 
 #include <sys/types.h>
@@ -123,7 +123,7 @@
 
 enum {chown_func,
         /*2*/  chmod_func,
-        /*3*/  mknod_func, 
+        /*3*/  mknod_func,
                stat_func,
         /*5*/  unlink_func,
                debugdata_func,
@@ -167,7 +167,7 @@ extern void unlock_comm_sd(void);
 # endif
 #endif /* FAKEROOT_FAKENET */
 
-#ifdef STAT64_SUPPORT  
+#ifdef STAT64_SUPPORT
 #ifndef STUPID_ALPHA_HACK
 extern void send_stat64(const struct stat64 *st, func_id_t f);
 extern void send_get_stat64(struct stat64 *buf);
