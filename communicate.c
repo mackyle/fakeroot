@@ -1,7 +1,16 @@
 /*
-  copyright : GPL
-    (author: joost witteveen, joostje@debian.org)
+  Copyright Ⓒ 1997, 1998, 1999, 2000, 2001  joost witteveen
+  Copyright Ⓒ 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009  Clint Adams
 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
  This file contains the code (wrapper functions) that gets linked with 
  the programes run from inside fakeroot. These programes then communicate
