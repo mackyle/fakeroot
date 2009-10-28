@@ -13,8 +13,8 @@
     GNU General Public License for more details.
 
 */
-/* #define _POSIX_C_SOURCE 199309L whatever that may mean...*/ 
-/* #define _BSD_SOURCE             I use strdup, S_IFDIR, etc */ 
+/* #define _POSIX_C_SOURCE 199309L whatever that may mean...*/
+/* #define _BSD_SOURCE             I use strdup, S_IFDIR, etc */
 
 /* Roderich Schupp writes (bug #79100):
    /usr/include/dlfcn.h from libc6 2.2-5 defines RTLD_NEXT only
@@ -28,7 +28,7 @@
    fakeroot
    always bombs. Simple fix:
 */
-#define _GNU_SOURCE 
+#define _GNU_SOURCE
 
 #define FAKEROOT_LIBFAKEROOT
 
@@ -40,7 +40,7 @@
 #define _DARWIN_NO_64_BIT_INODE
 
 #ifndef __LP64__
-/* 
+/*
    This file is for 32-bit symbols which do not have the "$UNIX2003" version.
 */
 #define _NONSTD_SOURCE
@@ -66,7 +66,7 @@
    These INT_* (which stands for internal) macros should always be used when
    the fakeroot library owns the storage of the stat variable.
 */
-#ifdef STAT64_SUPPORT 
+#ifdef STAT64_SUPPORT
 #define INT_STRUCT_STAT struct stat64
 #define INT_NEXT_STAT(a,b) NEXT_STAT64(_STAT_VER,a,b)
 #define INT_NEXT_LSTAT(a,b) NEXT_LSTAT64(_STAT_VER,a,b)
@@ -90,7 +90,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <dlfcn.h>
-#include <unistd.h> 
+#include <unistd.h>
 #include <dirent.h>
 #include <errno.h>
 #include <sys/types.h>
@@ -109,8 +109,8 @@ extern int unsetenv (const char *name);
 #endif
 
 
-/* 
-   Where are those shared libraries? 
+/*
+   Where are those shared libraries?
    If I knew of a configure/libtool way to find that out, I'd use it. Or
    any other way other than the method I'm using below. Does anybody know
    how I can get that location? (BTW, symply linking a programme, and running
@@ -118,7 +118,7 @@ extern int unsetenv (const char *name);
 */
 
 
-/* 
+/*
    Note that LIBCPATH isn't actually used on Linux or Solaris, as RTLD_NEXT
    is defined and we use that to get the `next_*' functions
 
@@ -141,17 +141,17 @@ extern int unsetenv (const char *name);
 // this structure is used in next_wrap, which is defined in
 // wrapstruct.h, included below
 */
- 
+
 struct next_wrap_st{
   void **doit;
   char *name;
 };
 
 void *get_libc(){
- 
+
 #ifndef RTLD_NEXT
  void *lib=0;
- if(!lib){ 
+ if(!lib){
    lib= dlopen(LIBCPATH,RTLD_LAZY);
  }
  if (NULL==lib) {
@@ -195,7 +195,7 @@ void load_library_symbols(void){
 
   int i;
   const char *msg;
-  
+
 #ifdef LIBFAKEROOT_DEBUGGING
   if (getenv("FAKEROOT_DEBUG")) {
     fakeroot_debug=1;
@@ -559,8 +559,8 @@ static int dont_try_chown(){
 /* The wrapped functions */
 
 
-int WRAP_LSTAT LSTAT_ARG(int ver, 
-		       const char *file_name, 
+int WRAP_LSTAT LSTAT_ARG(int ver,
+		       const char *file_name,
 		       struct stat *statbuf){
 
   int r;
@@ -578,8 +578,8 @@ int WRAP_LSTAT LSTAT_ARG(int ver,
 }
 
 
-int WRAP_STAT STAT_ARG(int ver, 
-		       const char *file_name, 
+int WRAP_STAT STAT_ARG(int ver,
+		       const char *file_name,
 		       struct stat *st){
   int r;
 
@@ -596,8 +596,8 @@ int WRAP_STAT STAT_ARG(int ver,
 }
 
 
-int WRAP_FSTAT FSTAT_ARG(int ver, 
-			int fd, 
+int WRAP_FSTAT FSTAT_ARG(int ver,
+			int fd,
 			struct stat *st){
 
 
@@ -635,8 +635,8 @@ int WRAP_FSTATAT FSTATAT_ARG(int ver,
 
 #ifdef STAT64_SUPPORT
 
-int WRAP_LSTAT64 LSTAT64_ARG (int ver, 
-			   const char *file_name, 
+int WRAP_LSTAT64 LSTAT64_ARG (int ver,
+			   const char *file_name,
 			   struct stat64 *st){
 
   int r;
@@ -656,8 +656,8 @@ int WRAP_LSTAT64 LSTAT64_ARG (int ver,
 }
 
 
-int WRAP_STAT64 STAT64_ARG(int ver, 
-			   const char *file_name, 
+int WRAP_STAT64 STAT64_ARG(int ver,
+			   const char *file_name,
 			   struct stat64 *st){
   int r;
 
@@ -674,8 +674,8 @@ int WRAP_STAT64 STAT64_ARG(int ver,
 }
 
 
-int WRAP_FSTAT64 FSTAT64_ARG(int ver, 
-			     int fd, 
+int WRAP_FSTAT64 FSTAT64_ARG(int ver,
+			     int fd,
 			     struct stat64 *st){
   int r;
 
@@ -715,7 +715,7 @@ int WRAP_FSTATAT64 FSTATAT64_ARG(int ver,
 /*************************************************************/
 /*
   Wrapped functions general info:
-  
+
   In general, the structure is as follows:
     - Then, if the function does things that (possibly) fail by
       other users than root, allow for `fake' root privileges.
@@ -734,7 +734,7 @@ int WRAP_FSTATAT64 FSTATAT64_ARG(int ver,
 
 
 /* chown, lchown, fchown, chmod, fchmod, mknod functions
-   
+
    quite general. See the `Wrapped functions general info:' above
    for more info.
  */
@@ -757,7 +757,7 @@ int chown(const char *path, uid_t owner, gid_t group){
   /*chown(sym-link) works on the symlink itself, use lstat: */
   r=INT_NEXT_LSTAT(path, &st);
 #endif
-  
+
   if(r)
     return r;
   st.st_uid=owner;
@@ -769,7 +769,7 @@ int chown(const char *path, uid_t owner, gid_t group){
     r=0;
   if(r&&(errno==EPERM))
     r=0;
-  
+
   return r;
 }
 
@@ -808,19 +808,19 @@ int fchown(int fd, uid_t owner, gid_t group){
   r=INT_NEXT_FSTAT(fd, &st);
   if(r)
     return r;
-  
+
   st.st_uid=owner;
   st.st_gid=group;
   INT_SEND_STAT(&st, chown_func);
-  
+
   if(!dont_try_chown())
     r=next_fchown(fd,owner,group);
   else
     r=0;
-  
+
   if(r&&(errno==EPERM))
     r=0;
-  
+
   return r;
 }
 
@@ -832,22 +832,22 @@ int fchownat(int dir_fd, const char *path, uid_t owner, gid_t group, int flags) 
      be when we stat it. */
   INT_STRUCT_STAT st;
   r=INT_NEXT_FSTATAT(dir_fd, path, &st, (flags & AT_SYMLINK_NOFOLLOW));
-  
+
   if(r)
     return(r);
-  
+
   st.st_uid=owner;
   st.st_gid=group;
-  INT_SEND_STAT(&st,chown_func);  
-  
+  INT_SEND_STAT(&st,chown_func);
+
   if(!dont_try_chown())
     r=next_fchownat(dir_fd,path,owner,group,flags);
   else
     r=0;
-  
+
   if(r&&(errno==EPERM))
     r=0;
-  
+
   return r;
 }
 #endif /* HAVE_FCHOWNAT */
@@ -865,11 +865,11 @@ int chmod(const char *path, mode_t mode){
   r=INT_NEXT_STAT(path, &st);
   if(r)
     return r;
-  
+
   st.st_mode=(mode&ALLPERMS)|(st.st_mode&~ALLPERMS);
-    
+
   INT_SEND_STAT(&st, chmod_func);
-  
+
   /* if a file is unwritable, then root can still write to it
      (no matter who owns the file). If we are fakeroot, the only
      way to fake this is to always make the file writable, readable
@@ -881,7 +881,7 @@ int chmod(const char *path, mode_t mode){
   mode |= 0600;
   if(S_ISDIR(st.st_mode))
     mode |= 0100;
-  
+
   r=next_chmod(path, mode);
   if(r&&(errno==EPERM))
     r=0;
@@ -903,18 +903,18 @@ int fchmod(int fd, mode_t mode){
   }
 #endif /* LIBFAKEROOT_DEBUGGING */
   r=INT_NEXT_FSTAT(fd, &st);
-  
+
   if(r)
     return(r);
-  
+
   st.st_mode=(mode&ALLPERMS)|(st.st_mode&~ALLPERMS);
-  INT_SEND_STAT(&st,chmod_func);  
-  
+  INT_SEND_STAT(&st,chmod_func);
+
   /* see chmod() for comment */
   mode |= 0600;
   if(S_ISDIR(st.st_mode))
     mode |= 0100;
-  
+
   r=next_fchmod(fd, mode);
   if(r&&(errno==EPERM))
     r=0;
@@ -935,18 +935,18 @@ int fchmodat(int dir_fd, const char *path, mode_t mode, int flags) {
   /* If AT_SYMLINK_NOFOLLOW is set in the fchownat call it should
      be when we stat it. */
   r=INT_NEXT_FSTATAT(dir_fd, path, &st, flags & AT_SYMLINK_NOFOLLOW);
-  
+
   if(r)
     return(r);
-  
+
   st.st_mode=(mode&ALLPERMS)|(st.st_mode&~ALLPERMS);
-  INT_SEND_STAT(&st,chmod_func);  
-  
+  INT_SEND_STAT(&st,chmod_func);
+
   /* see chmod() for comment */
   mode |= 0600;
   if(S_ISDIR(st.st_mode))
     mode |= 0100;
-  
+
   r=next_fchmodat(dir_fd, path, mode, flags);
   if(r&&(errno==EPERM))
     r=0;
@@ -960,7 +960,7 @@ int fchmodat(int dir_fd, const char *path, mode_t mode, int flags) {
 #endif /* HAVE_FSTATAT */
 
 int WRAP_MKNOD MKNOD_ARG(int ver UNUSED,
-			 const char *pathname, 
+			 const char *pathname,
 			 mode_t mode, dev_t XMKNOD_FRTH_ARG dev)
 {
   INT_STRUCT_STAT st;
@@ -968,16 +968,16 @@ int WRAP_MKNOD MKNOD_ARG(int ver UNUSED,
   int fd,r;
 
   umask(old_mask);
-  
+
   /*Don't bother to mknod the file, that probably doesn't work.
     just create it as normal file, and leave the premissions
     to the fakemode.*/
-  
+
   fd=open(pathname, O_WRONLY|O_CREAT|O_TRUNC, 00644);
 
   if(fd==-1)
     return -1;
-  
+
   close(fd);
   /* get the inode, to communicate with faked */
 
@@ -985,12 +985,12 @@ int WRAP_MKNOD MKNOD_ARG(int ver UNUSED,
 
   if(r)
     return -1;
-  
+
   st.st_mode= mode & ~old_mask;
   st.st_rdev= XMKNOD_FRTH_ARG dev;
-  
+
   INT_SEND_STAT(&st,mknod_func);
-    
+
   return 0;
 }
 
@@ -998,7 +998,7 @@ int WRAP_MKNOD MKNOD_ARG(int ver UNUSED,
 #ifdef HAVE_MKNODAT
 int WRAP_MKNODAT MKNODAT_ARG(int ver UNUSED,
 			     int dir_fd,
-			     const char *pathname, 
+			     const char *pathname,
 			     mode_t mode, dev_t XMKNODAT_FIFTH_ARG dev)
 {
   INT_STRUCT_STAT st;
@@ -1006,7 +1006,7 @@ int WRAP_MKNODAT MKNODAT_ARG(int ver UNUSED,
   int fd,r;
 
   umask(old_mask);
-  
+
   /*Don't bother to mknod the file, that probably doesn't work.
     just create it as normal file, and leave the permissions
     to the fakemode.*/
@@ -1015,7 +1015,7 @@ int WRAP_MKNODAT MKNODAT_ARG(int ver UNUSED,
 
   if(fd==-1)
     return -1;
-  
+
   close(fd);
   /* get the inode, to communicate with faked */
 
@@ -1025,12 +1025,12 @@ int WRAP_MKNODAT MKNODAT_ARG(int ver UNUSED,
 
   if(r)
     return -1;
-  
+
   st.st_mode= mode & ~old_mask;
   st.st_rdev= XMKNODAT_FIFTH_ARG dev;
-  
+
   INT_SEND_STAT(&st,mknod_func);
-    
+
   return 0;
 }
 #endif /* HAVE_MKNODAT */
@@ -1053,15 +1053,15 @@ int mkdir(const char *path, mode_t mode){
     fprintf(stderr, "mkdir path %s\n", path);
   }
 #endif /* LIBFAKEROOT_DEBUGGING */
-  r=next_mkdir(path, mode|0700); 
+  r=next_mkdir(path, mode|0700);
   /* mode|0700: see comment in the chown() function above */
   if(r)
     return -1;
   r=INT_NEXT_STAT(path, &st);
-  
+
   if(r)
     return -1;
-  
+
   st.st_mode=(mode&~old_mask&ALLPERMS)|(st.st_mode&~ALLPERMS)|S_IFDIR;
 
   INT_SEND_STAT(&st, chmod_func);
@@ -1083,7 +1083,7 @@ int mkdirat(int dir_fd, const char *path, mode_t mode){
      to communicate with faked we need a struct stat, so we now
      do a stat of the new directory (just for the inode/dev) */
 
-  r=next_mkdirat(dir_fd, path, mode|0700); 
+  r=next_mkdirat(dir_fd, path, mode|0700);
   /* mode|0700: see comment in the chown() function above */
   if(r)
     return -1;
@@ -1091,7 +1091,7 @@ int mkdirat(int dir_fd, const char *path, mode_t mode){
 
   if(r)
     return -1;
-  
+
   st.st_mode=(mode&~old_mask&ALLPERMS)|(st.st_mode&~ALLPERMS)|S_IFDIR;
 
   INT_SEND_STAT(&st, chmod_func);
@@ -1101,19 +1101,19 @@ int mkdirat(int dir_fd, const char *path, mode_t mode){
 #endif /* HAVE_MKDIRAT */
 #endif /* HAVE_FSTATAT */
 
-/* 
+/*
    The remove funtions: unlink, rmdir, rename.
    These functions can all remove inodes from the system.
    I need to inform faked about the removal of these inodes because
    of the following:
     # rm -f file
-    # touch file 
+    # touch file
     # chown admin file
     # rm file
     # touch file
    In the above example, assuming that for both touch-es, the same
    inode is generated, faked will still report the owner of `file'
-   as `admin', unless it's informed about the removal of the inode.   
+   as `admin', unless it's informed about the removal of the inode.
 */
 
 int unlink(const char *pathname){
@@ -1125,13 +1125,13 @@ int unlink(const char *pathname){
   if(r)
     return -1;
 
-  r=next_unlink(pathname);  
+  r=next_unlink(pathname);
 
   if(r)
     return -1;
-  
+
   INT_SEND_STAT(&st, unlink_func);
-  
+
   return 0;
 }
 
@@ -1148,9 +1148,9 @@ int unlinkat(int dir_fd, const char *pathname, int flags){
 
   if(r)
     return -1;
-  
+
   INT_SEND_STAT(&st, unlink_func);
-  
+
   return 0;
 }
 #endif /* HAVE_UNLINKAT */
@@ -1167,11 +1167,11 @@ int rmdir(const char *pathname){
   r=INT_NEXT_LSTAT(pathname, &st);
   if(r)
     return -1;
-  r=next_rmdir(pathname);  
+  r=next_rmdir(pathname);
   if(r)
     return -1;
 
-  INT_SEND_STAT(&st,unlink_func);  
+  INT_SEND_STAT(&st,unlink_func);
 
   return 0;
 }
@@ -1187,11 +1187,11 @@ int remove(const char *pathname){
   r=INT_NEXT_LSTAT(pathname, &st);
   if(r)
     return -1;
-  r=next_remove(pathname);  
+  r=next_remove(pathname);
   if(r)
     return -1;
-  INT_SEND_STAT(&st,unlink_func);  
-  
+  INT_SEND_STAT(&st,unlink_func);
+
   return r;
 }
 
@@ -1206,9 +1206,9 @@ int remove(const char *pathname){
 
 int rename(const char *oldpath, const char *newpath){
   int r,s;
-  INT_STRUCT_STAT st;     
+  INT_STRUCT_STAT st;
 
-  /* If newpath points to an existing file, that file will be 
+  /* If newpath points to an existing file, that file will be
      unlinked.   Make sure we tell the faked daemon about this! */
 
   /* we need the st_new struct in order to inform faked about the
@@ -1230,9 +1230,9 @@ int rename(const char *oldpath, const char *newpath){
 int renameat(int olddir_fd, const char *oldpath,
              int newdir_fd, const char *newpath){
   int r,s;
-  INT_STRUCT_STAT st;     
+  INT_STRUCT_STAT st;
 
-  /* If newpath points to an existing file, that file will be 
+  /* If newpath points to an existing file, that file will be
      unlinked.   Make sure we tell the faked daemon about this! */
 
   /* we need the st_new struct in order to inform faked about the
