@@ -1,3 +1,13 @@
+fakeroot (1.14.4-1) unstable; urgency=low
+
+  * Switch to 3.0 (quilt) source format.
+  * Adapt prebuild to preroll for upstream separation.
+  * Rename changelog to changelog.Debian.
+  * communicate.h: patch from Bernhard Reutner-Fischer to enable LFS
+    builds against uClibc.  closes: #556257.
+
+ -- Clint Adams <schizo@debian.org>  Sat, 14 Nov 2009 22:05:51 -0500
+
 fakeroot (1.14.3) unstable; urgency=low
 
   * Apply patch (tweaked) from VMware: "Make sure STAT64_SUPPORT is
@@ -1426,7 +1436,7 @@ fakeroot (0.4.4-3) unstable; urgency=low
     `tartest' from the tests to this (and the old) format.
 
  -- joost witteveen <joostje@debian.org>  Sat,  9 Oct 1999 17:25:56 +0200
-	
+
 fakeroot (0.4.4-2) unstable; urgency=low
 
   * comparison of uid/gid with -1 is done with 32 bits only. Closes: #44543
