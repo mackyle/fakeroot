@@ -31,7 +31,8 @@ EXTRA_DIST=wrapawk wrapfunc.inp                        \
            debian/rules debian/changelog debian/control  \
 	   message.h \
 	   DEBUG BUGS \
-	   setenv.c
+	   setenv.c \
+	   preroll
 
 CLEAN_FILES=fakerootconfig.h
 

@@ -1,0 +1,11 @@
+#!/bin/sh -v
+
+mkdir build-aux
+
+[ -n "${DEB_VERSION}" ] || exit 1
+
+printf "define(FAKEROOT_VERSION, %s)\n" "${DEB_VERSION%-*}" >acinclude.m4 || exit 1
+autoreconf -fi || exit 1
+(cd doc && po4a -k 0 --rm-backups --variable "srcdir=../doc/" po4a/po4a.cfg) || exit 1
+
+rm -rf autom4te.cache build-aux
