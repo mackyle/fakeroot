@@ -33,8 +33,6 @@ BIARCH_LIB_DIR=usr/lib64
 endif
 endif
 
-fakeroot_version := $(shell dpkg-parsechangelog | sed -n '/^Version: \(.*\)$$/ {s//\1/;p}')
-
 build: build-stamp
 build-stamp:
 	$(checkdir)
@@ -220,16 +218,7 @@ binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary checkroot prebuild
 
 prebuild:
-	printf "define(FAKEROOT_VERSION, %s)\n" $(fakeroot_version) >acinclude.m4
-
-	autoreconf -fi
-
-	cd doc && po4a -k 0 --rm-backups --variable "srcdir=$(CURDIR)/doc/" po4a/po4a.cfg
-
-#	./configure
-#	$(MAKE) dist
-#	mv fakeroot-$(fakeroot_version).tar.gz ../fakeroot_$(fakeroot_version).tar.gz
-#	$(MAKE) distclean
+	@echo prebuild handled differently now
 
 define checkdir
 	test -f debian/rules
