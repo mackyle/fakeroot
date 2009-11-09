@@ -106,7 +106,7 @@ ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu i486-l
 	$(MAKE) -f debian/rules binary-biarch
 endif
 	$(INSTALL_FILE) debian/copyright debian/tmp/usr/share/doc/fakeroot/copyright
-	$(INSTALL_FILE) debian/changelog debian/tmp/usr/share/doc/fakeroot/changelog
+	$(INSTALL_FILE) debian/changelog debian/tmp/usr/share/doc/fakeroot/changelog.Debian
 	gzip -9f debian/tmp/usr/share/man/man1/faked-sysv.1 \
 		 debian/tmp/usr/share/man/man1/fakeroot-sysv.1 \
 		 debian/tmp/usr/share/man/man1/faked-tcp.1 \
@@ -127,7 +127,7 @@ endif
 		 debian/tmp/usr/share/man/sv/man1/fakeroot-sysv.1 \
 		 debian/tmp/usr/share/man/sv/man1/faked-tcp.1 \
 		 debian/tmp/usr/share/man/sv/man1/fakeroot-tcp.1 \
-		 debian/tmp/usr/share/doc/fakeroot/changelog
+		 debian/tmp/usr/share/doc/fakeroot/changelog.Debian
 ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot/libfakeroot-sysv.so
 	strip --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/usr/lib/libfakeroot/libfakeroot-tcp.so
