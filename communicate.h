@@ -50,7 +50,10 @@
 #endif
 
 /* Then decide whether we do or do not use the stat64 support */
-#if defined __APPLE__ || (defined(sun) && !defined(__SunOS_5_5_1) && !defined(_LP64)) || __GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1)
+#if defined __APPLE__ \
+	|| (defined(sun) && !defined(__SunOS_5_5_1) && !defined(_LP64)) \
+	|| (!defined __UCLIBC__ && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1))) \
+	|| (defined __UCLIBC__ && defined __UCLIBC_HAS_LFS__)
 # define STAT64_SUPPORT
 #else
 # warning Not using stat64 support
