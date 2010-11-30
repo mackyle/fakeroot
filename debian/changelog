@@ -1,3 +1,10 @@
+fakeroot (1.14.4-2) unstable; urgency=low
+
+  * Patch from Michael Gilbert to re-enable biarch on amd64 and
+    conflict with libc6-i386 (<= 2.9-13).  closes: #605077.
+
+ -- Clint Adams <clint@gnu.org>  Mon, 29 Nov 2010 19:57:45 -0500
+
 fakeroot (1.14.4-1) unstable; urgency=low
 
   * Switch to 3.0 (quilt) source format.
