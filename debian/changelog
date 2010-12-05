@@ -1,3 +1,11 @@
+fakeroot (1.14.5-1) unstable; urgency=low
+
+  * Clear dlerror() just in case dlsym() legitimately returns
+    NULL, to prevent misleading errors on Nexenta.  Thanks to
+    Pavel Strashkin.
+
+ -- Clint Adams <clint@gnu.org>  Sun, 05 Dec 2010 14:04:18 -0500
+
 fakeroot (1.14.4-2) unstable; urgency=low
 
   * Patch from Michael Gilbert to re-enable biarch on amd64 and
