@@ -1,3 +1,9 @@
+fakeroot (1.14.5-2) unstable; urgency=low
+
+  * Drop ancient Conflicts.
+
+ -- Clint Adams <clint@debian.org>  Fri, 11 Feb 2011 23:51:49 -0500
+
 fakeroot (1.14.5-1) unstable; urgency=low
 
   * Clear dlerror() just in case dlsym() legitimately returns
