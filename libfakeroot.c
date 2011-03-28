@@ -894,6 +894,40 @@ int chmod(const char *path, mode_t mode){
   return r;
 }
 
+#ifdef HAVE_LCHMOD
+int lchmod(const char *path, mode_t mode){
+  INT_STRUCT_STAT st;
+  int r;
+
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "lchmod path %s\n", path);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
+  r=INT_NEXT_LSTAT(path, &st);
+  if(r)
+    return r;
+
+  st.st_mode=(mode&ALLPERMS)|(st.st_mode&~ALLPERMS);
+
+  INT_SEND_STAT(&st, chmod_func);
+
+  /* see chmod() for comment */
+  mode |= 0600;
+  if(S_ISDIR(st.st_mode))
+    mode |= 0100;
+
+  r=next_chmod(path, mode);
+  if(r&&(errno==EPERM))
+    r=0;
+#ifdef EFTYPE		/* available under FreeBSD kernel */
+  if(r&&(errno==EFTYPE))
+    r=0;
+#endif
+  return r;
+}
+#endif
+
 int fchmod(int fd, mode_t mode){
   int r;
   INT_STRUCT_STAT st;

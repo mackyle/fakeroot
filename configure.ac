@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([fakeroot],[FAKEROOT_VERSION],[clint@gnu.org],[fakeroot])
+AC_INIT([fakeroot],[FAKEROOT_VERSION],[clint@debian.org],[fakeroot])
 AC_PREREQ(2.61)
 AC_CONFIG_MACRO_DIR([build-aux])
 LT_PREREQ(2.1a)
@@ -274,7 +274,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
   ])
 done
 
-AC_CHECK_FUNCS(fchmodat fchownat fstatat mkdirat mknodat openat renameat unlinkat)
+AC_CHECK_FUNCS(fchmodat fchownat fstatat mkdirat mknodat openat renameat unlinkat lchmod)
 
 dnl find out how stat() etc are called. On linux systems, we really
 dnl need to wrap (IIRC):
