@@ -1,3 +1,12 @@
+fakeroot (1.15-1) unstable; urgency=low
+
+  * Patch from Aurelien Jarno to add lchmod() support (for GNU/kFreeBSD).
+    closes: #618782.
+  * Patch from Justin B. Rye to improve short and long package descriptions.
+    closes: #615852.
+
+ -- Clint Adams <clint@debian.org>  Mon, 28 Mar 2011 11:10:45 -0400
+
 fakeroot (1.14.5-2) unstable; urgency=low
 
   * Drop ancient Conflicts.
