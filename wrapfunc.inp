@@ -65,6 +65,9 @@ lchown;int;(const char *path, uid_t owner, gid_t group);(path, owner, group)
 fchown;int;(int fd, uid_t owner, gid_t group);(fd, owner, group)
 chmod;int;(const char *path, mode_t mode);(path, mode)
 fchmod;int;(int fd, mode_t mode);(fd, mode)
+#if defined HAVE_LCHMOD
+lchmod;int;(const char *path, mode_t mode);(path, mode)
+#endif
 #if defined __APPLE__ && !defined __LP64__
 lchown$UNIX2003;int;(const char *path, uid_t owner, gid_t group);(path, owner, group)
 chmod$UNIX2003;int;(const char *path, mode_t mode);(path, mode)
