@@ -10,12 +10,9 @@ Vcs-Browser: http://git.debian.org/?p=users/clint/fakeroot.git;a=summary
 Package: fakeroot
 Architecture: any
 Depends: ${shlibs:Depends}
-Description: Gives a fake root environment
- This package is intended to enable something like:
-   dpkg-buildpackage -rfakeroot
- i.e. to remove the need to become root for a package build.
- This is done by setting LD_PRELOAD to libfakeroot.so,
- which provides wrappers around getuid, chown, chmod, mknod, 
- stat, and so on, thereby creating a fake root environment.
- .
- fakeroot requires SYSV IPC or TCP to operate.
+Description: tool for simulating superuser privileges
+ fakeroot provides a fake "root environment" by means of LD_PRELOAD and
+ SysV IPC (or TCP) trickery. It puts wrappers around getuid(), chown(),
+ stat(), and other file-manipulation functions, so that unprivileged
+ users can (for instance) populate .deb archives with root-owned files;
+ various build tools use fakeroot for this by default.
