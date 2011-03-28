@@ -520,7 +520,7 @@ msgstr ""
 
 # type: Plain text
 #: ../../doc/fakeroot.1:292 ../../doc/faked.1:87
-msgid "E<lt>I<schizo@debian.org>E<gt>"
+msgid "E<lt>I<clint@debian.org>E<gt>"
 msgstr ""
 
 # type: TP
