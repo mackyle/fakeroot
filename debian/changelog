@@ -1,3 +1,10 @@
+fakeroot (1.15.1-1) unstable; urgency=low
+
+  * Patch from Aurelien Jarno to fix lchown support.
+    closes: #620245.
+
+ -- Clint Adams <clint@debian.org>  Thu, 31 Mar 2011 10:32:41 -0400
+
 fakeroot (1.15-1) unstable; urgency=low
 
   * Patch from Aurelien Jarno to add lchmod() support (for GNU/kFreeBSD).
