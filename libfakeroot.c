@@ -917,7 +917,7 @@ int lchmod(const char *path, mode_t mode){
   if(S_ISDIR(st.st_mode))
     mode |= 0100;
 
-  r=next_chmod(path, mode);
+  r=next_lchmod(path, mode);
   if(r&&(errno==EPERM))
     r=0;
 #ifdef EFTYPE		/* available under FreeBSD kernel */
