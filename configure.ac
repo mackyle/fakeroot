@@ -303,6 +303,7 @@ dnl    FOUND=$WRAPPED
       DEFINE_NEXT=[`echo wrap_${FOUND}| tr '[a-z]' '[A-Z]'`]
       DEFINE_ARG=[`echo wrap_${FOUND}| tr '[a-z]' '[A-Z]'`]
       AC_DEFINE_UNQUOTED(WRAP_${PF}, $FOUND)
+      AC_DEFINE_UNQUOTED(WRAP_${PF}_RAW, $FOUND)
       AC_DEFINE_UNQUOTED(WRAP_${PF}_QUOTE, "$FOUND")
       AC_DEFINE_UNQUOTED(TMP_${PF}, tmp_$FOUND)
       AC_DEFINE_UNQUOTED(NEXT_${PF}_NOARG, next_$FOUND)
@@ -405,7 +406,6 @@ case $target_cpu:$target_os in
 		LDLIBPATHVAR="DYLD_LIBRARY_PATH"
 		LDPRELOADVAR="DYLD_INSERT_LIBRARIES"
 		LDPRELOADABS=1
-		LDEXTRAVAR="DYLD_FORCE_FLAT_NAMESPACE=1"
 		;;
 	(*)
 		AC_MSG_WARN([don't know where libc is for $target_os on
@@ -437,51 +437,61 @@ AH_VERBATIM([WRAP_STAT],
 [/* Stuff.  */
 #define WRAP_STAT  __astat
 #define WRAP_STAT_QUOTE  __astat
+#define WRAP_STAT_RAW  __astat
 #define TMP_STAT  __astat
 #define NEXT_STAT_NOARG  next___astat
 
 #define WRAP_LSTAT_QUOTE  __astat
 #define WRAP_LSTAT  __astat
+#define WRAP_LSTAT_RAW  __astat
 #define TMP_LSTAT  __astat
 #define NEXT_LSTAT_NOARG  next___astat
 
 #define WRAP_FSTAT_QUOTE  __astat
 #define WRAP_FSTAT  __astat
+#define WRAP_FSTAT_RAW  __astat
 #define TMP_FSTAT  __astat
 #define NEXT_FSTAT_NOARG  next___astat
 
 #define WRAP_FSTATAT_QUOTE  __astatat
 #define WRAP_FSTATAT  __astatat
+#define WRAP_FSTATAT_RAW  __astatat
 #define TMP_FSTATAT  __astatat
 #define NEXT_FSTATAT_NOARG  next___astatat
 
 #define WRAP_STAT64_QUOTE  __astat64
 #define WRAP_STAT64  __astat64
+#define WRAP_STAT64_RAW  __astat64
 #define TMP_STAT64  __astat64
 #define NEXT_STAT64_NOARG  next___astat64
 
 #define WRAP_LSTAT64_QUOTE  __astat64
 #define WRAP_LSTAT64  __astat64
+#define WRAP_LSTAT64_RAW  __astat64
 #define TMP_LSTAT64  __astat64
 #define NEXT_LSTAT64_NOARG  next___astat64
 
 #define WRAP_FSTAT64_QUOTE  __astat64
 #define WRAP_FSTAT64  __astat64
+#define WRAP_FSTAT64_RAW  __astat64
 #define TMP_FSTAT64  __astat64
 #define NEXT_FSTAT64_NOARG  next___astat64
 
 #define WRAP_FSTATAT64_QUOTE  __astatat64
 #define WRAP_FSTATAT64  __astatat64
+#define WRAP_FSTATAT64_RAW  __astatat64
 #define TMP_FSTATAT64  __astatat64
 #define NEXT_FSTATAT64_NOARG  next___astatat64
 
 #define WRAP_MKNOD_QUOTE  __amknod
 #define WRAP_MKNOD  __amknod
+#define WRAP_MKNOD_RAW  __amknod
 #define TMP_MKNOD  __amknod
 #define NEXT_MKNOD_NOARG  next___amknod
 
 #define WRAP_MKNODAT_QUOTE  __amknodat
 #define WRAP_MKNODAT  __amknodat
+#define WRAP_MKNODAT_RAW  __amknodat
 #define TMP_MKNODAT  __amknodat
 #define NEXT_MKNODAT_NOARG  next___amknodat
 ])

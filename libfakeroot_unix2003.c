@@ -73,11 +73,13 @@
 
 #include "patchattr.h"
 #include "wrapped.h"
+#include "wraptmpf.h"
+#include "wrapdef.h"
 
 extern int fakeroot_disabled;
 
 #ifdef LCHOWN_SUPPORT
-int lchown(const char *path, uid_t owner, gid_t group){
+int lchown$UNIX2003(const char *path, uid_t owner, gid_t group){
   INT_STRUCT_STAT st;
   int r=0;
 
@@ -103,7 +105,7 @@ int lchown(const char *path, uid_t owner, gid_t group){
 }
 #endif
 
-int chmod(const char *path, mode_t mode){
+int chmod$UNIX2003(const char *path, mode_t mode){
   INT_STRUCT_STAT st;
   int r;
 
@@ -142,7 +144,7 @@ int chmod(const char *path, mode_t mode){
   return r;
 }
 
-int fchmod(int fd, mode_t mode){
+int fchmod$UNIX2003(int fd, mode_t mode){
   int r;
   INT_STRUCT_STAT st;
 
@@ -175,7 +177,7 @@ int fchmod(int fd, mode_t mode){
   return r;
 }
 
-int setreuid(SETREUID_ARG ruid, SETREUID_ARG euid){
+int setreuid$UNIX2003(SETREUID_ARG ruid, SETREUID_ARG euid){
 #ifdef LIBFAKEROOT_DEBUGGING
   if (fakeroot_debug) {
     fprintf(stderr, "setreuid$UNIX2003\n");
@@ -186,7 +188,7 @@ int setreuid(SETREUID_ARG ruid, SETREUID_ARG euid){
   return set_faked_reuid(ruid, euid);
 }
 
-int setregid(SETREGID_ARG rgid, SETREGID_ARG egid){
+int setregid$UNIX2003(SETREGID_ARG rgid, SETREGID_ARG egid){
 #ifdef LIBFAKEROOT_DEBUGGING
   if (fakeroot_debug) {
     fprintf(stderr, "setregid$UNIX2003\n");
@@ -198,7 +200,7 @@ int setregid(SETREGID_ARG rgid, SETREGID_ARG egid){
 }
 
 int
-getattrlist(const char *path, void *attrList, void *attrBuf,
+getattrlist$UNIX2003(const char *path, void *attrList, void *attrBuf,
             size_t attrBufSize, unsigned long options)
 {
   int r;
