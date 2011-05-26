@@ -1,9 +1,19 @@
 #! /bin/sh
 
+LIBTOOLIZE=libtoolize
+
+SYSNAME="`uname -s 2>/dev/null`"
+
+case x"$SYSNAME" in
+  x"Darwin")
+    LIBTOOLIZE=glibtoolize
+    ;;
+esac
+
 test -d build-aux || mkdir build-aux
 
 # autoreconf seems to be missing the fact that libtool is used if
 # the macros are not defined first.  So help it.
-test -f ltmain.sh || libtoolize --install --force
+test -f ltmain.sh || $LIBTOOLIZE --install --force
 
 autoreconf --force --verbose --install
