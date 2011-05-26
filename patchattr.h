@@ -15,6 +15,13 @@
 #include <sys/attr.h>
 #include <sys/mount.h>
 
+#ifndef ATTR_CMN_RETURNED_ATTRS
+#define ATTR_CMN_RETURNED_ATTRS                 0x80000000
+#endif
+#ifndef ATTR_CMN_FULLPATH
+#define ATTR_CMN_FULLPATH                       0x08000000
+#endif
+
 #ifdef LIBFAKEROOT_DEBUGGING
 extern int fakeroot_debug;
 
