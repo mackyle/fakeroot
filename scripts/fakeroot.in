@@ -148,7 +148,7 @@ PID=`echo $KEY_PID|cut -d: -f2`
 if [ "$WAITINTRAP" -eq 0 ]; then
   trap "kill -s @signal@ $PID" EXIT INT
 else
-  trap 'FAKEROOTKEY=$FAKEROOTKEY LD_LIBRARY_PATH="$PATHS"  LD_PRELOAD="$LIB" /bin/ls -l / >/dev/null 2>&1; while kill -s @signal@ $PID 2>/dev/null; do sleep 0.1; done' EXIT INT
+  trap 'FAKEROOTKEY=$FAKEROOTKEY @LDLIBPATHVAR@="$PATHS" @LDPRELOADVAR@="$LIB" /bin/ls -l / >/dev/null 2>&1; while kill -s @signal@ $PID 2>/dev/null; do sleep 0.1; done' EXIT INT
 fi
 
 if test -z "$FAKEROOTKEY" || test -z "$PID"; then
