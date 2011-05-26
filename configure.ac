@@ -274,7 +274,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
   ])
 done
 
-AC_CHECK_FUNCS(fchmodat fchownat fstatat mkdirat mknodat openat renameat unlinkat lchmod)
+AC_CHECK_FUNCS(fchmodat fchownat fstatat mkdirat mknodat openat renameat unlinkat lchmod fgetattrlist)
 
 dnl find out how stat() etc are called. On linux systems, we really
 dnl need to wrap (IIRC):

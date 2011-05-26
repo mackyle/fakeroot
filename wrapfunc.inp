@@ -35,10 +35,14 @@ WRAP_FSTATAT64;int;FSTATAT64_ARG(int ver, int dir_fd, const char *path, struct s
 #ifdef __APPLE__
 #ifdef __LP64__
 getattrlist;int;(const char *path, void *attrList, void *attrBuf, size_t attrBufSize, unsigned int options);(path, attrList, attrBuf, attrBufSize, options)
+#ifdef HAVE_FGETATTRLIST
 fgetattrlist;int;(int fd, void *attrList, void *attrBuf, size_t attrBufSize, unsigned int options);(fd, attrList, attrBuf, attrBufSize, options)
+#endif
 #else
 getattrlist;int;(const char *path, void *attrList, void *attrBuf, size_t attrBufSize, unsigned long options);(path, attrList, attrBuf, attrBufSize, options)
+#ifdef HAVE_FGETATTRLIST
 fgetattrlist;int;(int fd, void *attrList, void *attrBuf, size_t attrBufSize, unsigned long options);(fd, attrList, attrBuf, attrBufSize, options)
+#endif
 getattrlist$UNIX2003;int;(const char *path, void *attrList, void *attrBuf, size_t attrBufSize, unsigned long options);(path, attrList, attrBuf, attrBufSize, options)
 #endif
 lstat$INODE64;int;(const char *file_name, struct stat *buf);(file_name, buf)

@@ -1600,6 +1600,7 @@ getattrlist(const char *path, void *attrList, void *attrBuf,
   return 0;
 }
 
+#if HAVE_FGETATTRLIST
 #ifdef __LP64__
 int
 fgetattrlist(int fd, void *attrList, void *attrBuf,
@@ -1630,4 +1631,5 @@ fgetattrlist(int fd, void *attrList, void *attrBuf,
 
   return 0;
 }
+#endif /* if HAVE_FGETATTRLIST */
 #endif /* ifdef __APPLE__ */
