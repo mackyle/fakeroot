@@ -12,3 +12,4 @@ Portability Notes
 
 On OS X, only binaries that do NOT rely on Mach-based [e]uid/[e]gid/mode
 APIs will correctly use fakeroot altered ownership/permissions.
+See README_MACOSX.txt for further information.
