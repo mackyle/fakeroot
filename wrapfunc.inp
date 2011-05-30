@@ -43,11 +43,15 @@ getattrlist;int;(const char *path, void *attrList, void *attrBuf, size_t attrBuf
 #ifdef HAVE_FGETATTRLIST
 fgetattrlist;int;(int fd, void *attrList, void *attrBuf, size_t attrBufSize, unsigned long options);(fd, attrList, attrBuf, attrBufSize, options)
 #endif
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 getattrlist$UNIX2003;int;(const char *path, void *attrList, void *attrBuf, size_t attrBufSize, unsigned long options);(path, attrList, attrBuf, attrBufSize, options)
 #endif
+#endif
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 lstat$INODE64;int;(const char *file_name, struct stat *buf);(file_name, buf)
 stat$INODE64;int;(const char *file_name, struct stat *buf);(file_name, buf)
 fstat$INODE64;int;(int fd, struct stat *buf);(fd, buf)
+#endif
 #endif /* ifdef __APPLE__ */
 
 WRAP_MKNOD;int;MKNOD_ARG(int ver, const char *pathname, mode_t mode, dev_t XMKNOD_FRTH_ARG dev);MKNOD_ARG(ver, pathname, mode, dev);MKNOD
@@ -73,9 +77,11 @@ fchmod;int;(int fd, mode_t mode);(fd, mode)
 lchmod;int;(const char *path, mode_t mode);(path, mode)
 #endif
 #if defined __APPLE__ && !defined __LP64__
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 lchown$UNIX2003;int;(const char *path, uid_t owner, gid_t group);(path, owner, group)
 chmod$UNIX2003;int;(const char *path, mode_t mode);(path, mode)
 fchmod$UNIX2003;int;(int fd, mode_t mode);(fd, mode)
+#endif
 #endif /* if defined __APPLE__ && !defined __LP64__ */
 mkdir;int;(const char *path, mode_t mode);(path, mode)
 unlink;int;(const char *pathname);(pathname)
@@ -105,8 +111,10 @@ setegid;int;(gid_t id);(id)
 setreuid;int;(SETREUID_ARG ruid, SETREUID_ARG euid);(ruid, euid)
 setregid;int;(SETREGID_ARG rgid, SETREGID_ARG egid);(rgid, egid)
 #if defined __APPLE__ && !defined __LP64__
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 setreuid$UNIX2003;int;(SETREUID_ARG ruid, SETREUID_ARG euid);(ruid, euid)
 setregid$UNIX2003;int;(SETREGID_ARG rgid, SETREGID_ARG egid);(rgid, egid)
+#endif
 #endif /* if defined __APPLE__ && !defined __LP64__ */
 #ifdef HAVE_GETRESUID
 getresuid;int;(uid_t *ruid, uid_t *euid, uid_t *suid);(ruid, euid, suid)
@@ -158,12 +166,16 @@ acl_set_file;int;(const char *path_p, acl_type_t type, acl_t acl);(path_p, type,
 #ifdef HAVE_FTS_READ
 fts_read;FTSENT *;(FTS *ftsp);(ftsp)
 #ifdef __APPLE__
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 fts_read$INODE64;FTSENT *;(FTS *ftsp);(ftsp)
+#endif
 #endif /* ifdef __APPLE__ */
 #endif /* HAVE_FTS_READ */
 #ifdef HAVE_FTS_CHILDREN
 fts_children;FTSENT *;(FTS *ftsp, int options);(ftsp, options)
 #ifdef __APPLE__
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 fts_children$INODE64;FTSENT *;(FTS *ftsp, int options);(ftsp, options)
+#endif
 #endif /* ifdef __APPLE__ */
 #endif /* HAVE_FTS_CHILDREN */

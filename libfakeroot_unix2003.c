@@ -29,6 +29,8 @@
 #include "config.h"
 #include "communicate.h"
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+
 #ifdef STUPID_ALPHA_HACK
 #define SEND_STAT(a,b,c) send_stat(a,b,c)
 #define SEND_STAT64(a,b,c) send_stat64(a,b,c)
@@ -227,4 +229,5 @@ getattrlist$UNIX2003(const char *path, void *attrList, void *attrBuf,
 
   return 0;
 }
+#endif /* MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 */
 #endif /* if defined __APPLE__ && !defined __LP64__ */

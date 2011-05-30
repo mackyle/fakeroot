@@ -25,6 +25,8 @@
 #include "config.h"
 #include "communicate.h"
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+
 #include <stdio.h>
 #ifdef HAVE_SYS_ACL_H
 #include <sys/acl.h>
@@ -131,5 +133,6 @@ FTSENT *fts_children$INODE64(FTS *ftsp,
 
   return first;
 }
+#endif /* MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 */
 #endif /* HAVE_FTS_READ */
 #endif /* ifdef __APPLE__ */

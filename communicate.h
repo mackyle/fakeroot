@@ -49,14 +49,26 @@
 # include <sys/feature_tests.h>
 #endif
 
+#ifdef __APPLE__
+# include <AvailabilityMacros.h>
+# ifndef MAC_OS_X_VERSION_10_5 1050
+#  define MAC_OS_X_VERSION_10_5 1050
+# endif
+# if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+#  define HAVE_APPLE_STAT64 1
+# endif
+#endif
+
 /* Then decide whether we do or do not use the stat64 support */
-#if defined __APPLE__ \
+#if defined HAVE_APPLE_STAT64 \
 	|| (defined(sun) && !defined(__SunOS_5_5_1) && !defined(_LP64)) \
 	|| (!defined __UCLIBC__ && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1))) \
 	|| (defined __UCLIBC__ && defined __UCLIBC_HAS_LFS__)
 # define STAT64_SUPPORT
 #else
-# warning Not using stat64 support
+# ifndef __APPLE__
+#  warning Not using stat64 support
+# endif
 /* if glibc is 2.0 or older, undefine these again */
 # undef STAT64_SUPPORT
 # undef _LARGEFILE64_SOURCE
