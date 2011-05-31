@@ -1356,6 +1356,25 @@ int dup2(int oldfd, int newfd)
 }
 #endif /* FAKEROOT_FAKENET */
 
+#ifdef __APPLE__
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_6
+
+static int check_fakeroot_disabled(void *retaddr){
+  Dl_info info;
+  const char *suffix;
+  if (fakeroot_disabled || !dladdr(retaddr, &info))
+    return fakeroot_disabled;
+  suffix = strrchr(info.dli_fname, '/');
+  if (suffix && strcmp(suffix, "/CarbonCore") == 0)
+    return 1;
+  return fakeroot_disabled;
+}
+
+#define fakeroot_disabled check_fakeroot_disabled(__builtin_return_address(0))
+
+#endif
+#endif /* __APPLE__ */
+
 uid_t getuid(void){
   if (fakeroot_disabled)
     return next_getuid();
@@ -1493,6 +1512,8 @@ int setgroups(SETGROUPS_SIZE_TYPE size, const gid_t *list){
   else
     return 0;
 }
+
+#undef fakeroot_disabled
 
 int fakeroot_disable(int new)
 {

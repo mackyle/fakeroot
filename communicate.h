@@ -54,6 +54,9 @@
 # ifndef MAC_OS_X_VERSION_10_5 1050
 #  define MAC_OS_X_VERSION_10_5 1050
 # endif
+# ifndef MAC_OS_X_VERSION_10_6 1060
+#  define MAC_OS_X_VERSION_10_6 1060
+# endif
 # if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 #  define HAVE_APPLE_STAT64 1
 # endif
