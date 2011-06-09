@@ -124,6 +124,7 @@ setfsgid;gid_t;(gid_t fsgid);(fsgid)
 #endif /* HAVE_SETFSGID */
 initgroups;int;(const char *user, INITGROUPS_SECOND_ARG group);(user, group)
 setgroups;int;(SETGROUPS_SIZE_TYPE size, const gid_t *list);(size, list)
+access;int;(const char *pathname, int mode);(pathname, mode)
 
 #ifdef HAVE_FSTATAT
 #ifdef HAVE_FCHMODAT
