@@ -1,8 +1,14 @@
+fakeroot (1.17-1) unstable; urgency=low
+
+  * Revert access() support patch.  closes: #630129.
+
+ -- Clint Adams <clint@debian.org>  Thu, 18 Aug 2011 06:58:51 -0400
+
 fakeroot (1.16-1) unstable; urgency=low
 
   * Patch from Jonathan Nieder to add access() support.
     closes: #629956.
-  * Bump to Standards-Version 3.9.2. 
+  * Bump to Standards-Version 3.9.2.
 
  -- Clint Adams <clint@debian.org>  Thu, 09 Jun 2011 20:44:28 -0400
 
