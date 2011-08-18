@@ -94,18 +94,12 @@
 #include <dirent.h>
 #include <errno.h>
 #include <sys/types.h>
-#include <sys/statvfs.h>
 #ifdef HAVE_SYS_ACL_H
 #include <sys/acl.h>
 #endif /* HAVE_SYS_ACL_H */
 #if HAVE_FTS_H
 #include <fts.h>
 #endif /* HAVE_FTS_H */
-
-/* ST_NOEXEC is a glibc extension */
-#ifndef ST_NOEXEC
-#define ST_NOEXEC 0
-#endif
 
 #if !HAVE_DECL_SETENV
 extern int setenv (const char *name, const char *value, int replace);
@@ -1498,87 +1492,6 @@ int setgroups(SETGROUPS_SIZE_TYPE size, const gid_t *list){
     return next_setgroups(size, list);
   else
     return 0;
-}
-
-int access(const char *path, int amode) {
-  INT_STRUCT_STAT st;
-  struct statvfs fs_st;
-  uid_t uid;
-  gid_t gid;
-  int r;
-
-  /*
-    Missing pieces:
-    - should run path lookup with permissions of (uid, gid)
-    - capabilities
-    - POSIX acls
-    - restricting write permission to an immutable file
-   */
-
-#ifdef LIBFAKEROOT_DEBUGGING
-  if (fakeroot_debug) {
-    fprintf(stderr, "access path %s\n", path);
-  }
-#endif /* LIBFAKEROOT_DEBUGGING */
-  if (fakeroot_disabled || amode == F_OK)
-    return next_access(path, amode);
-
-  if (amode & ~(R_OK | W_OK | X_OK)) {
-    errno = EINVAL;
-    return -1;
-  }
-
-  r = INT_NEXT_STAT(path, &st);
-  if (r)
-    return r;
-
-  /* Read-only or noexec filesystem? */
-  if (amode & (W_OK | X_OK)) {
-    r = statvfs(path, &fs_st);
-    if (!r && (amode & W_OK) && (fs_st.f_flag & ST_RDONLY)) {
-      errno = EROFS;
-      return -1;
-    }
-    if (!r && (amode & X_OK) && (fs_st.f_flag & ST_NOEXEC)) {
-      errno = EACCES;
-      return -1;
-    }
-    if (r && errno != ENOSYS)
-      return -1;
-  }
-
-  uid = get_faked_uid();
-  gid = get_faked_gid();
-
-  if (uid == st.st_uid) {
-    if (!((amode & R_OK) && !(st.st_mode & S_IRUSR)) &&
-        !((amode & W_OK) && !(st.st_mode & S_IWUSR)) &&
-        !((amode & X_OK) && !(st.st_mode & S_IXUSR)))
-      return 0;
-  } else if (gid == st.st_gid) {
-    if (!((amode & R_OK) && !(st.st_mode & S_IRGRP)) &&
-        !((amode & W_OK) && !(st.st_mode & S_IWGRP)) &&
-        !((amode & X_OK) && !(st.st_mode & S_IXGRP)))
-      return 0;
-  } else {
-    if (!((amode & R_OK) && !(st.st_mode & S_IROTH)) &&
-        !((amode & W_OK) && !(st.st_mode & S_IWOTH)) &&
-        !((amode & X_OK) && !(st.st_mode & S_IXOTH)))
-      return 0;
-  }
-
-  if ((amode & X_OK) && !S_ISDIR(st.st_mode) &&
-      !(st.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH))) {
-    errno = EACCES;
-    return -1;
-  }
-
-  /* root gets CAP_DAC_OVERRIDE */
-  if (uid == 0)
-    return 0;
-
-  errno = EACCES;
-  return -1;
 }
 
 int fakeroot_disable(int new)
