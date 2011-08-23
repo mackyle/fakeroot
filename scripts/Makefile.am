@@ -2,6 +2,15 @@ AUTOMAKE_OPTIONS=foreign
 bin_SCRIPTS=fakeroot
 EXTRA_DIST = fakeroot.in
 CLEANFILES=fakeroot
+if MACOSX
+define macosx_false
+#
+endef
+else !MACOSX
+define macosx_true
+#
+endef
+endif !MACOSX
 
 do_subst = sed -e 's,[@]prefix[@],$(prefix),g' \
 	   -e 's,[@]bindir[@],$(bindir),g' \
@@ -15,7 +24,9 @@ do_subst = sed -e 's,[@]prefix[@],$(prefix),g' \
 	   -e 's,[@]LDLIBPATHVAR[@],$(LDLIBPATHVAR),g' \
 	   -e 's,[@]LDPRELOADVAR[@],$(LDPRELOADVAR),g' \
 	   -e 's,[@]LDPRELOADABS[@],$(LDPRELOADABS),g' \
-	   -e 's,[@]LDEXTRAVAR[@],$(LDEXTRAVAR),g'
+	   -e 's,[@]LDEXTRAVAR[@],$(LDEXTRAVAR),g' \
+	   -e 's,[@]MACOSX_FALSE[@],$(macosx_false),g' \
+	   -e 's,[@]MACOSX_TRUE[@],$(macosx_true),g'
 
 fakeroot: $(srcdir)/fakeroot.in Makefile
 	$(do_subst) < $(srcdir)/fakeroot.in > fakeroot

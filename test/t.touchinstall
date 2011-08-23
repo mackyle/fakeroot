@@ -2,7 +2,9 @@
 . ./defs || exit 1
 
 mkdir $tmp
+# fakeroot mangles spaces unless the getopt utility is the GNU version
+echo "touch $tmp/iamnotuser; ls -al $tmp/iamnotuser" > $tmp/sh
 run_fakeroot -- \
- ${posixshell} -c "touch $tmp/iamnotuser; ls -al $tmp/iamnotuser" >$tmp/out
+ ${posixshell} $tmp/sh >$tmp/out
 cat $tmp/out
 grep root $tmp/out

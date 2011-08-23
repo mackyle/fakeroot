@@ -10,10 +10,11 @@ libmacosx_la_SOURCES = libfakeroot_inode64.c libfakeroot_unix2003.c patchattr.h
 lib_LTLIBRARIES=libfakeroot.la
 libfakeroot_la_SOURCES=libfakeroot.c statconv/glibc/linux/alpha/stats.h wrapdef.h  wrapstruct.h communicate.h
 libfakeroot_la_LDFLAGS=-release 0
-libfakeroot_la_DEPENDENCIES=wrapdef.h wrapstruct.h libcommunicate.la $(LTLIBOBJS)
 if MACOSX
+libfakeroot_la_DEPENDENCIES=wrapdef.h wrapstruct.h libcommunicate.la libmacosx.la $(LTLIBOBJS)
 libfakeroot_la_LIBADD = libcommunicate.la libmacosx.la $(LTLIBOBJS)
 else !MACOSX
+libfakeroot_la_DEPENDENCIES=wrapdef.h wrapstruct.h libcommunicate.la $(LTLIBOBJS)
 libfakeroot_la_LIBADD = libcommunicate.la $(LTLIBOBJS)
 endif !MACOSX
 
@@ -27,7 +28,7 @@ noinst_PROGRAMS=simple
 CLEANFILES= wrapdef.h wrapstruct.h wrapped.h wraptmpf.h
 DISTCLEANFILES = fakerootconfig.h
 
-EXTRA_DIST=wrapawk wrapfunc.inp                        \
+EXTRA_DIST=wrapawk wrapawk_macosx wrapfunc.inp           \
            debian/rules debian/changelog debian/control  \
 	   message.h \
 	   DEBUG BUGS \
@@ -36,8 +37,13 @@ EXTRA_DIST=wrapawk wrapfunc.inp                        \
 
 CLEAN_FILES=fakerootconfig.h
 
+if MACOSX
+wrapped.h wrapdef.h wrapstruct.h wraptmpf.h:wrapawk_macosx wrapfunc.inp
+	awk -f $(srcdir)/wrapawk_macosx < $(srcdir)/wrapfunc.inp
+else !MACOSX
 wrapped.h wrapdef.h wrapstruct.h wraptmpf.h:wrapawk wrapfunc.inp
 	awk -f $(srcdir)/wrapawk < $(srcdir)/wrapfunc.inp
+endif !MACOSX
 
 libfakeroot.lo:libfakeroot.c wrapdef.h wrapstruct.h wraptmpf.h
 

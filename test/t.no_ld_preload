@@ -2,10 +2,11 @@
 . ./defs || exit 1
 
 mkdir $tmp
+# fakeroot mangles spaces unless the getopt utility is the GNU version
+echo "touch $tmp/justafile &&
+      $LDPRELOADVAR= rm $tmp/justafile &&
+      mkdir $tmp/justafile &&
+      ls -ld $tmp/justafile" > $tmp/sh
 run_fakeroot -- \
- ${posixshell} -c "touch $tmp/justafile &&
-                   $LDPRELOADVAR= rm $tmp/justafile &&
-                   mkdir $tmp/justafile &&
-                   ls -ld $tmp/justafile" | grep "^d"
-TEMP=$?
-exit $TEMP
+ ${posixshell} $tmp/sh > $tmp/out
+grep "^d" $tmp/out
