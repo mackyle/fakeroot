@@ -2,7 +2,9 @@
 . ./defs || exit 1
 
 mkdir $tmp
+# fakeroot mangles spaces unless the getopt utility is the GNU version
+echo "mknod $tmp/hda3 b 3 1; ls -l $tmp/hda3" >$tmp/sh
 run_fakeroot -- \
-  ${posixshell} -c 'mknod $tmp/hda3 b 3 1; ls -l $tmp/hda3' >$tmp/out
+  ${posixshell} $tmp/sh >$tmp/out
 cat $tmp/out
 grep "^b" $tmp/out

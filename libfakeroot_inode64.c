@@ -25,6 +25,8 @@
 #include "config.h"
 #include "communicate.h"
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+
 #include <stdio.h>
 #ifdef HAVE_SYS_ACL_H
 #include <sys/acl.h>
@@ -34,12 +36,14 @@
 #endif /* HAVE_FTS_H */
 
 #include "wrapped.h"
+#include "wraptmpf.h"
+#include "wrapdef.h"
 
 #ifdef LIBFAKEROOT_DEBUGGING
 extern int fakeroot_debug;
 
 #endif /* LIBFAKEROOT_DEBUGGING */
-int lstat(const char *file_name,
+int lstat$INODE64(const char *file_name,
           struct stat *st){
 
   int r;
@@ -59,7 +63,7 @@ int lstat(const char *file_name,
 }
 
 
-int stat(const char *file_name,
+int stat$INODE64(const char *file_name,
          struct stat *st){
   int r;
 
@@ -76,7 +80,7 @@ int stat(const char *file_name,
 }
 
 
-int fstat(int fd,
+int fstat$INODE64(int fd,
           struct stat *st){
   int r;
 
@@ -94,7 +98,7 @@ int fstat(int fd,
 }
 
 #ifdef HAVE_FTS_READ
-FTSENT *fts_read(FTS *ftsp) {
+FTSENT *fts_read$INODE64(FTS *ftsp) {
   FTSENT *r;
 
 #ifdef LIBFAKEROOT_DEBUGGING
@@ -110,7 +114,7 @@ FTSENT *fts_read(FTS *ftsp) {
   return r;
 }
 
-FTSENT *fts_children(FTS *ftsp,
+FTSENT *fts_children$INODE64(FTS *ftsp,
                      int options) {
   FTSENT *first;
   FTSENT *r;
@@ -129,5 +133,6 @@ FTSENT *fts_children(FTS *ftsp,
 
   return first;
 }
+#endif /* MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 */
 #endif /* HAVE_FTS_READ */
 #endif /* ifdef __APPLE__ */

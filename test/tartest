@@ -14,6 +14,18 @@ fi
 
 cd $TMP;
 
+ROOTGROUP=root
+
+SYSNAME="`uname -s 2>/dev/null`"
+
+case x"$SYSNAME" in
+  x"Darwin")
+    ROOTGROUP=wheel
+    ;;
+  x*BSD*)
+    ROOTGROUP=wheel
+    ;;
+esac
 
 #test 1: try some silly mkdir, chmod, chown commands
 #        and see if we get the same tar file as I
@@ -47,7 +59,7 @@ for f in $LIST; do
 done
 
 chown -R daemon:sys 2
-chown -R daemon:root 3 4
+chown -R daemon:$ROOTGROUP 3 4
 chmod -R u+xs 2
 chmod u+s  5
 

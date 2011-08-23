@@ -1,9 +1,22 @@
 #!/bin/sh
+ROOTGROUP=root
+
+SYSNAME="`uname -s 2>/dev/null`"
+
+case x"$SYSNAME" in
+  x"Darwin")
+    ROOTGROUP=wheel
+    ;;
+  x*BSD*)
+    ROOTGROUP=wheel
+    ;;
+esac
+
 set -e
 echo compare-tar:
 
-gzip -dc $1 | tar -tvf - |awk '{print $1, $2, $3, $NF}' |sort > tmp-1
-gzip -dc $2 | tar -tvf - |awk '{print $1, $2, $3, $NF}' |sort > tmp-2
+gzip -dc $1 | tar -tvf - |awk '{print $1, $2, $3, $NF}' |sed -e "s/$ROOTGROUP/root/" |sort > tmp-1
+gzip -dc $2 | tar -tvf - |awk '{print $1, $2, $3, $NF}' |sed -e "s/$ROOTGROUP/root/" |sort > tmp-2
 
 diff tmp-1 tmp-2 > tmp-diff || true
 
