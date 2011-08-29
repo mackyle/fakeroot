@@ -1,3 +1,9 @@
+fakeroot (1.18-1) unstable; urgency=low
+
+  * Improved MacOS X support from Kyle J. McKay.
+
+ -- Clint Adams <clint@debian.org>  Mon, 29 Aug 2011 17:25:49 -0400
+
 fakeroot (1.17-1) unstable; urgency=low
 
   * Revert access() support patch.  closes: #630129.
