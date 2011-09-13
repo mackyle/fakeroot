@@ -25,14 +25,19 @@ endif
 
 LIB_DIR=usr/lib/$(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
-build: build-stamp
-build-stamp:
+obj-sysv/config.status:
 	$(checkdir)
-
-	mkdir obj-sysv obj-tcp
-
+	mkdir obj-sysv
 	cd obj-sysv && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/${LIB_DIR}/libfakeroot --program-suffix=-sysv $(CONFARGS)
+
+obj-tcp/config.status:
+	$(checkdir)
+	mkdir obj-tcp
 	cd obj-tcp && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/${LIB_DIR}/libfakeroot --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
+
+build: build-stamp
+build-stamp: obj-sysv/config.status obj-tcp/config.status
+	$(checkdir)
 
 	cd obj-sysv && $(MAKE)
 	cd obj-tcp && $(MAKE)
