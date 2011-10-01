@@ -4,6 +4,8 @@ ROOTGROUP=root
 SYSNAME="`uname -s 2>/dev/null`"
 
 case x"$SYSNAME" in
+  x*kFreeBSD*)
+    ;;
   x"Darwin")
     ROOTGROUP=wheel
     ;;
