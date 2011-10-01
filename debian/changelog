@@ -1,3 +1,10 @@
+fakeroot (1.18.1-1) unstable; urgency=low
+
+  * Patch from Petr Salinger to fix tar test on GNU/kFreeBSD.
+    closes: #643872.
+
+ -- Clint Adams <clint@debian.org>  Sat, 01 Oct 2011 12:40:52 -0400
+
 fakeroot (1.18-1) unstable; urgency=low
 
   * Improved MacOS X support from Kyle J. McKay.
