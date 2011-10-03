@@ -31,8 +31,9 @@ means that fakeroot support on Mac OS X works ONLY with programs that
 rely solely on Linux/Unix/POSIX APIs.
 
 In particular, special effort is made to avoid crashes caused in
-CarbonCore starting on Mac OS X 10.6 when the result of getuid() running
-under fakeroot differs from the actual real uid as seen through various
+CarbonCore starting on Mac OS X 10.6 (and also CoreServicesInternal
+starting on Mac OS X 10.7) when the result of getuid() running under
+fakeroot differs from the actual real uid as seen through various
 Mach APIs that are not intercepted by fakeroot.
 
 The packagemaker command line interface is fully supported (ultimately
