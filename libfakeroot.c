@@ -1365,7 +1365,8 @@ static int check_fakeroot_disabled(void *retaddr){
   if (fakeroot_disabled || !dladdr(retaddr, &info))
     return fakeroot_disabled;
   suffix = strrchr(info.dli_fname, '/');
-  if (suffix && strcmp(suffix, "/CarbonCore") == 0)
+  if (suffix && (strcmp(suffix, "/CarbonCore") == 0 ||
+                 strcmp(suffix, "/CoreServicesInternal") == 0))
     return 1;
   return fakeroot_disabled;
 }
