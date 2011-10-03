@@ -53,11 +53,15 @@
   tool for simulating superuser privileges
 </div>
 
-<p>A fork/clone of the main debian fakeroot repository at <a href="http://git.debian.org/?p=users/clint/fakeroot.git">http://git.debian.org/?p=users/clint/fakeroot.git</a> that includes enhanced Mac OS X fakeroot support which has since been merged back into that repository.
+<p>A fork/clone of the main debian fakeroot repository at <a href="http://git.debian.org/?p=users/clint/fakeroot.git">http://git.debian.org/?p=users/clint/fakeroot.git</a> that includes enhanced Mac OS X fakeroot support which has since been merged back into that repository for Mac OS X versions prior to Lion (i.e. 10.6.x and before).  The Mac OS X Lion support for running packagemaker awaits a merge and can be found on the macosx head.
 
 </p><p>
 
 This GitHub fork/clone of the debian fakeroot repository is a mirror clone with the addition of a new macosx branch that includes the Mac OS X enhancements described here.  The default HEAD branch for this GitHub repository is macosx, <em>not</em> master!  However, unless there are new Mac OS X enhancements waiting to be merged, the macosx branch should track master (as in be the same as).
+
+</p><p>
+
+<em>WARNING:</em> When changes are pulled from the macosx branch in this repository and incorporated into the master branch of the main debian fakeroot repository, the macosx branch in this repository will be moved in a possibly non-fast-forward way to match the new master branch on the main debian repository once all outstanding changes have been pulled.
 
 </p><p>
 
