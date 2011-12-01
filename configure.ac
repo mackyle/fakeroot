@@ -535,7 +535,8 @@ AM_CONDITIONAL([MACOSX], [test x$macosx = xtrue])
 AC_CONFIG_FILES([
    Makefile
    scripts/Makefile
-   doc/Makefile doc/es/Makefile doc/fr/Makefile doc/nl/Makefile doc/sv/Makefile
+   doc/Makefile
+   doc/de/Makefile doc/es/Makefile doc/fr/Makefile doc/nl/Makefile doc/sv/Makefile
    test/Makefile test/defs])
 AC_OUTPUT
 
