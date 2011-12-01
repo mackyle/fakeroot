@@ -476,8 +476,13 @@ static void open_comm_sd(void)
   if (fcntl(comm_sd, F_SETFD, FD_CLOEXEC) < 0)
     fail("fcntl(F_SETFD, FD_CLOEXEC)");
 
-  if (connect(comm_sd, get_addr(), sizeof (struct sockaddr_in)) < 0)
-    fail("connect");
+  while (1) {
+    if (connect(comm_sd, get_addr(), sizeof (struct sockaddr_in)) < 0) {
+      if (errno != EINTR)
+        fail("connect");
+    } else
+      break;
+  }
 }
 
 void lock_comm_sd(void)
