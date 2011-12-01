@@ -1,3 +1,20 @@
+fakeroot (1.18.2-1) unstable; urgency=low
+
+  * German translation from Chris Leick.  closes: #646405.
+  * Initial multiarch support from Yann Dirson.  closes: #636192.
+  * Improved build robustness from Yann Dirson.  closes: #641503.
+  * Improved fakeroot-tcp robustness from Thomas Schwinge.  closes: #641200.
+  * Add build-arch and build-indep targets.
+
+ -- Clint Adams <clint@debian.org>  Wed, 30 Nov 2011 22:37:00 -0500
+
+fakeroot (1.18.1-1) unstable; urgency=low
+
+  * Patch from Petr Salinger to fix tar test on GNU/kFreeBSD.
+    closes: #643872.
+
+ -- Clint Adams <clint@debian.org>  Sat, 01 Oct 2011 12:40:52 -0400
+
 fakeroot (1.18-1) unstable; urgency=low
 
   * Improved MacOS X support from Kyle J. McKay.
