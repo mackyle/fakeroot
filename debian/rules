@@ -35,7 +35,8 @@ obj-tcp/config.status:
 	mkdir obj-tcp
 	cd obj-tcp && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/${LIB_DIR}/libfakeroot --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 
-build: build-stamp
+build: build-arch build-indep
+build-arch: build-stamp
 build-stamp: obj-sysv/config.status obj-tcp/config.status
 	$(checkdir)
 
@@ -154,7 +155,7 @@ source diff:
 	@echo >&2 'source and diff are obsolete - use dpkg-source -b'; false
 
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary checkroot prebuild
+.PHONY: build build-arch build-indep clean binary-indep binary-arch binary checkroot prebuild
 
 prebuild:
 	@echo prebuild handled differently now
