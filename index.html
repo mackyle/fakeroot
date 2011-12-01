@@ -25,11 +25,12 @@
     a { color: black; }
     .description { font-size: 1.2em; margin-bottom: 2em; margin-top: 2em; font-style: italic; }
     .download { float: right; }
-    pre { font-family: Menlo, Monaco, Consolas, Courier, "Courier New", monospace; }
+    pre { font-family: Menlo, Monaco, Consolas, Courier, "Courier New", monospace; font-size: 90%;}
     pre { padding: 0.5em 1ex; border: thin dotted silver; }
     hr { border: 0; width: 80%; border-bottom: thin solid silver; }
     p { text-align: justify; }
     p.left { text-align: left; }
+    .inset { margin-left: 5ex; margin-right: 5ex; }
     .footer { text-align:center; padding-top:2em; font-style: italic; }
   </style>
 </head>
@@ -53,19 +54,34 @@
   tool for simulating superuser privileges
 </div>
 
-<p>A fork/clone of the main debian fakeroot repository at <a href="http://git.debian.org/?p=users/clint/fakeroot.git">http://git.debian.org/?p=users/clint/fakeroot.git</a> that includes enhanced Mac OS X fakeroot support which has since been merged back into that repository for Mac OS X versions prior to Lion (i.e. 10.6.x and before).  The Mac OS X Lion support for running packagemaker awaits a merge and can be found on the macosx head.
+<p>A fork/clone of the main debian fakeroot repository at <a href="http://git.debian.org/?p=users/clint/fakeroot.git">http://git.debian.org/?p=users/clint/fakeroot.git</a> that includes enhanced Mac OS X fakeroot support which has since been merged back into that repository as of release 1.18.2-1.
 
 </p><p>
 
-This GitHub fork/clone of the debian fakeroot repository is a mirror clone with the addition of a new macosx branch that includes the Mac OS X enhancements described here.  The default HEAD branch for this GitHub repository is macosx, <em>not</em> master!  However, unless there are new Mac OS X enhancements waiting to be merged, the macosx branch should track master (as in be the same as).
+This GitHub fork/clone of the debian fakeroot repository is a mirror clone with the addition of a new macosx branch that includes the Mac OS X enhancements described here.  The default HEAD branch for this GitHub repository is macosx, <em>not</em> master!  However, unless there are new Mac OS X enhancements waiting to be merged, the macosx branch should track master very closely (as in be the same as except for the <tt>doc/Makefile.am</tt> change below).
 
-</p><p>
+</p>
 
-<em>WARNING:</em> When changes are pulled from the macosx branch in this repository and incorporated into the master branch of the main debian fakeroot repository, the macosx branch in this repository will be moved in a possibly non-fast-forward way to match the new master branch on the main debian repository once all outstanding changes have been pulled.
+<h2>Branch macosx</h2>
 
-</p><p>
+<p>Without a change to the <tt>doc/Makefile.am</tt> file like so:</p>
+<pre class="inset">
+diff --git a/master:doc/Makefile.am b/macosx:doc/Makefile.am
+index bf5ce07..5394548 100644
+--- a/master:doc/Makefile.am
++++ b/macosx:doc/Makefile.am
+@@ -1,5 +1,5 @@
+ AUTOMAKE_OPTIONS=foreign
+-SUBDIRS = de es fr sv nl
++##SUBDIRS = de es fr sv nl
 
-Mac OS X 10.4 and later are supported as are two-level namespace executables.</p>
+ man_MANS = faked.1 fakeroot.1
+</pre>
+<p>the <tt>sudo make install</tt> command will fail on Mac OS X.  The macosx branch (which is also the default HEAD branch) for this GitHub repository maintains the above change so that <tt>sudo make install</tt> will succeed after building on Mac OS X.</p>
+
+<h2>Supported OS X Versions</h2>
+
+<p>Mac OS X 10.4 and later are supported as are two-level namespace executables.</p>
 
 <h2>Install</h2>
 <p>See the <a href="https://github.com/mackyle/fakeroot/blob/macosx/README">README</a> and
@@ -86,7 +102,7 @@ See also the <a href="https://github.com/mackyle/fakeroot/blob/macosx/COPYING">C
 </p>
 <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
   by running:
-  <pre>$ git clone git://github.com/mackyle/fakeroot</pre>
+  <pre class="inset">$ git clone git://github.com/mackyle/fakeroot</pre>
 </p>
 
 <h2>GitHub</h2>
