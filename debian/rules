@@ -106,6 +106,10 @@ binary-arch: build checkroot
 		 debian/tmp/usr/share/man/man1/fakeroot-sysv.1 \
 		 debian/tmp/usr/share/man/man1/faked-tcp.1 \
 		 debian/tmp/usr/share/man/man1/fakeroot-tcp.1 \
+		 debian/tmp/usr/share/man/de/man1/faked-sysv.1 \
+		 debian/tmp/usr/share/man/de/man1/fakeroot-sysv.1 \
+		 debian/tmp/usr/share/man/de/man1/faked-tcp.1 \
+		 debian/tmp/usr/share/man/de/man1/fakeroot-tcp.1 \
 		 debian/tmp/usr/share/man/es/man1/faked-sysv.1 \
 		 debian/tmp/usr/share/man/es/man1/fakeroot-sysv.1 \
 		 debian/tmp/usr/share/man/es/man1/faked-tcp.1 \
