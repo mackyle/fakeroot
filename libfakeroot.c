@@ -1550,6 +1550,11 @@ FTSENT *fts_read(FTS *ftsp) {
   }
 #endif /* LIBFAKEROOT_DEBUGGING */
   r=next_fts_read(ftsp);
+#ifdef __APPLE__
+  if (r && ((ftsp->fts_options & FTS_NOSTAT)
+            || r->fts_info == FTS_NS || r->fts_info == FTS_NSOK))
+    r->fts_statp = NULL;  /* Otherwise fts_statp may be a random pointer */
+#endif
   if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
 # if defined(STAT64_SUPPORT) && !defined(__APPLE__)
     SEND_GET_STAT64(r->fts_statp, _STAT_VER);
