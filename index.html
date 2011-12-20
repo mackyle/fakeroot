@@ -20,17 +20,17 @@
     h1 .small { font-size: 0.4em; }
     h1 a { text-decoration: none; }
     h2 { font-size: 1.5em; color: black; }
-    h3 { text-align: center; color: black; }
+    h3 { color: black; }
     h1, h2, h3 { font-family: Helvetica, Arial, FreeSans, sans-serif; font-weight: normal; }
     a { color: black; }
     .description { font-size: 1.2em; margin-bottom: 2em; margin-top: 2em; font-style: italic; }
     .download { float: right; }
-    pre { font-family: Menlo, Monaco, Consolas, Courier, "Courier New", monospace; font-size: 90%;}
+    pre { font-family: Menlo, Monaco, Consolas, Courier, "Courier New", monospace; font-size: 75%;}
     pre { padding: 0.5em 1ex; border: thin dotted silver; }
     hr { border: 0; width: 80%; border-bottom: thin solid silver; }
     p { text-align: justify; }
     p.left { text-align: left; }
-    .inset { margin-left: 5ex; margin-right: 5ex; }
+    .inset { margin-left: 1ex; margin-right: 1ex; }
     .footer { text-align:center; padding-top:2em; font-style: italic; }
   </style>
 </head>
@@ -54,7 +54,7 @@
   tool for simulating superuser privileges
 </div>
 
-<p>A fork/clone of the main debian fakeroot repository at <a href="http://git.debian.org/?p=users/clint/fakeroot.git">http://git.debian.org/?p=users/clint/fakeroot.git</a> that includes enhanced Mac OS X fakeroot support which has since been merged back into that repository as of release 1.18.2-1.
+<p>A fork/clone of the main debian fakeroot repository at <a href="http://git.debian.org/?p=users/clint/fakeroot.git">http://git.debian.org/?p=users/clint/fakeroot.git</a> that includes enhanced Mac OS X fakeroot support which has since been merged back into that repository as of release 1.18.2-1 except for the changes noted below.
 
 </p><p>
 
@@ -79,6 +79,21 @@ index bf5ce07..5394548 100644
 </pre>
 <p>the <tt>sudo make install</tt> command will fail on Mac OS X.  The macosx branch (which is also the default HEAD branch) for this GitHub repository maintains the above change so that <tt>sudo make install</tt> will succeed after building on Mac OS X.</p>
 
+<h3>macosx changes not yet in upstream master<br />(pull request pending)</h3>
+<pre class="inset">
+commit 2bf529521813436edaf9065076cdba8e13212af8
+Author: Kyle J. McKay
+Date:   Mon Dec 19 02:44:00 2011 -0800
+
+    Handle random fts_read fts_statp result for FTS_NOSTAT on __APPLE__
+
+    If FTS_NOSTAT is used with fts_open on Darwin, fts_statp is never
+    valid, even for directories.  Furthermore, while the returned
+    fts_statp value sometimes is NULL in these cases, sometimes it's
+    just a random, uninitialized value instead.  Handle this properly
+    when __APPLE__ is defined.
+</pre>
+
 <h2>Supported OS X Versions</h2>
 
 <p>Mac OS X 10.4 and later are supported as are two-level namespace executables.</p>
@@ -86,6 +101,23 @@ index bf5ce07..5394548 100644
 <h2>Install</h2>
 <p>See the <a href="https://github.com/mackyle/fakeroot/blob/macosx/README">README</a> and
 <a href="https://github.com/mackyle/fakeroot/blob/macosx/README_MACOSX.txt">README_MACOSX.txt</a> (for Mac OS X) files.</p>
+
+<h2>Example</h2>
+<p>Suppose you wish to create an installer package for a preference pane <tt>SimplePref.prefPane</tt> so
+that it's installed to <tt>/Library/PreferencePanes</tt> with owner <tt>root</tt> and group <tt>admin</tt>.
+
+Assuming that a <tt>SimplePref.prefPane</tt> exists in the current directory and fakeroot has already been installed,
+the following script will create <tt>SimplePref.pkg</tt> to install it:</p>
+
+<pre class="inset">
+#!/bin/sh
+pm=/Developer/usr/bin/packagemaker
+fakeroot sh -s &lt;&lt;FAKEROOT_SCRIPT
+chown -R root:admin SimplePref.prefPane
+$pm --root SimplePref.prefPane --install-to /Library/PreferencePanes \
+  --id com.example.SimplePref --no-recommend --target 10.4 --out SimplePref.pkg
+FAKEROOT_SCRIPT
+</pre>
 
 <h2>License</h2>
 <p>GPLv3
