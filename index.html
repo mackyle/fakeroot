@@ -79,8 +79,28 @@ index bf5ce07..5394548 100644
 </pre>
 <p>the <tt>sudo make install</tt> command will fail on Mac OS X.  The macosx branch (which is also the default HEAD branch) for this GitHub repository maintains the above change so that <tt>sudo make install</tt> will succeed after building on Mac OS X.</p>
 
-<h3>macosx changes not yet in upstream master<br />(pull request pending)</h3>
+<h3>Branch macosx changes not yet in upstream master<br />(pull request pending)</h3>
 <pre class="inset">
+commit 97eeec7d06a9314515bdfde9c287946a96983dc6
+Author: Kyle J. McKay
+Date:   Wed Dec 28 11:42:30 2011 -0800
+
+    Darwin fixes for lchown$UNIX2003, setreuid$UNIX2003 and setregid$UNIX2003
+
+    The implementations of those functions in libfakeroot_unix2003.c use
+    routines from libfakeroot.c that were static and are now private extern
+    instead when building on __APPLE__.
+
+Notes:
+    A simple &#x2018;fakeroot chown -R root:admin .&#x2019; can trigger the bug (undefined
+    symbol) if any symbolic links are visited.
+
+commit 44c43b02e34e8308b39fe89092cae3043886b7bf
+Author: Kyle J. McKay
+Date:   Wed Dec 21 03:54:30 2011 -0800
+
+    Adjust suggested Mac OS X 10.4 build instructions
+
 commit 2bf529521813436edaf9065076cdba8e13212af8
 Author: Kyle J. McKay
 Date:   Mon Dec 19 02:44:00 2011 -0800
@@ -92,6 +112,10 @@ Date:   Mon Dec 19 02:44:00 2011 -0800
     fts_statp value sometimes is NULL in these cases, sometimes it's
     just a random, uninitialized value instead.  Handle this properly
     when __APPLE__ is defined.
+
+Notes:
+    Simply doing &#x2018;fakeroot find . -print&#x2019; will often trigger a crash
+    without this fix.
 </pre>
 
 <h2>Supported OS X Versions</h2>
