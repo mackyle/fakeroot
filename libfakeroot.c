@@ -39,13 +39,21 @@
 */
 #define _DARWIN_NO_64_BIT_INODE
 
+/* The helper _unix2003 version of this file calls a few functions in this file
+   that are marked with static_nonapple so that needs to become private instead
+*/
+#define static_nonapple __attribute__((visibility("hidden")))
+
 #ifndef __LP64__
 /*
    This file is for 32-bit symbols which do not have the "$UNIX2003" version.
 */
 #define _NONSTD_SOURCE
 #endif
-#endif
+#else /* !__APPLE__ */
+/* static_nonapple needs to become static in this case */
+#define static_nonapple static
+#endif /* !__APPLE__ */
 
 #include "config.h"
 #include "communicate.h"
@@ -477,7 +485,7 @@ static int set_faked_egid(gid_t egid) {
   return 0;
 }
 
-static int set_faked_reuid(uid_t ruid, uid_t euid) {
+static_nonapple int set_faked_reuid(uid_t ruid, uid_t euid) {
   read_uids();
   if (ruid != (uid_t)-1 || euid != (uid_t)-1)
     faked_saved_uid = faked_effective_uid;
@@ -489,7 +497,7 @@ static int set_faked_reuid(uid_t ruid, uid_t euid) {
   return write_uids();
 }
 
-static int set_faked_regid(gid_t rgid, gid_t egid) {
+static_nonapple int set_faked_regid(gid_t rgid, gid_t egid) {
   read_gids();
   if (rgid != (gid_t)-1 || egid != (gid_t)-1)
     faked_saved_gid = faked_effective_gid;
@@ -546,7 +554,7 @@ static gid_t set_faked_fsgid(gid_t fsgid) {
 #endif
 
 
-static int dont_try_chown(){
+static_nonapple int dont_try_chown(){
   static int inited=0;
   static int donttry;
 
