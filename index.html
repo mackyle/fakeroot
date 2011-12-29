@@ -21,7 +21,7 @@
     h1 a { text-decoration: none; }
     h2 { font-size: 1.5em; color: black; }
     h3 { color: black; }
-    h1, h2, h3 { font-family: Helvetica, Arial, FreeSans, sans-serif; font-weight: normal; }
+    p.note:before, h1, h2, h3 { font-family: Helvetica, Arial, FreeSans, sans-serif; font-weight: normal; }
     a { color: black; }
     .description { font-size: 1.2em; margin-bottom: 2em; margin-top: 2em; font-style: italic; }
     .download { float: right; }
@@ -32,6 +32,8 @@
     p.left { text-align: left; }
     .inset { margin-left: 1ex; margin-right: 1ex; }
     .footer { text-align:center; padding-top:2em; font-style: italic; }
+    p.note:before { content: "Note: "; }
+    .nobreak { white-space: nowrap; }
   </style>
 </head>
 
@@ -130,18 +132,25 @@ Notes:
 <p>Suppose you wish to create an installer package for a preference pane <tt>SimplePref.prefPane</tt> so
 that it's installed to <tt>/Library/PreferencePanes</tt> with owner <tt>root</tt> and group <tt>admin</tt>.
 
-Assuming that a <tt>SimplePref.prefPane</tt> exists in the current directory and fakeroot has already been installed,
+Assuming that a <tt>SimplePref.prefPane</tt> exists by itself in the <tt>stage</tt> subdirectory (which is
+located in the current directory) and fakeroot has already been installed,
 the following script will create <tt>SimplePref.pkg</tt> to install it:</p>
 
 <pre class="inset">
 #!/bin/sh
 pm=/Developer/usr/bin/packagemaker
 fakeroot sh -s &lt;&lt;FAKEROOT_SCRIPT
-chown -R root:admin SimplePref.prefPane
-$pm --root SimplePref.prefPane --install-to /Library/PreferencePanes \
+chown -R root:admin stage/SimplePref.prefPane
+$pm --root stage --install-to /Library/PreferencePanes \
   --id com.example.SimplePref --no-recommend --target 10.4 --out SimplePref.pkg
 FAKEROOT_SCRIPT
 </pre>
+
+<p class="note">
+Be careful about combining the <tt class="nobreak">--discard-forks</tt> packagemaker option with hard links.
+If <tt class="nobreak">--discard-forks</tt> is used <em>and</em> any files have a link count greater than 1, then those
+files <em>will not</em> pick up the fakeroot settings in the produced installer package!  Using either by itself works fine.
+</p>
 
 <h2>License</h2>
 <p>GPLv3
