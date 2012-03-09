@@ -37,10 +37,10 @@ fakeroot differs from the actual real uid as seen through various
 Mach APIs that are not intercepted by fakeroot.
 
 The packagemaker command line interface is fully supported (ultimately
-it uses pax to build the installer archives which relies solely on
-APIs supported by fakeroot).  So Mac OS X installer packages built using
-packagemaker under fakeroot will have all the desired users, groups and
-permissions as set up under fakeroot.
+it uses pax-like functionality to build the installer archives which
+relies solely on APIs supported by fakeroot).  So Mac OS X installer
+packages built using packagemaker under fakeroot will have all the
+desired users, groups and permissions as set up under fakeroot.
 
 In addition, as expected, all other command line archiving tools work
 under fakeroot just as they would under fakeroot on Linux.
@@ -140,6 +140,6 @@ will NOT be intercepted by the version built for 10.4.
 
 Similarly building the 10.5 version and running it on 10.6 is not
 recommended either because 10.6 added yet more calls that will NOT
-be intercepted by the version build for 10.5.
+be intercepted by the version built for 10.5.
 
 And so on for 10.7 etc.
