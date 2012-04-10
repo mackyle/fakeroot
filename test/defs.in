@@ -9,8 +9,8 @@ trap 'rm -rf $tmp' EXIT
 LDPRELOADVAR=@LDPRELOADVAR@
 
 case $VERBOSE in
-  (x)  set -x;;                # Debug mode.
-  ('') exec >/dev/null 2>&1;;  # By default, be silent.
+  x)  set -x;;                # Debug mode.
+  '') exec >/dev/null 2>&1;;  # By default, be silent.
 esac
 
 run_fakeroot ()
