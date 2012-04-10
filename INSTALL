@@ -11,10 +11,6 @@ FreeBSD:
   To compile --with-ipc=tcp and gcc, make sure the -pthread flag
   is used.
 
-Solaris:
-
-  Replace all "#!/bin/sh" lines with "#!/usr/xpg4/bin/sh"
-
 ###################################################################
 (old stuff)
 
