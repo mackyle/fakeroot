@@ -1,6 +1,7 @@
 /*
   Copyright Ⓒ 1997, 1998, 1999, 2000, 2001  joost witteveen
   Copyright Ⓒ 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009  Clint Adams
+  Copyright Ⓒ 2012 Mikhail Gusarov
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -108,6 +109,9 @@
 #if HAVE_FTS_H
 #include <fts.h>
 #endif /* HAVE_FTS_H */
+#ifdef __sun
+#include <sys/systeminfo.h>
+#endif
 
 #if !HAVE_DECL_SETENV
 extern int setenv (const char *name, const char *value, int replace);
@@ -1536,7 +1540,7 @@ int fakeroot_isdisabled(void)
   return fakeroot_disabled;
 }
 
-#ifdef HAVE_SYS_ACL_H
+#ifdef HAVE_ACL_T
 int acl_set_fd(int fd, acl_t acl) {
   errno = ENOTSUP;
   return -1;
@@ -1668,3 +1672,33 @@ fgetattrlist(int fd, void *attrList, void *attrBuf,
 }
 #endif /* if HAVE_FGETATTRLIST */
 #endif /* ifdef __APPLE__ */
+
+#ifdef __sun
+/*
+ * Disable the runtime selection of binaries on Solaris: libfakeroot is (yet?)
+ * unable to cope with several bitnesses of binaries being run.
+ */
+int sysinfo(int command, char *buf, long count)
+{
+    if (command == SI_ISALIST)
+    {
+        /* do the evil trick */
+#ifdef sparc
+#ifdef __arch64__
+        strncpy(buf, "sparcv9 sparc", count - 1);
+        return sizeof("sparcv9 sparc");
+#else
+        strncpy(buf, "sparcv7 sparc", count - 1);
+        return sizeof("sparcv7 sparc");
+#endif
+#else
+        strncpy(buf, "i386 i86", count - 1);
+        return sizeof("i386 i86");
+#endif
+    }
+    else
+    {
+        return next_sysinfo(command, buf, count);
+    }
+}
+#endif

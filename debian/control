@@ -3,7 +3,7 @@ Section: utils
 Priority: optional
 Build-Depends: sharutils, gcc-multilib [amd64 i386 kfreebsd-amd64 powerpc s390 sparc], lib64c-dev [i386 powerpc s390 sparc], lib32c-dev [amd64 kfreebsd-amd64 ppc64], libacl1-dev
 Maintainer: Clint Adams <clint@debian.org>
-Standards-Version: 3.9.2
+Standards-Version: 3.9.3
 Vcs-Git: git://git.debian.org/git/users/clint/fakeroot.git
 Vcs-Browser: http://git.debian.org/?p=users/clint/fakeroot.git;a=summary
 
