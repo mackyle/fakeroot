@@ -1,6 +1,7 @@
 /*
   Copyright Ⓒ 1997, 1998, 1999, 2000, 2001  joost witteveen
   Copyright Ⓒ 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009  Clint Adams
+  Copyright Ⓒ 2012 Mikhail Gusarov
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -39,13 +40,21 @@
 */
 #define _DARWIN_NO_64_BIT_INODE
 
+/* The helper _unix2003 version of this file calls a few functions in this file
+   that are marked with static_nonapple so that needs to become private instead
+*/
+#define static_nonapple __attribute__((visibility("hidden")))
+
 #ifndef __LP64__
 /*
    This file is for 32-bit symbols which do not have the "$UNIX2003" version.
 */
 #define _NONSTD_SOURCE
 #endif
-#endif
+#else /* !__APPLE__ */
+/* static_nonapple needs to become static in this case */
+#define static_nonapple static
+#endif /* !__APPLE__ */
 
 #include "config.h"
 #include "communicate.h"
@@ -100,6 +109,9 @@
 #if HAVE_FTS_H
 #include <fts.h>
 #endif /* HAVE_FTS_H */
+#ifdef __sun
+#include <sys/systeminfo.h>
+#endif
 
 #if !HAVE_DECL_SETENV
 extern int setenv (const char *name, const char *value, int replace);
@@ -477,7 +489,7 @@ static int set_faked_egid(gid_t egid) {
   return 0;
 }
 
-static int set_faked_reuid(uid_t ruid, uid_t euid) {
+static_nonapple int set_faked_reuid(uid_t ruid, uid_t euid) {
   read_uids();
   if (ruid != (uid_t)-1 || euid != (uid_t)-1)
     faked_saved_uid = faked_effective_uid;
@@ -489,7 +501,7 @@ static int set_faked_reuid(uid_t ruid, uid_t euid) {
   return write_uids();
 }
 
-static int set_faked_regid(gid_t rgid, gid_t egid) {
+static_nonapple int set_faked_regid(gid_t rgid, gid_t egid) {
   read_gids();
   if (rgid != (gid_t)-1 || egid != (gid_t)-1)
     faked_saved_gid = faked_effective_gid;
@@ -546,7 +558,7 @@ static gid_t set_faked_fsgid(gid_t fsgid) {
 #endif
 
 
-static int dont_try_chown(){
+static_nonapple int dont_try_chown(){
   static int inited=0;
   static int donttry;
 
@@ -1528,7 +1540,7 @@ int fakeroot_isdisabled(void)
   return fakeroot_disabled;
 }
 
-#ifdef HAVE_SYS_ACL_H
+#ifdef HAVE_ACL_T
 int acl_set_fd(int fd, acl_t acl) {
   errno = ENOTSUP;
   return -1;
@@ -1550,6 +1562,11 @@ FTSENT *fts_read(FTS *ftsp) {
   }
 #endif /* LIBFAKEROOT_DEBUGGING */
   r=next_fts_read(ftsp);
+#ifdef __APPLE__
+  if (r && ((ftsp->fts_options & FTS_NOSTAT)
+            || r->fts_info == FTS_NS || r->fts_info == FTS_NSOK))
+    r->fts_statp = NULL;  /* Otherwise fts_statp may be a random pointer */
+#endif
   if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
 # if defined(STAT64_SUPPORT) && !defined(__APPLE__)
     SEND_GET_STAT64(r->fts_statp, _STAT_VER);
@@ -1655,3 +1672,33 @@ fgetattrlist(int fd, void *attrList, void *attrBuf,
 }
 #endif /* if HAVE_FGETATTRLIST */
 #endif /* ifdef __APPLE__ */
+
+#ifdef __sun
+/*
+ * Disable the runtime selection of binaries on Solaris: libfakeroot is (yet?)
+ * unable to cope with several bitnesses of binaries being run.
+ */
+int sysinfo(int command, char *buf, long count)
+{
+    if (command == SI_ISALIST)
+    {
+        /* do the evil trick */
+#ifdef sparc
+#ifdef __arch64__
+        strncpy(buf, "sparcv9 sparc", count - 1);
+        return sizeof("sparcv9 sparc");
+#else
+        strncpy(buf, "sparcv7 sparc", count - 1);
+        return sizeof("sparcv7 sparc");
+#endif
+#else
+        strncpy(buf, "i386 i86", count - 1);
+        return sizeof("i386 i86");
+#endif
+    }
+    else
+    {
+        return next_sysinfo(command, buf, count);
+    }
+}
+#endif

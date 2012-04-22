@@ -81,6 +81,8 @@
 extern int fakeroot_disabled;
 
 #ifdef LCHOWN_SUPPORT
+extern int dont_try_chown() __attribute__((visibility("hidden")));
+
 int lchown$UNIX2003(const char *path, uid_t owner, gid_t group){
   INT_STRUCT_STAT st;
   int r=0;
@@ -179,6 +181,8 @@ int fchmod$UNIX2003(int fd, mode_t mode){
   return r;
 }
 
+extern int set_faked_reuid(uid_t ruid, uid_t euid) __attribute__((visibility("hidden")));
+
 int setreuid$UNIX2003(SETREUID_ARG ruid, SETREUID_ARG euid){
 #ifdef LIBFAKEROOT_DEBUGGING
   if (fakeroot_debug) {
@@ -189,6 +193,8 @@ int setreuid$UNIX2003(SETREUID_ARG ruid, SETREUID_ARG euid){
     return next_setreuid$UNIX2003(ruid, euid);
   return set_faked_reuid(ruid, euid);
 }
+
+extern int set_faked_regid(gid_t rgid, gid_t egid) __attribute__((visibility("hidden")));
 
 int setregid$UNIX2003(SETREGID_ARG rgid, SETREGID_ARG egid){
 #ifdef LIBFAKEROOT_DEBUGGING

@@ -75,7 +75,7 @@ to your path before running bootstrap.
 If building on 10.4 that means something like this:
 
   ./bootstrap # GNU autotools required
-  SDKROOT='-isysroot /Developer/SDKs/MacOSX10.4u.sdk' \
+  SDKROOT='-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4'
   CFLAGS="-pipe -O2 -arch x86_64 -arch ppc64 -arch i386 -arch ppc $SDKROOT" \
   ./configure --disable-dependency-tracking --disable-static
   make && make check && sudo make install
