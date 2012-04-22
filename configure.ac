@@ -274,6 +274,17 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
   ])
 done
 
+AH_TEMPLATE([HAVE_ACL_T], [acl_t data type and associated functions are provided by OS])
+AC_MSG_CHECKING([for acl_t struct])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+       #include <sys/acl.h>
+  ]], [[
+       acl_t t;
+  ]])],[AC_DEFINE_UNQUOTED(HAVE_ACL_T,1)
+   AC_MSG_RESULT([yes])
+  ],[ AC_MSG_RESULT([no])
+  ])
+
 AC_CHECK_FUNCS(fchmodat fchownat fstatat mkdirat mknodat openat renameat unlinkat lchmod fgetattrlist)
 
 dnl find out how stat() etc are called. On linux systems, we really
