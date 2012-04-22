@@ -1,3 +1,11 @@
+fakeroot (1.18.3-1) unstable; urgency=low
+
+  * Disable SYSV tests on the Hurd.  closes: #651103.
+  * Bump to Standards-Version 3.9.3.
+  * Solaris patches from Mikhail Gusarov.  closes: #668277.
+
+ -- Clint Adams <clint@debian.org>  Sat, 21 Apr 2012 22:24:23 -0400
+
 fakeroot (1.18.2-1) unstable; urgency=low
 
   * German translation from Chris Leick.  closes: #646405.
