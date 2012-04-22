@@ -56,7 +56,7 @@
   tool for simulating superuser privileges
 </div>
 
-<p>A fork/clone of the main debian fakeroot repository at <a href="http://git.debian.org/?p=users/clint/fakeroot.git">http://git.debian.org/?p=users/clint/fakeroot.git</a> that includes enhanced Mac OS X fakeroot support which has since been merged back into that repository as of release 1.18.2-1 except for the changes noted below.
+<p>A fork/clone of the main debian fakeroot repository at <a href="http://git.debian.org/?p=users/clint/fakeroot.git">http://git.debian.org/?p=users/clint/fakeroot.git</a> that includes enhanced Mac OS X fakeroot support which has since been merged back into that repository as of release 1.18.3-1 except for the changes noted below.
 
 </p><p>
 
@@ -83,41 +83,21 @@ index bf5ce07..5394548 100644
 
 <h3>Branch macosx changes not yet in upstream master<br />(pull request pending)</h3>
 <pre class="inset">
-commit 97eeec7d06a9314515bdfde9c287946a96983dc6
-Author: Kyle J. McKay
-Date:   Wed Dec 28 11:42:30 2011 -0800
+commit 827fcb2cc6a7dc57afc750ffb810bd1729931ddf
+Author: Kyle J. McKay <mackyle@gmail.com>
+Date:   Sun Apr 22 03:26:57 2012 -0700
 
-    Darwin fixes for lchown$UNIX2003, setreuid$UNIX2003 and setregid$UNIX2003
-
-    The implementations of those functions in libfakeroot_unix2003.c use
-    routines from libfakeroot.c that were static and are now private extern
-    instead when building on __APPLE__.
+    Correct HAVE_ACL_T configure test for Darwin
 
 Notes:
-    A simple &#x2018;fakeroot chown -R root:admin .&#x2019; can trigger the bug (undefined
-    symbol) if any symbolic links are visited.
+    Commit d6f29a80 broke the ACL presence configure test
+    on Darwin.  Include &lt;sys/types.h&gt; also to fix it.
 
-commit 44c43b02e34e8308b39fe89092cae3043886b7bf
-Author: Kyle J. McKay
-Date:   Wed Dec 21 03:54:30 2011 -0800
+commit aba0033d2ae93f8e4d54f8be822825e51e8fb817
+Author: Kyle J. McKay <mackyle@gmail.com>
+Date:   Fri Mar 9 09:43:15 2012 -0800
 
-    Adjust suggested Mac OS X 10.4 build instructions
-
-commit 2bf529521813436edaf9065076cdba8e13212af8
-Author: Kyle J. McKay
-Date:   Mon Dec 19 02:44:00 2011 -0800
-
-    Handle random fts_read fts_statp result for FTS_NOSTAT on __APPLE__
-
-    If FTS_NOSTAT is used with fts_open on Darwin, fts_statp is never
-    valid, even for directories.  Furthermore, while the returned
-    fts_statp value sometimes is NULL in these cases, sometimes it's
-    just a random, uninitialized value instead.  Handle this properly
-    when __APPLE__ is defined.
-
-Notes:
-    Simply doing &#x2018;fakeroot find . -print&#x2019; will often trigger a crash
-    without this fix.
+    Minor README_MACOSX.txt typo and clarification
 </pre>
 
 <h2>Supported OS X Versions</h2>
