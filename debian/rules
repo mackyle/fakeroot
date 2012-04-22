@@ -45,7 +45,9 @@ build-stamp: obj-sysv/config.status obj-tcp/config.status
 
 ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
 ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
+ifeq (,$(findstring hurd, $(DEB_HOST_ARCH_OS)))
 	cd obj-sysv && $(MAKE) check
+endif
 	cd obj-tcp && $(MAKE) check
 endif
 endif
