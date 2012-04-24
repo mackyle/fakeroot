@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset='utf-8'>
+  <meta charset='utf-8' />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
   <title>mackyle/fakeroot @ GitHub</title>
 
@@ -25,7 +26,8 @@
     a { color: black; }
     .description { font-size: 1.2em; margin-bottom: 2em; margin-top: 2em; font-style: italic; }
     .download { float: right; }
-    pre { font-family: Menlo, Monaco, Consolas, Courier, "Courier New", monospace; font-size: 75%;}
+    pre, ttx, .hash tdx { font-family: Menlo, Monaco, Consolas, Courier, "Courier New", monospace; }
+    pre { font-size: 75%;}
     pre { padding: 0.5em 1ex; border: thin dotted silver; }
     hr { border: 0; width: 80%; border-bottom: thin solid silver; }
     p { text-align: justify; }
@@ -34,6 +36,12 @@
     .footer { text-align:center; padding-top:2em; font-style: italic; }
     p.note:before { content: "Note: "; }
     .nobreak { white-space: nowrap; }
+    .hash td { font-size: 80%; line-height: 1.0; font-family: monospace; }
+    .hash tr > td:first-child { text-align: right; }
+    .hash tr > td:first-child:after { content: ':'; }
+    span.down { display: inline-block; width: 16px; height: 16px; padding-right: 2px;
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAQnRFWHRDb21tZW50AHRJTUUgY2h1bmtsZW4gNyBpZ25vcmVkDUFTQ0lJOiAuLi4uLjA3DUhFWDogMDdENjA5MTYxMDMwMzeLgNWuAAACTUlEQVR4nJRQW2iSYRj+tgq6k5BuDILdObqoYLBRxsjBsKvoIoKKokbrMMibrZsMNseojPJAbINg0zZlFVEi1Yi8aNJWiXlG51lvdOiNiBcefp++74tfZGzQXnh43+89PN/zvoTsYhfmeoQrr3oxsngSY0v9UFvPYLfeHe2c8Yjw5rcB7z0v8fHPLNTLA3sjGNIfFqw/n+PFVzUnufu6b28Ep59JBMu6Dk9Xx/DWbcTIwon/I+h5RIrHpruK1xZPYeHHE8x8HsWK2wDNh4u4v9yHByuKnYmi0agzHA7j6MN9uG4Zwuz3STp8D5OOGzB8G+cqphyXcYse1Ww2O7cPD6ZSKVQqFWwVt6AyHsfNpWHMrWmh/XQblg0dxt+dx6V5OcrlMux2O0wmk7JNEAqFnIVCAfF4HLlcDsl0Amf1coxaVZhfm8Yd6zAllcHlcsHv9yMQCECn0/1TEQwGBzc3N1EqlcBUUDW8YePXOhTaQ7hqVmDg8UG43W74fD4kk0mwz+ga0Gg0SuL1evnv+Xwe2WwWmUyGI51OIxqPoHfqABKJBB9knqlkdY/Hg4mJCWd3vV4n1WqV0GFCCxxUCaHNJJvKEX2/g8RiMRKJRAg9MgddmdB7ETbLCPgx2EMQBEJ35A10LUJ/42BkVAEnZj21Wo1IJBI2o+xmj2azycGKIsScmN8eNxoNjv2MQBxqtVpELpdzzwCgnWdxZ575NoFUKuWNrCBCbGTGYmaddZlMxpV02Wy2L3QXFbsBI+v0IkS5DJ2rUqLVvwAAAP//AwDkwh7q3xB35AAAAABJRU5ErkJggg==);
+    }
   </style>
 </head>
 
@@ -44,9 +52,9 @@
 
 <div class="download">
   <a href="http://github.com/mackyle/fakeroot/zipball/macosx">
-    <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
+    <img border="0" width="90" src="http://github.com/images/modules/download/zip.png" /></a>
   <a href="http://github.com/mackyle/fakeroot/tarball/macosx">
-    <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+    <img border="0" width="90" src="http://github.com/images/modules/download/tar.png" /></a>
 </div>
 
 <h1><a href="http://github.com/mackyle/fakeroot">fakeroot</a>
@@ -84,7 +92,7 @@ index bf5ce07..5394548 100644
 <h3>Branch macosx changes not yet in upstream master<br />(pull request pending)</h3>
 <pre class="inset">
 commit 827fcb2cc6a7dc57afc750ffb810bd1729931ddf
-Author: Kyle J. McKay <mackyle@gmail.com>
+Author: Kyle J. McKay &lt;mackyle@gmail.com>
 Date:   Sun Apr 22 03:26:57 2012 -0700
 
     Correct HAVE_ACL_T configure test for Darwin
@@ -94,7 +102,7 @@ Notes:
     on Darwin.  Include &lt;sys/types.h&gt; also to fix it.
 
 commit aba0033d2ae93f8e4d54f8be822825e51e8fb817
-Author: Kyle J. McKay <mackyle@gmail.com>
+Author: Kyle J. McKay &lt;mackyle@gmail.com>
 Date:   Fri Mar 9 09:43:15 2012 -0800
 
     Minor README_MACOSX.txt typo and clarification
@@ -141,7 +149,7 @@ See also the <a href="https://github.com/mackyle/fakeroot/blob/macosx/COPYING">C
 
 <h2>Download</h2>
 <p>
-  You can download this project in either
+  You can download the raw source files of this project in either
   <a href="http://github.com/mackyle/fakeroot/zipball/macosx">zip</a> or
   <a href="http://github.com/mackyle/fakeroot/tarball/macosx">tar</a> formats.
 </p>
@@ -149,6 +157,15 @@ See also the <a href="https://github.com/mackyle/fakeroot/blob/macosx/COPYING">C
   by running:
   <pre class="inset">$ git clone git://github.com/mackyle/fakeroot</pre>
 </p>
+<p>Pre-bootstrapped tarballs (i.e. do not require autotools and have a pre-generated configure script) are available for these tags:
+<dl>
+<dt><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-macosx-v3.1.tar.gz"><span class="down"></span><tt>fakeroot-macosx-v3.1.tar.gz</tt></a> (tag: <tt>macosx-v3.1</tt>)</dt>
+<dd><table class='hash'><tr><td>MD5</td><td>ef80ce0bcd3c85edb3fbf4f881022ea3</td></tr>
+<tr><td>SHA1</td><td>a301d053dfaa61d0dcaeb399a1d94ce58a0cf3ea</td></tr>
+<tr><td>SHA256</td><td>7238cf259c9d4521ab3cfc0c28c8042b6d67f072c85756ff3ddfe2941ed398da</td></tr></table></dd>
+</dl>
+</p>
+<p>See also the <a href="https://github.com/mackyle/fakeroot/downloads">project&#x2019;s downloads area</a>.</p>
 
 <h2>GitHub</h2>
 <p class="left">
