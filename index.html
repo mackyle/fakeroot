@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset='utf-8' />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -22,7 +22,7 @@
     h1 a { text-decoration: none; }
     h2 { font-size: 1.5em; color: black; }
     h3 { color: black; }
-    p.note:before, h1, h2, h3 { font-family: Helvetica, Arial, FreeSans, sans-serif; font-weight: normal; }
+    p.note:before, h1, h2, h3, th { font-family: Helvetica, Arial, FreeSans, sans-serif; font-weight: normal; }
     a { color: black; }
     .description { font-size: 1.2em; margin-bottom: 2em; margin-top: 2em; font-style: italic; }
     .download { float: right; }
@@ -39,7 +39,29 @@
     .hash td { font-size: 80%; line-height: 1.0; font-family: monospace; }
     .hash tr > td:first-child { text-align: right; }
     .hash tr > td:first-child:after { content: ':'; }
-    span.down { display: inline-block; width: 16px; height: 16px; padding-right: 2px;
+
+    table.download-list {
+      border-collapse: separate;
+      border-spacing: 1.25ex 0;
+      width: 100%;
+      margin-bottom: 0.5em;
+    }
+
+    table.download-list > * > tr > td:first-child,
+    table.download-list > * > tr > td:first-child + td,
+    table.download-list > * > tr > td:first-child + td + td {
+      white-space: nowrap;
+    }
+
+    tr.header th {
+      text-align: left;
+      border-bottom: thin solid black;
+    }
+    tr.separator {
+      height: 0.25em;
+    }
+
+    span.down { display: inline-block; width: 16px; height: 16px; margin-right: 2px;
       background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAQnRFWHRDb21tZW50AHRJTUUgY2h1bmtsZW4gNyBpZ25vcmVkDUFTQ0lJOiAuLi4uLjA3DUhFWDogMDdENjA5MTYxMDMwMzeLgNWuAAACTUlEQVR4nJRQW2iSYRj+tgq6k5BuDILdObqoYLBRxsjBsKvoIoKKokbrMMibrZsMNseojPJAbINg0zZlFVEi1Yi8aNJWiXlG51lvdOiNiBcefp++74tfZGzQXnh43+89PN/zvoTsYhfmeoQrr3oxsngSY0v9UFvPYLfeHe2c8Yjw5rcB7z0v8fHPLNTLA3sjGNIfFqw/n+PFVzUnufu6b28Ep59JBMu6Dk9Xx/DWbcTIwon/I+h5RIrHpruK1xZPYeHHE8x8HsWK2wDNh4u4v9yHByuKnYmi0agzHA7j6MN9uG4Zwuz3STp8D5OOGzB8G+cqphyXcYse1Ww2O7cPD6ZSKVQqFWwVt6AyHsfNpWHMrWmh/XQblg0dxt+dx6V5OcrlMux2O0wmk7JNEAqFnIVCAfF4HLlcDsl0Amf1coxaVZhfm8Yd6zAllcHlcsHv9yMQCECn0/1TEQwGBzc3N1EqlcBUUDW8YePXOhTaQ7hqVmDg8UG43W74fD4kk0mwz+ga0Gg0SuL1evnv+Xwe2WwWmUyGI51OIxqPoHfqABKJBB9knqlkdY/Hg4mJCWd3vV4n1WqV0GFCCxxUCaHNJJvKEX2/g8RiMRKJRAg9MgddmdB7ETbLCPgx2EMQBEJ35A10LUJ/42BkVAEnZj21Wo1IJBI2o+xmj2azycGKIsScmN8eNxoNjv2MQBxqtVpELpdzzwCgnWdxZ575NoFUKuWNrCBCbGTGYmaddZlMxpV02Wy2L3QXFbsBI+v0IkS5DJ2rUqLVvwAAAP//AwDkwh7q3xB35AAAAABJRU5ErkJggg==);
     }
   </style>
@@ -72,11 +94,35 @@ This GitHub fork/clone of the debian fakeroot repository is a mirror clone with 
 
 </p>
 
-<h2>Branch macosx</h2>
+<h2>Quick Download</h2>
+
+<table class="download-list">
+<thead>
+<tr class="header">
+<th>Download</th><th>Tag</th><th>Released</th><th>Info</th>
+</tr>
+<tr class="separator"><td colspan="4"></td></tr>
+</thead>
+<tbody>
+
+<tr><td><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-3.1.dmg"><span class="down"></span>fakeroot-3.1.dmg</a></td>
+<td>macosx-v3.1</td>
+<td>2012-02-24</td>
+<td>Mac OS X Installer for 10.4 or later (universal) [<a href="#macosx-v31_in">hashes</a>]</td></tr>
+
+<tr><td><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-macosx-v3.1.tar.gz"><span class="down"></span>fakeroot-macosx-v3.1.tar.gz</a></td>
+<td>macosx-v3.1</td>
+<td>2012-04-22</td>
+<td>Pre-bootstrapped (includes configure script) [<a href="#macosx-v31_tb">hashes</a>]</td></tr>
+
+</tbody>
+</table>
+
+<h2>Branch macosx Info</h2>
 
 <p>Without a change to the <tt>doc/Makefile.am</tt> file like so:</p>
-<pre class="inset">
-diff --git a/master:doc/Makefile.am b/macosx:doc/Makefile.am
+<pre class="inset"
+>diff --git a/master:doc/Makefile.am b/macosx:doc/Makefile.am
 index bf5ce07..5394548 100644
 --- a/master:doc/Makefile.am
 +++ b/macosx:doc/Makefile.am
@@ -90,8 +136,8 @@ index bf5ce07..5394548 100644
 <p>the <tt>sudo make install</tt> command will fail on Mac OS X.  The macosx branch (which is also the default HEAD branch) for this GitHub repository maintains the above change so that <tt>sudo make install</tt> will succeed after building on Mac OS X.</p>
 
 <h3>Branch macosx changes not yet in upstream master<br />(pull request pending)</h3>
-<pre class="inset">
-commit 827fcb2cc6a7dc57afc750ffb810bd1729931ddf
+<pre class="inset"
+>commit 827fcb2cc6a7dc57afc750ffb810bd1729931ddf
 Author: Kyle J. McKay &lt;mackyle@gmail.com>
 Date:   Sun Apr 22 03:26:57 2012 -0700
 
@@ -124,8 +170,8 @@ Assuming that a <tt>SimplePref.prefPane</tt> exists by itself in the <tt>stage</
 located in the current directory) and fakeroot has already been installed,
 the following script will create <tt>SimplePref.pkg</tt> to install it:</p>
 
-<pre class="inset">
-#!/bin/sh
+<pre class="inset"
+>#!/bin/sh
 pm=/Developer/usr/bin/packagemaker
 fakeroot sh -s &lt;&lt;FAKEROOT_SCRIPT
 chown -R root:admin stage/SimplePref.prefPane
@@ -143,7 +189,7 @@ files <em>will not</em> pick up the fakeroot settings in the produced installer 
 <h2>License</h2>
 <p>GPLv3
 
-<a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html">http://www.gnu.org/licenses/gpl-3.0-standalone.html</a><br />
+<a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html">http://www.gnu.org/licenses/gpl-3.0.html</a><br />
 See also the <a href="https://github.com/mackyle/fakeroot/blob/macosx/COPYING">COPYING</a> file.</p>
 
 
@@ -155,14 +201,21 @@ See also the <a href="https://github.com/mackyle/fakeroot/blob/macosx/COPYING">C
 </p>
 <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
   by running:
-  <pre class="inset">$ git clone git://github.com/mackyle/fakeroot</pre>
 </p>
-<p>Pre-bootstrapped tarballs (i.e. do not require autotools and have a pre-generated configure script) are available for these tags:
+<pre class="inset">$ git clone git://github.com/mackyle/fakeroot</pre>
+<p>Pre-bootstrapped tarballs (i.e. do not require autotools and have a pre-generated configure script) and Mac OS X installers are available for these tags:
 <dl>
-<dt><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-macosx-v3.1.tar.gz"><span class="down"></span><tt>fakeroot-macosx-v3.1.tar.gz</tt></a> (tag: <tt>macosx-v3.1</tt>)</dt>
+
+<dt id="macosx-v31_in"><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-3.1.dmg"><span class="down"></span><tt>fakeroot-3.1.dmg</tt></a> installer (tag: <tt>macosx-v3.1</tt>)</dt>
+<dd><table class='hash'><tr><td>MD5</td><td>7df81bbe38f235a43a678411263368ea</td></tr>
+<tr><td>SHA1</td><td>139955d0551626b6ef8a13b3f30cc4c67a632366</td></tr>
+<tr><td>SHA256</td><td>dc13a7531875ae32ba318880f5565567c8328373df0f7d2f2c602a222147c0ff</td></tr></table></dd>
+
+<dt id="macosx-v31_tb"><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-macosx-v3.1.tar.gz"><span class="down"></span><tt>fakeroot-macosx-v3.1.tar.gz</tt></a> tarball (tag: <tt>macosx-v3.1</tt>)</dt>
 <dd><table class='hash'><tr><td>MD5</td><td>ef80ce0bcd3c85edb3fbf4f881022ea3</td></tr>
 <tr><td>SHA1</td><td>a301d053dfaa61d0dcaeb399a1d94ce58a0cf3ea</td></tr>
 <tr><td>SHA256</td><td>7238cf259c9d4521ab3cfc0c28c8042b6d67f072c85756ff3ddfe2941ed398da</td></tr></table></dd>
+
 </dl>
 </p>
 <p>See also the <a href="https://github.com/mackyle/fakeroot/downloads">project&#x2019;s downloads area</a>.</p>
