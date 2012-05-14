@@ -52,6 +52,7 @@ lstat$INODE64;int;(const char *file_name, struct stat *buf);(file_name, buf)
 stat$INODE64;int;(const char *file_name, struct stat *buf);(file_name, buf)
 fstat$INODE64;int;(int fd, struct stat *buf);(fd, buf)
 #endif
+execve;int;(const char *path, char *const argv[], char *const envp[]);(path, argv, envp)
 #endif /* ifdef __APPLE__ */
 
 WRAP_MKNOD;int;MKNOD_ARG(int ver, const char *pathname, mode_t mode, dev_t XMKNOD_FRTH_ARG dev);MKNOD_ARG(ver, pathname, mode, dev);MKNOD
