@@ -224,14 +224,14 @@ getattrlist$UNIX2003(const char *path, void *attrList, void *attrBuf,
     return r;
   }
   if (options & FSOPT_NOFOLLOW) {
-    r=lstat(path, &st);
+    r=WRAP_LSTAT(path, &st);
   } else {
-    r=stat(path, &st);
+    r=WRAP_STAT(path, &st);
   }
   if (r) {
     return r;
   }
-  patchattr(attrList, attrBuf, st.st_uid, st.st_gid);
+  patchattr(attrList, attrBuf, st.st_uid, st.st_gid, st.st_mode);
 
   return 0;
 }
