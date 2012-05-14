@@ -1671,6 +1671,105 @@ fgetattrlist(int fd, void *attrList, void *attrBuf,
   return 0;
 }
 #endif /* if HAVE_FGETATTRLIST */
+
+/*
+ * Prevent loss of DYLD_INSERT_LIBRARIES and FAKEROOTKEY environment variables
+ * during packaging.
+ */
+
+static char *dylib_insert;
+static char *fakeroot_key;
+
+__attribute__((constructor,used)) static void retrieve_dylib();
+static void retrieve_dylib()
+{
+  const char *dil = getenv("DYLD_INSERT_LIBRARIES");
+  const char *frk = fakeroot_key = getenv("FAKEROOTKEY");
+  if (frk) {
+    char *savekey = (char *)malloc(12 + strlen(frk) + 1);
+    if (savekey) {
+      sprintf(savekey, "FAKEROOTKEY=%s", frk);
+      fakeroot_key = savekey;
+    }
+  }
+  if (dil) {
+    char *dupe = strdup(dil);
+    if (dupe) {
+      char *ptr = dupe;
+      do {
+        char *next = strchr(ptr, ':');
+        if (next)
+          *next++ = '\0';
+        if (strstr(ptr, "libfakeroot.dylib")) {
+          dylib_insert = ptr;
+          return;
+        }
+        ptr = next;
+      } while (ptr);
+      free(dupe);
+    }
+  }
+}
+
+int execve(const char *path, char *const argv[], char *const envp[])
+{
+  int result, i, envcount = 0;
+  char **altenv = NULL;
+  char *insenv = NULL;
+
+  if (!path || !argv || !envp || !dylib_insert || !fakeroot_key)
+    return next_execve(path, argv, envp);
+
+  while (envp[envcount]) {
+    ++envcount;
+  }
+  altenv = (char **)malloc((envcount + 3) * sizeof(char *));
+  if (!altenv)
+    return next_execve(path, argv, envp);
+  memcpy(altenv, envp, (envcount + 1) * sizeof(char *));
+
+  for (i=0; i<envcount; ++i) {
+    if (strncmp(altenv[i], "FAKEROOTKEY=", 12) == 0)
+      break;
+  }
+  if (i >= envcount) {
+    altenv[envcount] = fakeroot_key;
+    altenv[++envcount] = NULL;
+  }
+
+  for (i=0; i<envcount; ++i) {
+    if (strncmp(altenv[i], "DYLD_INSERT_LIBRARIES=", 22) == 0) {
+      if (strstr(altenv[i], dylib_insert)) {
+        free(altenv);
+        return next_execve(path, argv, envp);
+      } else {
+        insenv = (char *)malloc(strlen(altenv[i]) + strlen(dylib_insert) + 1);
+        if (!insenv) {
+          free(altenv);
+          return next_execve(path, argv, envp);
+        }
+        sprintf(insenv, "DYLD_INSERT_LIBRARIES=%s:%s", dylib_insert, altenv[i]+22);
+        altenv[i] = insenv;
+        result = next_execve(path, argv, altenv);
+        free(insenv);
+        free(altenv);
+        return result;
+      }
+    }
+  }
+  insenv = (char *)malloc(22 + strlen(dylib_insert) + 1);
+  if (!insenv) {
+    free(altenv);
+    return next_execve(path, argv, envp);
+  }
+  sprintf(insenv, "DYLD_INSERT_LIBRARIES=%s", dylib_insert);
+  altenv[envcount] = insenv;
+  altenv[envcount+1] = NULL;
+  result = next_execve(path, argv, altenv);
+  free(insenv);
+  free(altenv);
+  return result;
+}
 #endif /* ifdef __APPLE__ */
 
 #ifdef __sun
