@@ -61,7 +61,15 @@
       height: 0.25em;
     }
 
-    span.down { display: inline-block; width: 16px; height: 16px; margin-right: 2px;
+    span.down {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      margin-right: 2px;
+      vertical-align: baseline;
+      background-repeat: no-repeat;
+      background-position: 0% 100%;
+      background-size: 1em 1em;
       background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAQnRFWHRDb21tZW50AHRJTUUgY2h1bmtsZW4gNyBpZ25vcmVkDUFTQ0lJOiAuLi4uLjA3DUhFWDogMDdENjA5MTYxMDMwMzeLgNWuAAACTUlEQVR4nJRQW2iSYRj+tgq6k5BuDILdObqoYLBRxsjBsKvoIoKKokbrMMibrZsMNseojPJAbINg0zZlFVEi1Yi8aNJWiXlG51lvdOiNiBcefp++74tfZGzQXnh43+89PN/zvoTsYhfmeoQrr3oxsngSY0v9UFvPYLfeHe2c8Yjw5rcB7z0v8fHPLNTLA3sjGNIfFqw/n+PFVzUnufu6b28Ep59JBMu6Dk9Xx/DWbcTIwon/I+h5RIrHpruK1xZPYeHHE8x8HsWK2wDNh4u4v9yHByuKnYmi0agzHA7j6MN9uG4Zwuz3STp8D5OOGzB8G+cqphyXcYse1Ww2O7cPD6ZSKVQqFWwVt6AyHsfNpWHMrWmh/XQblg0dxt+dx6V5OcrlMux2O0wmk7JNEAqFnIVCAfF4HLlcDsl0Amf1coxaVZhfm8Yd6zAllcHlcsHv9yMQCECn0/1TEQwGBzc3N1EqlcBUUDW8YePXOhTaQ7hqVmDg8UG43W74fD4kk0mwz+ga0Gg0SuL1evnv+Xwe2WwWmUyGI51OIxqPoHfqABKJBB9knqlkdY/Hg4mJCWd3vV4n1WqV0GFCCxxUCaHNJJvKEX2/g8RiMRKJRAg9MgddmdB7ETbLCPgx2EMQBEJ35A10LUJ/42BkVAEnZj21Wo1IJBI2o+xmj2azycGKIsScmN8eNxoNjv2MQBxqtVpELpdzzwCgnWdxZ575NoFUKuWNrCBCbGTGYmaddZlMxpV02Wy2L3QXFbsBI+v0IkS5DJ2rUqLVvwAAAP//AwDkwh7q3xB35AAAAABJRU5ErkJggg==);
     }
   </style>
@@ -105,15 +113,15 @@ This GitHub fork/clone of the debian fakeroot repository is a mirror clone with 
 </thead>
 <tbody>
 
-<tr><td><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-3.1.dmg"><span class="down"></span>fakeroot-3.1.dmg</a></td>
-<td>macosx-v3.1</td>
-<td>2012-02-24</td>
-<td>Mac OS X Installer package for 10.4 or later (universal) [<a href="#macosx-v31_in">hashes</a>]</td></tr>
+<tr><td><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-3.2.dmg"><span class="down"></span>fakeroot-3.2.dmg</a></td>
+<td>macosx-v3.2</td>
+<td>2012-05-14</td>
+<td>Mac OS X Installer package for 10.4 or later (universal) [<a href="#macosx-v32_in">hashes</a>]</td></tr>
 
-<tr><td><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-macosx-v3.1.tar.gz"><span class="down"></span>fakeroot-macosx-v3.1.tar.gz</a></td>
-<td>macosx-v3.1</td>
-<td>2012-04-22</td>
-<td>Pre-bootstrapped source tarball (includes configure script) [<a href="#macosx-v31_tb">hashes</a>]</td></tr>
+<tr><td><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-macosx-v3.2.tar.gz"><span class="down"></span>fakeroot-macosx-v3.2.tar.gz</a></td>
+<td>macosx-v3.2</td>
+<td>2012-05-14</td>
+<td>Pre-bootstrapped source tarball (includes configure script) [<a href="#macosx-v32_tb">hashes</a>]</td></tr>
 
 </tbody>
 </table>
@@ -137,7 +145,19 @@ index bf5ce07..5394548 100644
 
 <h3>Branch macosx changes not yet in upstream master<br />(pull request pending)</h3>
 <pre class="inset"
->commit 827fcb2cc6a7dc57afc750ffb810bd1729931ddf
+>commit d6477a457f0ed11be5caa8f1c57e08947cbb8dc8
+Author: Kyle J. McKay &lt;mackyle@gmail.com>
+Date:   Mon May 14 13:18:12 2012 -0700
+
+    Fix packagemaker failures on Darwin
+
+commit b7cd56258268007401db5c9a66d77c968a4c6d70
+Author: Kyle J. McKay &lt;mackyle@gmail.com>
+Date:   Mon May 14 11:47:29 2012 -0700
+
+    Fix getattrlist failures on Darwin
+
+commit 827fcb2cc6a7dc57afc750ffb810bd1729931ddf
 Author: Kyle J. McKay &lt;mackyle@gmail.com>
 Date:   Sun Apr 22 03:26:57 2012 -0700
 
@@ -180,12 +200,6 @@ $pm --root stage --install-to /Library/PreferencePanes \
 FAKEROOT_SCRIPT
 </pre>
 
-<p class="note">
-Be careful about combining the <tt class="nobreak">--discard-forks</tt> packagemaker option with hard links.
-If <tt class="nobreak">--discard-forks</tt> is used <em>and</em> any files have a link count greater than 1, then those
-files <em>will not</em> pick up the fakeroot settings in the produced installer package!  Using either by itself works fine.
-</p>
-
 <h2>License</h2>
 <p>GPLv3
 
@@ -206,15 +220,15 @@ See also the <a href="https://github.com/mackyle/fakeroot/blob/macosx/COPYING">C
 <p>Pre-bootstrapped source tarballs (i.e. do not require autotools and have a pre-generated configure script) and Mac OS X installer packages are available for these tags:
 <dl>
 
-<dt id="macosx-v31_in"><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-3.1.dmg"><span class="down"></span><tt>fakeroot-3.1.dmg</tt></a> OS X installer package (tag: <tt>macosx-v3.1</tt>)</dt>
-<dd><table class='hash'><tr><td>MD5</td><td>7df81bbe38f235a43a678411263368ea</td></tr>
-<tr><td>SHA1</td><td>139955d0551626b6ef8a13b3f30cc4c67a632366</td></tr>
-<tr><td>SHA256</td><td>dc13a7531875ae32ba318880f5565567c8328373df0f7d2f2c602a222147c0ff</td></tr></table></dd>
+<dt id="macosx-v32_in"><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-3.2.dmg"><span class="down"></span><tt>fakeroot-3.2.dmg</tt></a> OS X installer package (tag: <tt>macosx-v3.2</tt>)</dt>
+<dd><table class='hash'><tr><td>MD5</td><td>7de1d7fac099672483c353b02fc1b73f</td></tr>
+<tr><td>SHA1</td><td>98333f7373d08e5f402b2ae94f7dbfe11315cc50</td></tr>
+<tr><td>SHA256</td><td>6f2a98fcc4fe32d8706fd85df7041ea504bf90d27ff74c173294dbe85744e1ee</td></tr></table></dd>
 
-<dt id="macosx-v31_tb"><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-macosx-v3.1.tar.gz"><span class="down"></span><tt>fakeroot-macosx-v3.1.tar.gz</tt></a> source tarball (tag: <tt>macosx-v3.1</tt>)</dt>
-<dd><table class='hash'><tr><td>MD5</td><td>ef80ce0bcd3c85edb3fbf4f881022ea3</td></tr>
-<tr><td>SHA1</td><td>a301d053dfaa61d0dcaeb399a1d94ce58a0cf3ea</td></tr>
-<tr><td>SHA256</td><td>7238cf259c9d4521ab3cfc0c28c8042b6d67f072c85756ff3ddfe2941ed398da</td></tr></table></dd>
+<dt id="macosx-v32_tb"><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-macosx-v3.2.tar.gz"><span class="down"></span><tt>fakeroot-macosx-v3.2.tar.gz</tt></a> source tarball (tag: <tt>macosx-v3.2</tt>)</dt>
+<dd><table class='hash'><tr><td>MD5</td><td>2f6b9965a9e97e4a77f0f2ba6f1e202f</td></tr>
+<tr><td>SHA1</td><td>6577e66821f6114746f26fd427bd1b12e00db642</td></tr>
+<tr><td>SHA256</td><td>a12822cc97f74f622069abf2f85ee89b9416e0ebd091dbae3a3b4a3354bb1582</td></tr></table></dd>
 
 </dl>
 </p>
