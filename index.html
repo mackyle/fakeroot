@@ -113,15 +113,15 @@ This GitHub fork/clone of the debian fakeroot repository is a mirror clone with 
 </thead>
 <tbody>
 
-<tr><td><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-3.2.dmg"><span class="down"></span>fakeroot-3.2.dmg</a></td>
-<td>macosx-v3.2</td>
-<td>2012-05-14</td>
-<td>Mac OS X Installer package for 10.4 or later (universal) [<a href="#macosx-v32_in">hashes</a>]</td></tr>
+<tr><td><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-3.3.dmg"><span class="down"></span>fakeroot-3.3.dmg</a></td>
+<td>macosx-v3.3</td>
+<td>2012-05-24</td>
+<td>Mac OS X Installer package for 10.4 or later (universal) [<a href="#macosx-v33_in">hashes</a>]</td></tr>
 
-<tr><td><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-macosx-v3.2.tar.gz"><span class="down"></span>fakeroot-macosx-v3.2.tar.gz</a></td>
-<td>macosx-v3.2</td>
-<td>2012-05-14</td>
-<td>Pre-bootstrapped source tarball (includes configure script) [<a href="#macosx-v32_tb">hashes</a>]</td></tr>
+<tr><td><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-macosx-v3.3.tar.gz"><span class="down"></span>fakeroot-macosx-v3.3.tar.gz</a></td>
+<td>macosx-v3.3</td>
+<td>2012-05-24</td>
+<td>Pre-bootstrapped source tarball (includes configure script) [<a href="#macosx-v33_tb">hashes</a>]</td></tr>
 
 </tbody>
 </table>
@@ -145,7 +145,19 @@ index bf5ce07..5394548 100644
 
 <h3>Branch macosx changes not yet in upstream master<br />(pull request pending)</h3>
 <pre class="inset"
->commit d6477a457f0ed11be5caa8f1c57e08947cbb8dc8
+>commit 4b70a81cd4951a54928774a87ebabce0f2108d3c
+Author: Kyle J. McKay &lt;mackyle@gmail.com>
+Date:   Thu May 24 02:23:04 2012 -0700
+
+    Fix packagemaker failures on OS X when running 10.6+
+
+    The packagemaker utility spawns a child to help with the package
+    creation but it explicitly sets its own insert library for that
+    child.  Previously this was handled by intercepting only execve,
+    but on newer systems that's not good enough.  Now intercept all
+    the exec/spawn calls to restore the insert library.
+
+commit d6477a457f0ed11be5caa8f1c57e08947cbb8dc8
 Author: Kyle J. McKay &lt;mackyle@gmail.com>
 Date:   Mon May 14 13:18:12 2012 -0700
 
@@ -220,15 +232,15 @@ See also the <a href="https://github.com/mackyle/fakeroot/blob/macosx/COPYING">C
 <p>Pre-bootstrapped source tarballs (i.e. do not require autotools and have a pre-generated configure script) and Mac OS X installer packages are available for these tags:
 <dl>
 
-<dt id="macosx-v32_in"><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-3.2.dmg"><span class="down"></span><tt>fakeroot-3.2.dmg</tt></a> OS X installer package (tag: <tt>macosx-v3.2</tt>)</dt>
-<dd><table class='hash'><tr><td>MD5</td><td>942a92db5fb9101668d22790d15bc93a</td></tr>
-<tr><td>SHA1</td><td>c14df97a391705f20bd70f21095a4e4fa3b0c221</td></tr>
-<tr><td>SHA256</td><td>facb2d4d2f04cc005b8055436a2c06a2c8a217fa8c54b2f0acaf074dd1a0f541</td></tr></table></dd>
+<dt id="macosx-v33_in"><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-3.3.dmg"><span class="down"></span><tt>fakeroot-3.3.dmg</tt></a> OS X installer package (tag: <tt>macosx-v3.3</tt>)</dt>
+<dd><table class='hash'><tr><td>MD5</td><td>a804db939b5f3adf43ec4043f0c94f56</td></tr>
+<tr><td>SHA1</td><td>e1d36da4f22b95b6af8a751000ac28028ff7f82e</td></tr>
+<tr><td>SHA256</td><td>cdf6c63f6959aa5d3c4c445902b413b087f08da49756a292055ee0320c876db3</td></tr></table></dd>
 
-<dt id="macosx-v32_tb"><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-macosx-v3.2.tar.gz"><span class="down"></span><tt>fakeroot-macosx-v3.2.tar.gz</tt></a> source tarball (tag: <tt>macosx-v3.2</tt>)</dt>
-<dd><table class='hash'><tr><td>MD5</td><td>6c5283672d84264413e8803432839af1</td></tr>
-<tr><td>SHA1</td><td>f0a14fbacc2bdc792c09e1a26188f0ee7a1b3326</td></tr>
-<tr><td>SHA256</td><td>32f49f1ca5cee482027911cef04a07dcfcd924a264d17840e26c7568b3911aff</td></tr></table></dd>
+<dt id="macosx-v33_tb"><a href="https://github.com/downloads/mackyle/fakeroot/fakeroot-macosx-v3.3.tar.gz"><span class="down"></span><tt>fakeroot-macosx-v3.3.tar.gz</tt></a> source tarball (tag: <tt>macosx-v3.3</tt>)</dt>
+<dd><table class='hash'><tr><td>MD5</td><td>82a8f80204feb35b008993674dd34b19</td></tr>
+<tr><td>SHA1</td><td>468df4d4f03c62fd1b0806819b8a773c39b566e6</td></tr>
+<tr><td>SHA256</td><td>cb42d5f568489baa6d77aa53969bef5403bd5b9b0f3e74e6c4cce5410568c513</td></tr></table></dd>
 
 </dl>
 </p>
