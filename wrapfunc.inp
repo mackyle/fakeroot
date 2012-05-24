@@ -51,8 +51,16 @@ getattrlist$UNIX2003;int;(const char *path, void *attrList, void *attrBuf, size_
 lstat$INODE64;int;(const char *file_name, struct stat *buf);(file_name, buf)
 stat$INODE64;int;(const char *file_name, struct stat *buf);(file_name, buf)
 fstat$INODE64;int;(int fd, struct stat *buf);(fd, buf)
+posix_spawn;int;(pid_t * __restrict pid, const char * __restrict path, const posix_spawn_file_actions_t *file_actions, const posix_spawnattr_t * __restrict attrp, char *const argv[ __restrict], char *const envp[ __restrict]);(pid, path, file_actions, attrp, argv, envp)
+posix_spawnp;int;(pid_t * __restrict pid, const char * __restrict path, const posix_spawn_file_actions_t *file_actions, const posix_spawnattr_t * __restrict attrp, char *const argv[ __restrict], char *const envp[ __restrict]);(pid, path, file_actions, attrp, argv, envp)
 #endif
 execve;int;(const char *path, char *const argv[], char *const envp[]);(path, argv, envp)
+execl;int;(const char *path, const char *arg0, ...)
+execle;int;(const char *path, const char *arg0, ...)
+execlp;int;(const char *path, const char *arg0, ...)
+execv;int;(const char *path, char *const argv[]);(path, argv)
+execvp;int;(const char *file, char *const argv[]);(file, argv)
+execvP;int;(const char *file, const char *search_path, char *const argv[]);(file, search_path, argv)
 #endif /* ifdef __APPLE__ */
 
 WRAP_MKNOD;int;MKNOD_ARG(int ver, const char *pathname, mode_t mode, dev_t XMKNOD_FRTH_ARG dev);MKNOD_ARG(ver, pathname, mode, dev);MKNOD

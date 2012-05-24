@@ -112,6 +112,17 @@
 #ifdef __sun
 #include <sys/systeminfo.h>
 #endif
+#ifdef __APPLE__
+#include <paths.h>
+#include <sys/stat.h>
+#include <crt_externs.h>
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+#include <spawn.h>
+#endif
+#ifndef va_copy
+#define va_copy(dest,src) ((dest)=(src))
+#endif
+#endif /* __APPLE__ */
 
 #if !HAVE_DECL_SETENV
 extern int setenv (const char *name, const char *value, int replace);
@@ -1673,23 +1684,56 @@ fgetattrlist(int fd, void *attrList, void *attrBuf,
 #endif /* if HAVE_FGETATTRLIST */
 
 /*
- * Prevent loss of DYLD_INSERT_LIBRARIES and FAKEROOTKEY environment variables
- * during packaging.
+ * Prevent loss of DYLD_INSERT_LIBRARIES, FAKEROOTKEY and FAKED_MODE
+ * environment variables during packaging (packagemaker otherwise clears them).
  */
 
 static char *dylib_insert;
 static char *fakeroot_key;
+static char *faked_mode;
+static int spawnexec_in_progress;
+static pid_t spawnexec_pid;
 
-__attribute__((constructor,used)) static void retrieve_dylib();
+static int is_spawnexec_active()
+{
+  if (getpid() != spawnexec_pid) {
+    spawnexec_in_progress = 0;
+  }
+  return spawnexec_in_progress;
+}
+
+static void enter_spawnexec()
+{
+  (void)is_spawnexec_active();
+  if (++spawnexec_in_progress == 1)
+    spawnexec_pid = getpid();
+}
+
+static void exit_spawnexec()
+{
+  (void)is_spawnexec_active();
+  if (spawnexec_in_progress)
+    --spawnexec_in_progress;
+}
+
+__attribute__((__constructor__,__used__)) static void retrieve_dylib();
 static void retrieve_dylib()
 {
   const char *dil = getenv("DYLD_INSERT_LIBRARIES");
   const char *frk = fakeroot_key = getenv("FAKEROOTKEY");
+  const char *fdm = faked_mode = getenv("FAKED_MODE");
   if (frk) {
     char *savekey = (char *)malloc(12 + strlen(frk) + 1);
     if (savekey) {
       sprintf(savekey, "FAKEROOTKEY=%s", frk);
       fakeroot_key = savekey;
+    }
+  }
+  if (fdm) {
+    char *savemode = (char *)malloc(11 + strlen(fdm) + 1);
+    if (savemode) {
+      sprintf(savemode, "FAKED_MODE=%s", fdm);
+      faked_mode = savemode;
     }
   }
   if (dil) {
@@ -1700,7 +1744,7 @@ static void retrieve_dylib()
         char *next = strchr(ptr, ':');
         if (next)
           *next++ = '\0';
-        if (strstr(ptr, "libfakeroot.dylib")) {
+        if (strstr(ptr, "libfakeroot") && strstr(ptr, ".dylib")) {
           dylib_insert = ptr;
           return;
         }
@@ -1711,21 +1755,22 @@ static void retrieve_dylib()
   }
 }
 
-int execve(const char *path, char *const argv[], char *const envp[])
+static char **get_exec_envp(char *const envp[], char **insenvp)
 {
-  int result, i, envcount = 0;
+  int i, envcount = 0;
   char **altenv = NULL;
-  char *insenv = NULL;
 
-  if (!path || !argv || !envp || !dylib_insert || !fakeroot_key)
-    return next_execve(path, argv, envp);
+  *insenvp = NULL;
+  if (!envp || !dylib_insert || !fakeroot_key ||
+      getenv("FAKEROOT_TEST_PRELOAD"))
+    return (char **)envp;
 
   while (envp[envcount]) {
     ++envcount;
   }
-  altenv = (char **)malloc((envcount + 3) * sizeof(char *));
+  altenv = (char **)malloc((envcount + 4) * sizeof(char *));
   if (!altenv)
-    return next_execve(path, argv, envp);
+    return (char **)envp;
   memcpy(altenv, envp, (envcount + 1) * sizeof(char *));
 
   for (i=0; i<envcount; ++i) {
@@ -1738,38 +1783,248 @@ int execve(const char *path, char *const argv[], char *const envp[])
   }
 
   for (i=0; i<envcount; ++i) {
+    if (strncmp(altenv[i], "FAKED_MODE=", 11) == 0)
+      break;
+  }
+  if (i >= envcount && faked_mode) {
+    altenv[envcount] = faked_mode;
+    altenv[++envcount] = NULL;
+  }
+
+  for (i=0; i<envcount; ++i) {
     if (strncmp(altenv[i], "DYLD_INSERT_LIBRARIES=", 22) == 0) {
-      if (strstr(altenv[i], dylib_insert)) {
-        free(altenv);
-        return next_execve(path, argv, envp);
-      } else {
-        insenv = (char *)malloc(strlen(altenv[i]) + strlen(dylib_insert) + 1);
-        if (!insenv) {
+      if (strstr(altenv[i], dylib_insert))
+        return altenv;
+      else {
+        *insenvp = (char *)malloc(strlen(altenv[i]) + strlen(dylib_insert) + 2);
+        if (!*insenvp) {
           free(altenv);
-          return next_execve(path, argv, envp);
+          return (char **)envp;
         }
-        sprintf(insenv, "DYLD_INSERT_LIBRARIES=%s:%s", dylib_insert, altenv[i]+22);
-        altenv[i] = insenv;
-        result = next_execve(path, argv, altenv);
-        free(insenv);
-        free(altenv);
-        return result;
+        sprintf(*insenvp, "DYLD_INSERT_LIBRARIES=%s:%s", dylib_insert,
+          altenv[i]+22);
+        altenv[i] = *insenvp;
+        return altenv;
       }
     }
   }
-  insenv = (char *)malloc(22 + strlen(dylib_insert) + 1);
-  if (!insenv) {
+  *insenvp = (char *)malloc(22 + strlen(dylib_insert) + 1);
+  if (!*insenvp) {
     free(altenv);
-    return next_execve(path, argv, envp);
+    return (char **)envp;
   }
-  sprintf(insenv, "DYLD_INSERT_LIBRARIES=%s", dylib_insert);
-  altenv[envcount] = insenv;
+  sprintf(*insenvp, "DYLD_INSERT_LIBRARIES=%s", dylib_insert);
+  altenv[envcount] = *insenvp;
   altenv[envcount+1] = NULL;
+  return altenv;
+}
+
+int execve(const char *path, char *const argv[], char *const envp[])
+{
+  int result;
+  char **altenv;
+  char *insenv;
+
+  if (!path || !argv || !envp || is_spawnexec_active()) {
+    enter_spawnexec();
+    result = next_execve(path, argv, envp);
+    exit_spawnexec();
+    return result;
+  }
+
+  altenv = get_exec_envp(envp, &insenv);
+  enter_spawnexec();
   result = next_execve(path, argv, altenv);
-  free(insenv);
-  free(altenv);
+  exit_spawnexec();
+  if (altenv != envp)
+    free(altenv);
+  if (insenv)
+    free(insenv);
   return result;
 }
+
+/* funnel execl, execle, execlp, execv, execvp and execvP into execve */
+
+int execv(const char *path, char *const argv[])
+{
+  return execve(path, argv, *_NSGetEnviron());
+}
+
+static char *find_exec_path(const char *file, const char *search_path)
+{
+  char *path = (char *)file;
+  if (file && *file && !strchr(file, '/') && search_path && *search_path) {
+    size_t splen = strlen(search_path);
+    const char *search_end = search_path + splen;
+    const char *next;
+    char *buff = malloc(strlen(file) + splen + 2);
+    if (!buff)
+      return NULL;
+    for (; search_path < search_end; search_path = next) {
+      struct stat info;
+      size_t plen;
+      if ((next = strchr(search_path, ':')))
+        plen = next++ - search_path;
+      else
+        plen = (next = search_end) - search_path;
+      memcpy(buff, search_path, plen);
+      sprintf(buff + plen, "%s%s", plen ? "/" : "", file);
+      if (stat(buff, &info) || !S_ISREG(info.st_mode) || access(buff, X_OK))
+        continue;
+      path = buff;
+      break;
+    }
+    if (path == file) {
+      free(buff);
+      errno = ENOENT;
+      return NULL;
+    }
+  }
+  return path;
+}
+
+int execvP(const char *file, const char *search_path, char *const argv[])
+{
+  int result;
+  char *path = find_exec_path(file, search_path);
+  if (!path)
+    return -1;
+  result = execve(path, argv, *_NSGetEnviron());
+  if (path != file)
+    free(path);
+  return result;
+}
+
+int execvp(const char *file, char *const argv[])
+{
+  const char *path = getenv("PATH");
+  return execvP(file, path ? path : _PATH_DEFPATH, argv);
+}
+
+static char **collect_args(const char *arg0, va_list args, char ***envp)
+{
+  char **arglist;
+  size_t count = 0;
+  char **outp;
+
+  va_list args_copy;
+  va_copy(args_copy, args);
+  for (;;) {
+    char *ap = va_arg(args_copy, char *);
+    if (!ap)
+      break;
+    ++count;
+  }
+  va_end(args_copy);
+  arglist = (char **)malloc((count + 2) * sizeof(char *));
+  if (!arglist)
+    return NULL;
+  outp = arglist;
+  *outp++ = (char *)arg0;
+  for (;;) {
+    char *ap = va_arg(args, char *);
+    *outp++ = ap;
+    if (!ap)
+      break;
+  }
+  if (envp)
+    *envp = va_arg(args, char **);
+  return arglist;
+}
+
+int execl(const char *path, const char *arg0, ...)
+{
+  int result;
+  char **arglist;
+  va_list args;
+  va_start(args, arg0);
+  arglist = collect_args(arg0, args, NULL);
+  va_end(args);
+  if (!arglist)
+    return -1;
+  result = execve(path, arglist, *_NSGetEnviron());
+  free(arglist);
+  return result;
+}
+
+int execle(const char *path, const char *arg0, ...)
+{
+  int result;
+  char **arglist;
+  char **envp;
+  va_list args;
+  va_start(args, arg0);
+  arglist = collect_args(arg0, args, &envp);
+  va_end(args);
+  if (!arglist)
+    return -1;
+  result = execve(path, arglist, envp);
+  free(arglist);
+  return result;
+}
+
+int execlp(const char *file, const char *arg0, ...)
+{
+  int result;
+  char **arglist;
+  va_list args;
+  va_start(args, arg0);
+  arglist = collect_args(arg0, args, NULL);
+  va_end(args);
+  if (!arglist)
+    return -1;
+  result = execvp(file, arglist);
+  free(arglist);
+  return result;
+}
+
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+
+/* handle posix_spawn and posix_spawnp separately */
+
+int posix_spawn(pid_t * __restrict pid, const char * __restrict path,
+                const posix_spawn_file_actions_t *file_actions,
+                const posix_spawnattr_t * __restrict attrp,
+                char *const argv[ __restrict], char *const envp[ __restrict])
+{
+  int result;
+  char **altenv;
+  char *insenv;
+
+  if (!path || !argv || !envp || is_spawnexec_active()) {
+    enter_spawnexec();
+    result = next_posix_spawn(pid, path, file_actions, attrp, argv, envp);
+    exit_spawnexec();
+    return result;
+  }
+
+  altenv = get_exec_envp(envp, &insenv);
+  enter_spawnexec();
+  result = next_posix_spawn(pid, path, file_actions, attrp, argv, altenv);
+  exit_spawnexec();
+  if (altenv != envp)
+    free(altenv);
+  if (insenv)
+    free(insenv);
+  return result;
+}
+
+int posix_spawnp(pid_t * __restrict pid, const char * __restrict file,
+                 const posix_spawn_file_actions_t *file_actions,
+                 const posix_spawnattr_t * __restrict attrp,
+                 char *const argv[ __restrict], char *const envp[ __restrict])
+{
+  int result;
+  const char *search_path = getenv("PATH");
+  char *path = find_exec_path(file, search_path ? search_path : _PATH_DEFPATH);
+  if (!path)
+    return errno;
+  result = posix_spawn(pid, path, file_actions, attrp, argv, envp);
+  if (path != file)
+    free(path);
+  return result;
+}
+#endif /* MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 */
 #endif /* ifdef __APPLE__ */
 
 #ifdef __sun
