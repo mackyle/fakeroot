@@ -4,7 +4,7 @@ mkdir $tmp
 run_fakeroot -- \
  ${posixshell} -c "touch $tmp/justafile &&
                    ln -s justafile $tmp/alink &&
-                   $LDPRELOADVAR= rm $tmp/alink &&
+                   $LDPRELOADVAR= FAKEROOT_TEST_PRELOAD=1 rm $tmp/alink &&
                    touch $tmp/alink &&
                    ls -ld $tmp/alink" | grep "^-"
 TEMP=$?

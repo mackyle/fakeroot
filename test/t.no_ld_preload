@@ -4,7 +4,7 @@
 mkdir $tmp
 # fakeroot mangles spaces unless the getopt utility is the GNU version
 echo "touch $tmp/justafile &&
-      $LDPRELOADVAR= rm $tmp/justafile &&
+      $LDPRELOADVAR= FAKEROOT_TEST_PRELOAD=1 rm $tmp/justafile &&
       mkdir $tmp/justafile &&
       ls -ld $tmp/justafile" > $tmp/sh
 run_fakeroot -- \

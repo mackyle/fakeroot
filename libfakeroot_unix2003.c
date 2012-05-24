@@ -66,6 +66,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
+#include <spawn.h>
 #ifdef HAVE_SYS_ACL_H
 #include <sys/acl.h>
 #endif /* HAVE_SYS_ACL_H */
