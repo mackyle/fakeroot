@@ -1,3 +1,9 @@
+fakeroot (1.18.4-1) unstable; urgency=low
+
+  * More MacOS X patches from Kyle J. McKay.
+
+ -- Clint Adams <clint@debian.org>  Sat, 02 Jun 2012 14:27:39 -0400
+
 fakeroot (1.18.3-1) unstable; urgency=low
 
   * Disable SYSV tests on the Hurd.  closes: #651103.
