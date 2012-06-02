@@ -277,6 +277,7 @@ done
 AH_TEMPLATE([HAVE_ACL_T], [acl_t data type and associated functions are provided by OS])
 AC_MSG_CHECKING([for acl_t struct])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+       #include <sys/types.h>
        #include <sys/acl.h>
   ]], [[
        acl_t t;

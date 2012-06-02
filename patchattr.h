@@ -33,7 +33,7 @@ extern int fakeroot_debug;
 
 #endif /* LIBFAKEROOT_DEBUGGING */
 static void
-patchattr(void *attrList, void *attrBuf, uid_t uid, gid_t gid)
+patchattr(void *attrList, void *attrBuf, uid_t uid, gid_t gid, mode_t mode)
 {
   /* Attributes, in the order in which they are returned (which is the same as
      the order they are described in the man page).
@@ -115,6 +115,14 @@ patchattr(void *attrList, void *attrBuf, uid_t uid, gid_t gid)
         }
 #endif /* LIBFAKEROOT_DEBUGGING */
         *(gid_t *)b = gid;
+      }
+      if (attrs[i].value == ATTR_CMN_ACCESSMASK) {
+#ifdef LIBFAKEROOT_DEBUGGING
+        if (fakeroot_debug) {
+          fprintf(stderr, "patchattr mode 0%o\n", *(mode_t *)b);
+        }
+#endif /* LIBFAKEROOT_DEBUGGING */
+        *(mode_t *)b = mode;
       }
       b += (attrs[i].size + 3) & ~3;
     }

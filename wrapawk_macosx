@@ -40,7 +40,7 @@ BEGIN{
   print $0 > headerfile;
 
 }
-/^[^\/].*;.*;.*;/{
+/^[^\/].*;.*;.*/{
   name=$1;
   ret=$2;
   argtype=$3;
@@ -66,10 +66,12 @@ BEGIN{
     print "#define " name " my_" name                   > deffile
 
     print "extern " ret, name, argtype ";"              > tmpffile;
-    print "static __inline__ " ret " next_" name, argtype " __attribute__((always_inline));" > tmpffile;
-    print "static __inline__ " ret " next_" name, argtype " {" > tmpffile;
-    print "  return " name, argname ";"                 > tmpffile;
-    print "}"                                           > tmpffile;
+    if(argname){
+        print "static __inline__ " ret " next_" name, argtype " __attribute__((always_inline));" > tmpffile;
+        print "static __inline__ " ret " next_" name, argtype " {" > tmpffile;
+        print "  return " name, argname ";"             > tmpffile;
+        print "}"                                       > tmpffile;
+    }
     print ""                                            > tmpffile;
   }
 }
