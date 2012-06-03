@@ -94,7 +94,7 @@
   tool for simulating superuser privileges
 </div>
 
-<p>A fork/clone of the main debian fakeroot repository at <a href="http://git.debian.org/?p=users/clint/fakeroot.git">http://git.debian.org/?p=users/clint/fakeroot.git</a> that includes enhanced Mac OS X fakeroot support which has since been merged back into that repository as of release 1.18.3-1 except for the changes noted below.
+<p>A fork/clone of the main debian fakeroot repository at <a href="http://git.debian.org/?p=users/clint/fakeroot.git">http://git.debian.org/?p=users/clint/fakeroot.git</a> that includes enhanced Mac OS X fakeroot support which has since been merged back into that repository as of release 1.18.4-1 except for the changes noted below.
 
 </p><p>
 
@@ -142,50 +142,11 @@ index bf5ce07..5394548 100644
  man_MANS = faked.1 fakeroot.1
 </pre>
 <p>the <tt>sudo make install</tt> command will fail on Mac OS X.  The macosx branch (which is also the default HEAD branch) for this GitHub repository maintains the above change so that <tt>sudo make install</tt> will succeed after building on Mac OS X.</p>
-
+<!--
 <h3>Branch macosx changes not yet in upstream master<br />(pull request pending)</h3>
 <pre class="inset"
->commit 4b70a81cd4951a54928774a87ebabce0f2108d3c
-Author: Kyle J. McKay &lt;mackyle@gmail.com>
-Date:   Thu May 24 02:23:04 2012 -0700
-
-    Fix packagemaker failures on OS X when running 10.6+
-
-    The packagemaker utility spawns a child to help with the package
-    creation but it explicitly sets its own insert library for that
-    child.  Previously this was handled by intercepting only execve,
-    but on newer systems that's not good enough.  Now intercept all
-    the exec/spawn calls to restore the insert library.
-
-commit d6477a457f0ed11be5caa8f1c57e08947cbb8dc8
-Author: Kyle J. McKay &lt;mackyle@gmail.com>
-Date:   Mon May 14 13:18:12 2012 -0700
-
-    Fix packagemaker failures on Darwin
-
-commit b7cd56258268007401db5c9a66d77c968a4c6d70
-Author: Kyle J. McKay &lt;mackyle@gmail.com>
-Date:   Mon May 14 11:47:29 2012 -0700
-
-    Fix getattrlist failures on Darwin
-
-commit 827fcb2cc6a7dc57afc750ffb810bd1729931ddf
-Author: Kyle J. McKay &lt;mackyle@gmail.com>
-Date:   Sun Apr 22 03:26:57 2012 -0700
-
-    Correct HAVE_ACL_T configure test for Darwin
-
-Notes:
-    Commit d6f29a80 broke the ACL presence configure test
-    on Darwin.  Include &lt;sys/types.h&gt; also to fix it.
-
-commit aba0033d2ae93f8e4d54f8be822825e51e8fb817
-Author: Kyle J. McKay &lt;mackyle@gmail.com>
-Date:   Fri Mar 9 09:43:15 2012 -0800
-
-    Minor README_MACOSX.txt typo and clarification
-</pre>
-
+></pre>
+-->
 <h2>Supported OS X Versions</h2>
 
 <p>Mac OS X 10.4 and later are supported as are two-level namespace executables.</p>
