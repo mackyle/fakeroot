@@ -1,0 +1,28 @@
+Index: fakeroot-1.18.4/libfakeroot.c
+===================================================================
+--- fakeroot-1.18.4.orig/libfakeroot.c	2012-06-02 18:23:41.000000000 +0000
++++ fakeroot-1.18.4/libfakeroot.c	2012-06-06 20:32:25.000000000 +0000
+@@ -1579,11 +1579,7 @@
+     r->fts_statp = NULL;  /* Otherwise fts_statp may be a random pointer */
+ #endif
+   if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
+-# if defined(STAT64_SUPPORT) && !defined(__APPLE__)
+-    SEND_GET_STAT64(r->fts_statp, _STAT_VER);
+-# else
+     SEND_GET_STAT(r->fts_statp, _STAT_VER);
+-# endif
+   }
+ 
+   return r;
+@@ -1602,11 +1598,7 @@
+   first=next_fts_children(ftsp, options);
+   for(r = first; r; r = r->fts_link) {
+     if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
+-# if defined(STAT64_SUPPORT) && !defined(__APPLE__)
+-      SEND_GET_STAT64(r->fts_statp, _STAT_VER);
+-# else
+       SEND_GET_STAT(r->fts_statp, _STAT_VER);
+-# endif
+     }
+   }
+ 
