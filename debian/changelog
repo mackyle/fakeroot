@@ -1,3 +1,11 @@
+fakeroot (1.18.4-2) unstable; urgency=low
+
+  * Disable stat64 for FTS functions in a Debian-local patch,
+    since FTS is always built without LFS in eglibc. Fixes
+    pax on hurd-i386 (at least).  closes: #676428.
+
+ -- Thorsten Glaser <tg@mirbsd.de>  Wed, 06 Jun 2012 20:33:31 +0000
+
 fakeroot (1.18.4-1) unstable; urgency=low
 
   * More MacOS X patches from Kyle J. McKay.
