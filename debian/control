@@ -1,7 +1,7 @@
 Source: fakeroot
 Section: utils
 Priority: optional
-Build-Depends: sharutils, gcc-multilib [amd64 i386 kfreebsd-amd64 powerpc s390 sparc], lib64c-dev [i386 powerpc s390 sparc], lib32c-dev [amd64 kfreebsd-amd64 ppc64], libacl1-dev
+Build-Depends: sharutils, gcc-multilib [amd64 i386 kfreebsd-amd64 powerpc s390 sparc], lib64c-dev [i386 powerpc s390 sparc], lib32c-dev [amd64 kfreebsd-amd64 ppc64], libacl1-dev, libcap-dev [amd64 i386], libcap2-bin [amd64 i386]
 Maintainer: Clint Adams <clint@debian.org>
 Standards-Version: 3.9.3
 Vcs-Git: git://git.debian.org/git/users/clint/fakeroot.git
