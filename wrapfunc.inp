@@ -145,6 +145,19 @@ setfsgid;gid_t;(gid_t fsgid);(fsgid)
 #endif /* HAVE_SETFSGID */
 initgroups;int;(const char *user, INITGROUPS_SECOND_ARG group);(user, group)
 setgroups;int;(SETGROUPS_SIZE_TYPE size, const gid_t *list);(size, list)
+capset;int;(cap_user_header_t hdrp, const cap_user_data_t datap);(hdrp, datap)
+listxattr; ssize_t;(const char *path, char *list, size_t size);(path, list, size)
+llistxattr; ssize_t;(const char *path, char *list, size_t size);(path, list, size)
+flistxattr; ssize_t;(int fd, char *list, size_t size);(fd, list, size)
+getxattr;ssize_t;(const char *path, const char *name, void *value, size_t size);(path, name, value, size)
+lgetxattr;ssize_t;(const char *path, const char *name, void *value, size_t size);(path, name, value, size)
+fgetxattr;ssize_t;(int fd, const char *name, void *value, size_t size);(fd, name, value, size)
+setxattr;ssize_t;(const char *path, const char *name, void *value, size_t size, int flags);(path, name, value, size, flags)
+lsetxattr;ssize_t;(const char *path, const char *name, void *value, size_t size, int flags);(path, name, value, size, flags)
+fsetxattr;ssize_t;(int fd, const char *name, void *value, size_t size, int flags);(fd, name, value, size, flags)
+removexattr;ssize_t;(const char *path, const char *name);(path, name)
+lremovexattr;ssize_t;(const char *path, const char *name);(path, name)
+fremovexattr;ssize_t;(int fd, const char *name);(fd, name)
 
 #ifdef HAVE_FSTATAT
 #ifdef HAVE_FCHMODAT

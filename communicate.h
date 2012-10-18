@@ -139,14 +139,27 @@
    enabled any more, but used to be in libtricks.
 */
 
-enum {chown_func,
-        /*2*/  chmod_func,
-        /*3*/  mknod_func,
-               stat_func,
-        /*5*/  unlink_func,
-               debugdata_func,
-               reqoptions_func,
+enum {chown_func = 0,
+               chmod_func = 1,
+               mknod_func = 2,
+               stat_func = 3,
+               unlink_func = 4,
+               debugdata_func = 5,
+               reqoptions_func = 6,
+               listxattr_func = 7,
+               getxattr_func = 8,
+               setxattr_func = 9,
+               removexattr_func = 10,
                last_func};
+
+typedef struct {
+  int func;
+  const char *name;
+  char *value;
+  size_t size;
+  int flags;
+  int rc;
+} xattr_args;
 
 #include "message.h"
 
@@ -161,6 +174,11 @@ extern void send_fakem(const struct fake_msg *buf);
 extern void send_get_stat(struct stat *buf);
 #else
 extern void send_get_stat(struct stat *buf,int ver);
+#endif
+#ifndef STUPID_ALPHA_HACK
+extern void send_get_xattr(struct stat *st, xattr_args *xattr);
+#else
+extern void send_get_xattr(struct stat *st, xattr_args *xattr, int ver);
 #endif
 extern void cpyfakefake (struct fakestat *b1, const struct fakestat *b2);
 #ifndef STUPID_ALPHA_HACK
@@ -189,9 +207,11 @@ extern void unlock_comm_sd(void);
 #ifndef STUPID_ALPHA_HACK
 extern void send_stat64(const struct stat64 *st, func_id_t f);
 extern void send_get_stat64(struct stat64 *buf);
+extern void send_get_xattr64(struct stat64 *st, xattr_args *xattr);
 #else
 extern void send_stat64(const struct stat64 *st, func_id_t f, int ver);
 extern void send_get_stat64(struct stat64 *buf, int ver);
+extern void send_get_xattr64(struct stat64 *st, xattr_args *xattr, int ver);
 #endif
 extern void stat64from32(struct stat64 *s64, const struct stat *s32);
 extern void stat32from64(struct stat *s32, const struct stat64 *s64);
