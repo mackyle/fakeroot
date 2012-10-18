@@ -612,6 +612,9 @@ static void send_fakem_nr(const struct fake_msg *buf)
   fm.st.mode = htonl(buf->st.mode);
   fm.st.nlink = htonl(buf->st.nlink);
   fm.remote = htonl(0);
+  fm.xattr.buffersize = htonl(buf->xattr.buffersize);
+  fm.xattr.flags_rc = htonl(buf->xattr.flags_rc);
+  memcpy(fm.xattr.buf, buf->xattr.buf, MAX_IPC_BUFFER_SIZE);
 
   while (1) {
     ssize_t len;
@@ -668,6 +671,8 @@ static void get_fakem_nr(struct fake_msg *buf)
   buf->st.mode = ntohl(buf->st.mode);
   buf->st.nlink = ntohl(buf->st.nlink);
   buf->remote = ntohl(buf->remote);
+  buf->xattr.buffersize = ntohl(buf->xattr.buffersize);
+  buf->xattr.flags_rc = ntohl(buf->xattr.flags_rc);
 }
 
 void send_get_fakem(struct fake_msg *buf)
@@ -756,6 +761,63 @@ void send_get_stat(struct stat *st
   }
 }
 
+void send_get_xattr(struct stat *st
+		, xattr_args *xattr
+#ifdef STUPID_ALPHA_HACK
+		, int ver
+#endif
+		){
+  struct fake_msg buf;
+  size_t in_size;
+  size_t name_size;
+  size_t total_size;
+
+#ifndef FAKEROOT_FAKENET
+  if(init_get_msg()!=-1)
+#endif /* ! FAKEROOT_FAKENET */
+  {
+#ifndef STUPID_ALPHA_HACK
+    cpyfakemstat(&buf,st);
+#else
+    cpyfakemstat(&buf,st,ver);
+#endif
+    in_size = xattr->size;
+    total_size = (xattr->func == setxattr_func) ? (in_size) : 0;
+    if (xattr->name)
+    {
+      name_size = strlen(xattr->name);
+      total_size += name_size + 1;
+    }
+    if (total_size > MAX_IPC_BUFFER_SIZE)
+    {
+      xattr->rc = ERANGE;
+      return;
+    }
+    if (xattr->name) {
+      strcpy(buf.xattr.buf, xattr->name);
+      if (xattr->func == setxattr_func)
+        memcpy(&buf.xattr.buf[name_size + 1], xattr->value, in_size);
+    }
+    buf.xattr.buffersize = total_size;
+    buf.xattr.flags_rc = xattr->flags;
+    buf.id=xattr->func;
+    send_get_fakem(&buf);
+    xattr->rc = buf.xattr.flags_rc;
+    xattr->size = buf.xattr.buffersize;
+    if (buf.xattr.buffersize) {
+      if (!in_size) {
+        /* Special case. Return size of required buffer */
+        return;
+      }
+      if (xattr->size > in_size) {
+        xattr->rc = ERANGE;
+        return;
+      }
+      memcpy(xattr->value, buf.xattr.buf, xattr->size);
+    }
+  }
+}
+
 #ifdef STAT64_SUPPORT
 void send_get_stat64(struct stat64 *st
 #ifdef STUPID_ALPHA_HACK
@@ -782,6 +844,63 @@ void send_get_stat64(struct stat64 *st
 #else
     cpystat64fakem(st,&buf,ver);
 #endif
+  }
+}
+
+void send_get_xattr64(struct stat64 *st
+		, xattr_args *xattr
+#ifdef STUPID_ALPHA_HACK
+		, int ver
+#endif
+		){
+  struct fake_msg buf;
+  size_t in_size;
+  size_t name_size;
+  size_t total_size;
+
+#ifndef FAKEROOT_FAKENET
+  if(init_get_msg()!=-1)
+#endif /* ! FAKEROOT_FAKENET */
+  {
+#ifndef STUPID_ALPHA_HACK
+    cpyfakemstat64(&buf,st);
+#else
+    cpyfakemstat64(&buf,st,ver);
+#endif
+    in_size = xattr->size;
+    total_size = (xattr->func == setxattr_func) ? (in_size) : 0;
+    if (xattr->name)
+    {
+      name_size = strlen(xattr->name);
+      total_size += name_size + 1;
+    }
+    if (total_size > MAX_IPC_BUFFER_SIZE)
+    {
+      xattr->rc = ERANGE;
+      return;
+    }
+    if (xattr->name) {
+      strcpy(buf.xattr.buf, xattr->name);
+      if (xattr->func == setxattr_func)
+        memcpy(&buf.xattr.buf[name_size + 1], xattr->value, in_size);
+    }
+    buf.xattr.buffersize = total_size;
+    buf.xattr.flags_rc = xattr->flags;
+    buf.id=xattr->func;
+    send_get_fakem(&buf);
+    xattr->rc = buf.xattr.flags_rc;
+    xattr->size = buf.xattr.buffersize;
+    if (buf.xattr.buffersize) {
+      if (!in_size) {
+        /* Special case. Return size of required buffer */
+        return;
+      }
+      if (xattr->size > in_size) {
+        xattr->rc = ERANGE;
+        return;
+      }
+      memcpy(xattr->value, buf.xattr.buf, xattr->size);
+    }
   }
 }
 #endif /* STAT64_SUPPORT */

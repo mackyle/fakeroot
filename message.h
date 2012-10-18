@@ -64,6 +64,20 @@ struct fakestat {
 #pragma pack()
 #endif
 
+#define MAX_IPC_BUFFER_SIZE 256
+
+#if __SUNPRO_C
+#pragma pack(4)
+#endif
+struct fakexattr {
+	uint32_t   buffersize;
+	char       buf[MAX_IPC_BUFFER_SIZE];
+	int32_t    flags_rc; /* flags from setxattr. Return code on round trip */
+} FAKEROOT_ATTR(packed);
+#if __SUNPRO_C
+#pragma pack()
+#endif
+
 #if __SUNPRO_C
 #pragma pack(4)
 #endif
@@ -77,6 +91,7 @@ struct fake_msg {
 	int serial;
 #endif
 	struct fakestat st;
+	struct fakexattr xattr;
 	uint32_t        remote;
 } FAKEROOT_ATTR(packed);
 #if __SUNPRO_C
