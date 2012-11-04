@@ -1599,7 +1599,7 @@ static size_t common_listxattr(INT_STRUCT_STAT *st, char *list, size_t size)
   return xattr.size;
 }
 
-static size_t common_removexattr(INT_STRUCT_STAT *st, char *name)
+static size_t common_removexattr(INT_STRUCT_STAT *st, const char *name)
 {
   xattr_args xattr;
   xattr.name = name;
@@ -1786,7 +1786,7 @@ ssize_t flistxattr(int fd, char *list, size_t size)
   return common_listxattr(&st, list, size);
 }
 
-ssize_t removexattr(const char *path, char *name)
+ssize_t removexattr(const char *path, const char *name)
 {
   INT_STRUCT_STAT st;
   int r;
@@ -1805,7 +1805,7 @@ ssize_t removexattr(const char *path, char *name)
   return common_removexattr(&st, name);
 }
 
-ssize_t lremovexattr(const char *path, char *name)
+ssize_t lremovexattr(const char *path, const char *name)
 {
   INT_STRUCT_STAT st;
   int r;
@@ -1824,7 +1824,7 @@ ssize_t lremovexattr(const char *path, char *name)
   return common_removexattr(&st, name);
 }
 
-ssize_t fremovexattr(int fd, char *name)
+ssize_t fremovexattr(int fd, const char *name)
 {
   INT_STRUCT_STAT st;
   int r;
