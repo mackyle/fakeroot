@@ -59,6 +59,23 @@
 #include "config.h"
 #include "communicate.h"
 
+#ifdef __APPLE__
+/* The *xattr functions are currently disabled on __APPLE__ since the prototypes
+   are all different from the Linux versions and there is, as of yet, no
+   STUPID_APPLE_HACK (or similar) to deal with the differences.
+   Note that __APPLE__ does not have the l*xattr variants or capset so those
+   will already be undefined.
+*/
+#undef HAVE_LISTXATTR
+#undef HAVE_FLISTXATTR
+#undef HAVE_GETXATTR
+#undef HAVE_FGETXATTR
+#undef HAVE_SETXATTR
+#undef HAVE_FSETXATTR
+#undef HAVE_REMOVEXATTR
+#undef HAVE_FREMOVEXATTR
+#endif /* __APPLE__ */
+
 #ifdef STUPID_ALPHA_HACK
 #define SEND_STAT(a,b,c) send_stat(a,b,c)
 #define SEND_STAT64(a,b,c) send_stat64(a,b,c)
