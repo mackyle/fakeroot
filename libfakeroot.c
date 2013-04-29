@@ -1858,6 +1858,14 @@ int fakeroot_isdisabled(void)
 }
 
 #ifdef HAVE_ACL_T
+acl_t acl_get_fd(int fd) {
+  errno = ENOTSUP;
+  return (acl_t)NULL;
+}
+acl_t acl_get_file(const char *path_p, acl_type_t type) {
+  errno = ENOTSUP;
+  return (acl_t)NULL;
+}
 int acl_set_fd(int fd, acl_t acl) {
   errno = ENOTSUP;
   return -1;
