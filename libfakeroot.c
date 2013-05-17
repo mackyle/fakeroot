@@ -59,16 +59,35 @@
 #include "config.h"
 #include "communicate.h"
 
+#ifdef __APPLE__
+/* The *xattr functions are currently disabled on __APPLE__ since the prototypes
+   are all different from the Linux versions and there is, as of yet, no
+   STUPID_APPLE_HACK (or similar) to deal with the differences.
+   Note that __APPLE__ does not have the l*xattr variants or capset so those
+   will already be undefined.
+*/
+#undef HAVE_LISTXATTR
+#undef HAVE_FLISTXATTR
+#undef HAVE_GETXATTR
+#undef HAVE_FGETXATTR
+#undef HAVE_SETXATTR
+#undef HAVE_FSETXATTR
+#undef HAVE_REMOVEXATTR
+#undef HAVE_FREMOVEXATTR
+#endif /* __APPLE__ */
+
 #ifdef STUPID_ALPHA_HACK
 #define SEND_STAT(a,b,c) send_stat(a,b,c)
 #define SEND_STAT64(a,b,c) send_stat64(a,b,c)
 #define SEND_GET_STAT(a,b) send_get_stat(a,b)
 #define SEND_GET_STAT64(a,b) send_get_stat64(a,b)
+#define SEND_GET_XATTR64(a,b,c) send_get_xattr64(a,b,c)
 #else
 #define SEND_STAT(a,b,c) send_stat(a,b)
 #define SEND_STAT64(a,b,c) send_stat64(a,b)
 #define SEND_GET_STAT(a,b) send_get_stat(a)
 #define SEND_GET_STAT64(a,b) send_get_stat64(a)
+#define SEND_GET_XATTR64(a,b,c) send_get_xattr64(a,b)
 #endif
 
 /*
@@ -82,6 +101,7 @@
 #define INT_NEXT_FSTAT(a,b) NEXT_FSTAT64(_STAT_VER,a,b)
 #define INT_NEXT_FSTATAT(a,b,c,d) NEXT_FSTATAT64(_STAT_VER,a,b,c,d)
 #define INT_SEND_STAT(a,b) SEND_STAT64(a,b,_STAT_VER)
+#define INT_SEND_GET_XATTR(a,b) SEND_GET_XATTR64(a,b,_STAT_VER)
 #else
 #define INT_STRUCT_STAT struct stat
 #define INT_NEXT_STAT(a,b) NEXT_STAT(_STAT_VER,a,b)
@@ -89,6 +109,7 @@
 #define INT_NEXT_FSTAT(a,b) NEXT_FSTAT(_STAT_VER,a,b)
 #define INT_NEXT_FSTATAT(a,b,c,d) NEXT_FSTATAT(_STAT_VER,a,b,c,d)
 #define INT_SEND_STAT(a,b) SEND_STAT(a,b,_STAT_VER)
+#define INT_SEND_GET_XATTR(a,b) SEND_GET_XATTR(a,b,_STAT_VER)
 #endif
 
 #include <stdlib.h>
@@ -106,6 +127,9 @@
 #ifdef HAVE_SYS_ACL_H
 #include <sys/acl.h>
 #endif /* HAVE_SYS_ACL_H */
+#ifdef HAVE_SYS_CAPABILITY_H
+#include <sys/capability.h>
+#endif
 #if HAVE_FTS_H
 #include <fts.h>
 #endif /* HAVE_FTS_H */
@@ -1537,6 +1561,339 @@ int setgroups(SETGROUPS_SIZE_TYPE size, const gid_t *list){
     return 0;
 }
 
+#ifdef HAVE_CAPSET
+int capset(cap_user_header_t hdrp, const cap_user_data_t datap)
+{
+  int rc = next_capset(hdrp, datap);
+  return (fakeroot_disabled) ? (rc) : 0;
+}
+#endif /* HAVE_CAPSET */
+
+#if defined(HAVE_SETXATTR) || defined(HAVE_LSETXATTR) || defined(HAVE_FSETXATTR)
+static size_t common_setxattr(INT_STRUCT_STAT *st, const char *name, void * value, size_t size, int flags)
+{
+  xattr_args xattr;
+  xattr.name = name;
+  xattr.value = value;
+  xattr.size = size;
+  xattr.flags = flags;
+  xattr.func = setxattr_func;
+  INT_SEND_GET_XATTR(st, &xattr);
+  if (xattr.rc)
+  {
+    errno = xattr.rc;
+    return -1;
+  }
+  return 0;
+}
+#endif /* defined(HAVE_SETXATTR) || defined(HAVE_LSETXATTR) || defined(HAVE_FSETXATTR) */
+
+#if defined(HAVE_GETXATTR) || defined(HAVE_LGETXATTR) || defined(HAVE_FGETXATTR)
+static size_t common_getxattr(INT_STRUCT_STAT *st, const char *name, void * value, size_t size)
+{
+  xattr_args xattr;
+  xattr.name = name;
+  xattr.value = value;
+  xattr.size = size;
+  xattr.func = getxattr_func;
+  INT_SEND_GET_XATTR(st, &xattr);
+  if (xattr.rc)
+  {
+    errno = xattr.rc;
+    return -1;
+  }
+  return xattr.size;
+}
+#endif /* defined(HAVE_GETXATTR) || defined(HAVE_LGETXATTR) || defined(HAVE_FGETXATTR) */
+
+#if defined(HAVE_LISTXATTR) || defined(HAVE_LLISTXATTR) || defined(HAVE_FLISTXATTR)
+static size_t common_listxattr(INT_STRUCT_STAT *st, char *list, size_t size)
+{
+  xattr_args xattr;
+  xattr.name = NULL;
+  xattr.value = list;
+  xattr.size = size;
+  xattr.func = listxattr_func;
+  INT_SEND_GET_XATTR(st, &xattr);
+  if (xattr.rc)
+  {
+    errno = xattr.rc;
+    return -1;
+  }
+  return xattr.size;
+}
+#endif /* defined(HAVE_LISTXATTR) || defined(HAVE_LLISTXATTR) || defined(HAVE_FLISTXATTR) */
+
+#if defined(HAVE_REMOVEXATTR) || defined(HAVE_LREMOVEXATTR) || defined(HAVE_FREMOVEXATTR)
+static size_t common_removexattr(INT_STRUCT_STAT *st, const char *name)
+{
+  xattr_args xattr;
+  xattr.name = name;
+  xattr.value = NULL;
+  xattr.size = 0;
+  xattr.func = removexattr_func;
+  INT_SEND_GET_XATTR(st, &xattr);
+  if (xattr.rc)
+  {
+    errno = xattr.rc;
+    return -1;
+  }
+  return 0;
+}
+#endif /* defined(HAVE_REMOVEXATTR) || defined(HAVE_LREMOVEXATTR) || defined(HAVE_FREMOVEXATTR) */
+
+#ifdef HAVE_SETXATTR
+ssize_t setxattr(const char *path, const char *name, void *value, size_t size, int flags)
+{
+  INT_STRUCT_STAT st;
+  int r;
+  if (fakeroot_disabled)
+    return next_setxattr(path, name, value, size, flags);
+
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "setxattr path %s\n", path);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
+  r=INT_NEXT_STAT(path, &st);
+  if(r)
+    return r;
+
+  return common_setxattr(&st, name, value, size, flags);
+}
+#endif /* HAVE_SETXATTR */
+
+#ifdef HAVE_LSETXATTR
+ssize_t lsetxattr(const char *path, const char *name, void *value, size_t size, int flags)
+{
+  INT_STRUCT_STAT st;
+  int r;
+  if (fakeroot_disabled)
+    return next_lsetxattr(path, name, value, size, flags);
+
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "lsetxattr path %s\n", path);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
+  r=INT_NEXT_LSTAT(path, &st);
+  if(r)
+    return r;
+
+  return common_setxattr(&st, name, value, size, flags);
+}
+#endif /* HAVE_LSETXATTR */
+
+#ifdef HAVE_FSETXATTR
+ssize_t fsetxattr(int fd, const char *name, void *value, size_t size, int flags)
+{
+  INT_STRUCT_STAT st;
+  int r;
+  if (fakeroot_disabled)
+    return next_fsetxattr(fd, name, value, size, flags);
+
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "fsetxattr fd %d\n", fd);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
+  r=INT_NEXT_FSTAT(fd, &st);
+  if(r)
+    return r;
+
+  return common_setxattr(&st, name, value, size, flags);
+}
+#endif /* HAVE_FSETXATTR */
+
+#ifdef HAVE_GETXATTR
+ssize_t getxattr(const char *path, const char *name, void *value, size_t size)
+{
+  INT_STRUCT_STAT st;
+  int r;
+  if (fakeroot_disabled)
+    return next_getxattr(path, name, value, size);
+
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "getxattr path %s name %s size %d\n", path, name, size);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
+  r=INT_NEXT_STAT(path, &st);
+  if(r)
+    return r;
+
+  return common_getxattr(&st, name, value, size);
+}
+#endif /* HAVE_GETXATTR */
+
+#ifdef HAVE_LGETXATTR
+ssize_t lgetxattr(const char *path, const char *name, void *value, size_t size)
+{
+  INT_STRUCT_STAT st;
+  int r;
+  if (fakeroot_disabled)
+    return next_lgetxattr(path, name, value, size);
+
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "lgetxattr path %s\n", path);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
+  r=INT_NEXT_LSTAT(path, &st);
+  if(r)
+    return r;
+
+  return common_getxattr(&st, name, value, size);
+}
+#endif /* HAVE_LGETXATTR */
+
+#ifdef HAVE_FGETXATTR
+ssize_t fgetxattr(int fd, const char *name, void *value, size_t size)
+{
+  INT_STRUCT_STAT st;
+  int r;
+  if (fakeroot_disabled)
+    return next_fgetxattr(fd, name, value, size);
+
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "fgetxattr fd %d\n", fd);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
+  r=INT_NEXT_FSTAT(fd, &st);
+  if(r)
+    return r;
+
+  return common_getxattr(&st, name, value, size);
+}
+#endif /* HAVE_FGETXATTR */
+
+#ifdef HAVE_LISTXATTR
+ssize_t listxattr(const char *path, char *list, size_t size)
+{
+  INT_STRUCT_STAT st;
+  int r;
+  if (fakeroot_disabled)
+    return next_listxattr(path, list, size);
+
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "listxattr path %s size %d\n", path, size);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
+  r=INT_NEXT_STAT(path, &st);
+  if(r)
+    return r;
+
+  return common_listxattr(&st, list, size);
+}
+#endif /* HAVE_LISTXATTR */
+
+#ifdef HAVE_LLISTXATTR
+ssize_t llistxattr(const char *path, char *list, size_t size)
+{
+  INT_STRUCT_STAT st;
+  int r;
+  if (fakeroot_disabled)
+    return next_llistxattr(path, list, size);
+
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "llistxattr path %s\n", path);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
+  r=INT_NEXT_LSTAT(path, &st);
+  if(r)
+    return r;
+
+  return common_listxattr(&st, list, size);
+}
+#endif /* HAVE_LLISTXATTR */
+
+#ifdef HAVE_FLISTXATTR
+ssize_t flistxattr(int fd, char *list, size_t size)
+{
+  INT_STRUCT_STAT st;
+  int r;
+  if (fakeroot_disabled)
+    return next_flistxattr(fd, list, size);
+
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "flistxattr fd %d\n", fd);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
+  r=INT_NEXT_FSTAT(fd, &st);
+  if(r)
+    return r;
+
+  return common_listxattr(&st, list, size);
+}
+#endif /* HAVE_FLISTXATTR */
+
+#ifdef HAVE_REMOVEXATTR
+ssize_t removexattr(const char *path, const char *name)
+{
+  INT_STRUCT_STAT st;
+  int r;
+  if (fakeroot_disabled)
+    return next_removexattr(path, name);
+
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "removexattr path %s\n", path);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
+  r=INT_NEXT_STAT(path, &st);
+  if(r)
+    return r;
+
+  return common_removexattr(&st, name);
+}
+#endif /* HAVE_REMOVEXATTR */
+
+#ifdef HAVE_LREMOVEXATTR
+ssize_t lremovexattr(const char *path, const char *name)
+{
+  INT_STRUCT_STAT st;
+  int r;
+  if (fakeroot_disabled)
+    return next_lremovexattr(path, name);
+
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "lremovexattr path %s\n", path);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
+  r=INT_NEXT_LSTAT(path, &st);
+  if(r)
+    return r;
+
+  return common_removexattr(&st, name);
+}
+#endif /* HAVE_LREMOVEXATTR */
+
+#ifdef HAVE_FREMOVEXATTR
+ssize_t fremovexattr(int fd, const char *name)
+{
+  INT_STRUCT_STAT st;
+  int r;
+  if (fakeroot_disabled)
+    return next_fremovexattr(fd, name);
+
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "fremovexattr fd %d\n", fd);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
+  r=INT_NEXT_FSTAT(fd, &st);
+  if(r)
+    return r;
+
+  return common_removexattr(&st, name);
+}
+#endif /* HAVE_FREMOVEXATTR */
+
 #undef fakeroot_disabled
 
 int fakeroot_disable(int new)
@@ -1552,6 +1909,14 @@ int fakeroot_isdisabled(void)
 }
 
 #ifdef HAVE_ACL_T
+acl_t acl_get_fd(int fd) {
+  errno = ENOTSUP;
+  return (acl_t)NULL;
+}
+acl_t acl_get_file(const char *path_p, acl_type_t type) {
+  errno = ENOTSUP;
+  return (acl_t)NULL;
+}
 int acl_set_fd(int fd, acl_t acl) {
   errno = ENOTSUP;
   return -1;
