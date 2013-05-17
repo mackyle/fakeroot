@@ -1,3 +1,10 @@
+fakeroot (1.19-2) unstable; urgency=low
+
+  * Patch from Colin Watson to use appropriate strip command
+    when cross-building.  closes: #693975.
+
+ -- Clint Adams <clint@debian.org>  Thu, 16 May 2013 21:10:46 -0400
+
 fakeroot (1.19-1) unstable; urgency=low
 
   * New upstream version.
