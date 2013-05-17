@@ -145,6 +145,45 @@ setfsgid;gid_t;(gid_t fsgid);(fsgid)
 #endif /* HAVE_SETFSGID */
 initgroups;int;(const char *user, INITGROUPS_SECOND_ARG group);(user, group)
 setgroups;int;(SETGROUPS_SIZE_TYPE size, const gid_t *list);(size, list)
+#ifdef HAVE_CAPSET
+capset;int;(cap_user_header_t hdrp, const cap_user_data_t datap);(hdrp, datap)
+#endif /* HAVE_CAPSET */
+#ifdef HAVE_LISTXATTR
+listxattr; ssize_t;(const char *path, char *list, size_t size);(path, list, size)
+#endif /* HAVE_LISTXATTR */
+#ifdef HAVE_LLISTXATTR
+llistxattr; ssize_t;(const char *path, char *list, size_t size);(path, list, size)
+#endif /* HAVE_LLISTXATTR */
+#ifdef HAVE_FLISTXATTR
+flistxattr; ssize_t;(int fd, char *list, size_t size);(fd, list, size)
+#endif /* HAVE_FLISTXATTR */
+#ifdef HAVE_GETXATTR
+getxattr;ssize_t;(const char *path, const char *name, void *value, size_t size);(path, name, value, size)
+#endif /* HAVE_GETXATTR */
+#ifdef HAVE_LGETXATTR
+lgetxattr;ssize_t;(const char *path, const char *name, void *value, size_t size);(path, name, value, size)
+#endif /* HAVE_LGETXATTR */
+#ifdef HAVE_FGETXATTR
+fgetxattr;ssize_t;(int fd, const char *name, void *value, size_t size);(fd, name, value, size)
+#endif /* HAVE_FGETXATTR */
+#ifdef HAVE_SETXATTR
+setxattr;ssize_t;(const char *path, const char *name, void *value, size_t size, int flags);(path, name, value, size, flags)
+#endif /* HAVE_SETXATTR */
+#ifdef HAVE_LSETXATTR
+lsetxattr;ssize_t;(const char *path, const char *name, void *value, size_t size, int flags);(path, name, value, size, flags)
+#endif /* HAVE_LSETXATTR */
+#ifdef HAVE_FSETXATTR
+fsetxattr;ssize_t;(int fd, const char *name, void *value, size_t size, int flags);(fd, name, value, size, flags)
+#endif /* HAVE_FSETXATTR */
+#ifdef HAVE_REMOVEXATTR
+removexattr;ssize_t;(const char *path, const char *name);(path, name)
+#endif /* HAVE_REMOVEXATTR */
+#ifdef HAVE_LREMOVEXATTR
+lremovexattr;ssize_t;(const char *path, const char *name);(path, name)
+#endif /* HAVE_LREMOVEXATTR */
+#ifdef HAVE_FREMOVEXATTR
+fremovexattr;ssize_t;(int fd, const char *name);(fd, name)
+#endif /* HAVE_FREMOVEXATTR */
 
 #ifdef HAVE_FSTATAT
 #ifdef HAVE_FCHMODAT
@@ -168,6 +207,8 @@ unlinkat;int;(int dir_fd, const char *pathname, int flags);(dir_fd, pathname, fl
 #endif /* HAVE_FSTATAT */
 
 #ifdef HAVE_ACL_T
+acl_get_fd;acl_t;(int fd);(fd)
+acl_get_file;acl_t;(const char *path_p, acl_type_t type);(path_p, type)
 acl_set_fd;int;(int fd, acl_t acl);(fd, acl)
 acl_set_file;int;(const char *path_p, acl_type_t type, acl_t acl);(path_p, type, acl)
 #endif /* HAVE_ACL_T */

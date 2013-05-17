@@ -1,0 +1,30 @@
+#!/bin/sh
+. ./defs || exit 1
+
+HAVE_SETCAP=1
+SYSNAME="`uname -s 2>/dev/null`"
+
+case x"$SYSNAME" in
+  x*kFreeBSD*)
+    ;;
+  x"Darwin")
+    HAVE_SETCAP=
+    ;;
+  x*BSD*)
+    HAVE_SETCAP=
+    ;;
+esac
+
+if test z"$HAVE_SETCAP" != z"1"; then
+  # Succeed on systems without the setcap/getcap utilities
+  exit 0
+fi
+
+mkdir $tmp
+touch $tmp/foo
+# fakeroot mangles spaces unless the getopt utility is the GNU version
+echo "setcap cap_net_raw+ep $tmp/foo; getcap $tmp/foo" >$tmp/sh
+run_fakeroot -- \
+  ${posixshell} $tmp/sh >$tmp/out
+cat $tmp/out
+grep "^$tmp/foo = cap_net_raw+ep" $tmp/out
