@@ -877,6 +877,7 @@ void process_unlink(struct fake_msg *buf){
 
 void process_listxattr(struct fake_msg *buf)
 {
+#if defined(HAVE_LISTXATTR) || defined(HAVE_LLISTXATTR) || defined(HAVE_FLISTXATTR)
   data_node_t *i;
   xattr_node_t *x = NULL;
 
@@ -912,10 +913,12 @@ void process_listxattr(struct fake_msg *buf)
     }
   }
   faked_send_fakem(buf);
+#endif /* defined(HAVE_LISTXATTR) || defined(HAVE_LLISTXATTR) || defined(HAVE_FLISTXATTR) */
 }
 
 void process_setxattr(struct fake_msg *buf)
 {
+#if defined(HAVE_SETXATTR) || defined(HAVE_LSETXATTR) || defined(HAVE_FSETXATTR)
   data_node_t *i;
   xattr_node_t *x = NULL;
   xattr_node_t **x_ref = NULL;
@@ -979,10 +982,12 @@ void process_setxattr(struct fake_msg *buf)
   }
   buf->xattr.buffersize = 0;
   faked_send_fakem(buf);
+#endif /* defined(HAVE_SETXATTR) || defined(HAVE_LSETXATTR) || defined(HAVE_FSETXATTR) */
 }
 
 void process_getxattr(struct fake_msg *buf)
 {
+#if defined(HAVE_GETXATTR) || defined(HAVE_LGETXATTR) || defined(HAVE_FGETXATTR)
   data_node_t *i;
   xattr_node_t *x = NULL;
 
@@ -1008,10 +1013,12 @@ void process_getxattr(struct fake_msg *buf)
     buf->xattr.flags_rc = 0;
   }
   faked_send_fakem(buf);
+#endif /* defined(HAVE_GETXATTR) || defined(HAVE_LGETXATTR) || defined(HAVE_FGETXATTR) */
 }
 
 void process_removexattr(struct fake_msg *buf)
 {
+#if defined(HAVE_REMOVEXATTR) || defined(HAVE_LREMOVEXATTR) || defined(HAVE_FREMOVEXATTR)
   data_node_t *i;
   xattr_node_t *x = NULL;
 
@@ -1036,6 +1043,7 @@ void process_removexattr(struct fake_msg *buf)
   }
   buf->xattr.buffersize = 0;
   faked_send_fakem(buf);
+#endif /* defined(HAVE_REMOVEXATTR) || defined(HAVE_LREMOVEXATTR) || defined(HAVE_FREMOVEXATTR) */
 }
 
 void debugdata(int dummy UNUSED){

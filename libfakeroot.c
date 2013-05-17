@@ -59,6 +59,23 @@
 #include "config.h"
 #include "communicate.h"
 
+#ifdef __APPLE__
+/* The *xattr functions are currently disabled on __APPLE__ since the prototypes
+   are all different from the Linux versions and there is, as of yet, no
+   STUPID_APPLE_HACK (or similar) to deal with the differences.
+   Note that __APPLE__ does not have the l*xattr variants or capset so those
+   will already be undefined.
+*/
+#undef HAVE_LISTXATTR
+#undef HAVE_FLISTXATTR
+#undef HAVE_GETXATTR
+#undef HAVE_FGETXATTR
+#undef HAVE_SETXATTR
+#undef HAVE_FSETXATTR
+#undef HAVE_REMOVEXATTR
+#undef HAVE_FREMOVEXATTR
+#endif /* __APPLE__ */
+
 #ifdef STUPID_ALPHA_HACK
 #define SEND_STAT(a,b,c) send_stat(a,b,c)
 #define SEND_STAT64(a,b,c) send_stat64(a,b,c)
@@ -1544,12 +1561,15 @@ int setgroups(SETGROUPS_SIZE_TYPE size, const gid_t *list){
     return 0;
 }
 
+#ifdef HAVE_CAPSET
 int capset(cap_user_header_t hdrp, const cap_user_data_t datap)
 {
   int rc = next_capset(hdrp, datap);
   return (fakeroot_disabled) ? (rc) : 0;
 }
+#endif /* HAVE_CAPSET */
 
+#if defined(HAVE_SETXATTR) || defined(HAVE_LSETXATTR) || defined(HAVE_FSETXATTR)
 static size_t common_setxattr(INT_STRUCT_STAT *st, const char *name, void * value, size_t size, int flags)
 {
   xattr_args xattr;
@@ -1566,7 +1586,9 @@ static size_t common_setxattr(INT_STRUCT_STAT *st, const char *name, void * valu
   }
   return 0;
 }
+#endif /* defined(HAVE_SETXATTR) || defined(HAVE_LSETXATTR) || defined(HAVE_FSETXATTR) */
 
+#if defined(HAVE_GETXATTR) || defined(HAVE_LGETXATTR) || defined(HAVE_FGETXATTR)
 static size_t common_getxattr(INT_STRUCT_STAT *st, const char *name, void * value, size_t size)
 {
   xattr_args xattr;
@@ -1582,7 +1604,9 @@ static size_t common_getxattr(INT_STRUCT_STAT *st, const char *name, void * valu
   }
   return xattr.size;
 }
+#endif /* defined(HAVE_GETXATTR) || defined(HAVE_LGETXATTR) || defined(HAVE_FGETXATTR) */
 
+#if defined(HAVE_LISTXATTR) || defined(HAVE_LLISTXATTR) || defined(HAVE_FLISTXATTR)
 static size_t common_listxattr(INT_STRUCT_STAT *st, char *list, size_t size)
 {
   xattr_args xattr;
@@ -1598,8 +1622,10 @@ static size_t common_listxattr(INT_STRUCT_STAT *st, char *list, size_t size)
   }
   return xattr.size;
 }
+#endif /* defined(HAVE_LISTXATTR) || defined(HAVE_LLISTXATTR) || defined(HAVE_FLISTXATTR) */
 
-static size_t common_removexattr(INT_STRUCT_STAT *st, char *name)
+#if defined(HAVE_REMOVEXATTR) || defined(HAVE_LREMOVEXATTR) || defined(HAVE_FREMOVEXATTR)
+static size_t common_removexattr(INT_STRUCT_STAT *st, const char *name)
 {
   xattr_args xattr;
   xattr.name = name;
@@ -1614,7 +1640,9 @@ static size_t common_removexattr(INT_STRUCT_STAT *st, char *name)
   }
   return 0;
 }
+#endif /* defined(HAVE_REMOVEXATTR) || defined(HAVE_LREMOVEXATTR) || defined(HAVE_FREMOVEXATTR) */
 
+#ifdef HAVE_SETXATTR
 ssize_t setxattr(const char *path, const char *name, void *value, size_t size, int flags)
 {
   INT_STRUCT_STAT st;
@@ -1633,7 +1661,9 @@ ssize_t setxattr(const char *path, const char *name, void *value, size_t size, i
 
   return common_setxattr(&st, name, value, size, flags);
 }
+#endif /* HAVE_SETXATTR */
 
+#ifdef HAVE_LSETXATTR
 ssize_t lsetxattr(const char *path, const char *name, void *value, size_t size, int flags)
 {
   INT_STRUCT_STAT st;
@@ -1652,7 +1682,9 @@ ssize_t lsetxattr(const char *path, const char *name, void *value, size_t size, 
 
   return common_setxattr(&st, name, value, size, flags);
 }
+#endif /* HAVE_LSETXATTR */
 
+#ifdef HAVE_FSETXATTR
 ssize_t fsetxattr(int fd, const char *name, void *value, size_t size, int flags)
 {
   INT_STRUCT_STAT st;
@@ -1671,7 +1703,9 @@ ssize_t fsetxattr(int fd, const char *name, void *value, size_t size, int flags)
 
   return common_setxattr(&st, name, value, size, flags);
 }
+#endif /* HAVE_FSETXATTR */
 
+#ifdef HAVE_GETXATTR
 ssize_t getxattr(const char *path, const char *name, void *value, size_t size)
 {
   INT_STRUCT_STAT st;
@@ -1690,7 +1724,9 @@ ssize_t getxattr(const char *path, const char *name, void *value, size_t size)
 
   return common_getxattr(&st, name, value, size);
 }
+#endif /* HAVE_GETXATTR */
 
+#ifdef HAVE_LGETXATTR
 ssize_t lgetxattr(const char *path, const char *name, void *value, size_t size)
 {
   INT_STRUCT_STAT st;
@@ -1709,7 +1745,9 @@ ssize_t lgetxattr(const char *path, const char *name, void *value, size_t size)
 
   return common_getxattr(&st, name, value, size);
 }
+#endif /* HAVE_LGETXATTR */
 
+#ifdef HAVE_FGETXATTR
 ssize_t fgetxattr(int fd, const char *name, void *value, size_t size)
 {
   INT_STRUCT_STAT st;
@@ -1728,7 +1766,9 @@ ssize_t fgetxattr(int fd, const char *name, void *value, size_t size)
 
   return common_getxattr(&st, name, value, size);
 }
+#endif /* HAVE_FGETXATTR */
 
+#ifdef HAVE_LISTXATTR
 ssize_t listxattr(const char *path, char *list, size_t size)
 {
   INT_STRUCT_STAT st;
@@ -1747,7 +1787,9 @@ ssize_t listxattr(const char *path, char *list, size_t size)
 
   return common_listxattr(&st, list, size);
 }
+#endif /* HAVE_LISTXATTR */
 
+#ifdef HAVE_LLISTXATTR
 ssize_t llistxattr(const char *path, char *list, size_t size)
 {
   INT_STRUCT_STAT st;
@@ -1766,7 +1808,9 @@ ssize_t llistxattr(const char *path, char *list, size_t size)
 
   return common_listxattr(&st, list, size);
 }
+#endif /* HAVE_LLISTXATTR */
 
+#ifdef HAVE_FLISTXATTR
 ssize_t flistxattr(int fd, char *list, size_t size)
 {
   INT_STRUCT_STAT st;
@@ -1785,8 +1829,10 @@ ssize_t flistxattr(int fd, char *list, size_t size)
 
   return common_listxattr(&st, list, size);
 }
+#endif /* HAVE_FLISTXATTR */
 
-ssize_t removexattr(const char *path, char *name)
+#ifdef HAVE_REMOVEXATTR
+ssize_t removexattr(const char *path, const char *name)
 {
   INT_STRUCT_STAT st;
   int r;
@@ -1804,8 +1850,10 @@ ssize_t removexattr(const char *path, char *name)
 
   return common_removexattr(&st, name);
 }
+#endif /* HAVE_REMOVEXATTR */
 
-ssize_t lremovexattr(const char *path, char *name)
+#ifdef HAVE_LREMOVEXATTR
+ssize_t lremovexattr(const char *path, const char *name)
 {
   INT_STRUCT_STAT st;
   int r;
@@ -1823,8 +1871,10 @@ ssize_t lremovexattr(const char *path, char *name)
 
   return common_removexattr(&st, name);
 }
+#endif /* HAVE_LREMOVEXATTR */
 
-ssize_t fremovexattr(int fd, char *name)
+#ifdef HAVE_FREMOVEXATTR
+ssize_t fremovexattr(int fd, const char *name)
 {
   INT_STRUCT_STAT st;
   int r;
@@ -1842,6 +1892,7 @@ ssize_t fremovexattr(int fd, char *name)
 
   return common_removexattr(&st, name);
 }
+#endif /* HAVE_FREMOVEXATTR */
 
 #undef fakeroot_disabled
 
