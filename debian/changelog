@@ -1,3 +1,20 @@
+fakeroot (1.19-2) unstable; urgency=low
+
+  * Patch from Colin Watson to use appropriate strip command
+    when cross-building.  closes: #693975.
+
+ -- Clint Adams <clint@debian.org>  Thu, 16 May 2013 21:10:46 -0400
+
+fakeroot (1.19-1) unstable; urgency=low
+
+  * New upstream version.
+  * Bump to Standards-Version 3.9.4.
+  * Patch from David Bartley to wrap acl_get_fd and acl_get_file.
+    closes: #521178.
+  * Build-depend on libcap-dev and libcap2-bin on Linux.
+
+ -- Clint Adams <clint@debian.org>  Thu, 16 May 2013 20:19:55 -0400
+
 fakeroot (1.18.4-2) unstable; urgency=low
 
   * Disable stat64 for FTS functions in a Debian-local patch,

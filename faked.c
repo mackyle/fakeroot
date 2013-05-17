@@ -104,6 +104,9 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#ifdef HAVE_SYS_XATTR_H
+#include <sys/xattr.h>
+#endif
 #include <fcntl.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -150,6 +153,10 @@ void process_chmod(struct fake_msg *buf);
 void process_mknod(struct fake_msg *buf);
 void process_stat(struct fake_msg *buf);
 void process_unlink(struct fake_msg *buf);
+void process_listxattr(struct fake_msg *buf);
+void process_setxattr(struct fake_msg *buf);
+void process_getxattr(struct fake_msg *buf);
+void process_removexattr(struct fake_msg *buf);
 
 #ifdef FAKEROOT_FAKENET
 static int get_fakem(struct fake_msg *buf);
@@ -162,6 +169,12 @@ process_func func_arr[]={process_chown,
 			 process_mknod,
 			 process_stat,
 			 process_unlink,
+			 NULL, /* debugdata */
+			 NULL, /* reqoptions */
+			 process_listxattr,
+			 process_getxattr,
+			 process_setxattr,
+			 process_removexattr,
 			 };
 
 unsigned int highest_funcid = sizeof(func_arr)/sizeof(func_arr[0]);
@@ -190,12 +203,90 @@ static void fail(const char *msg)
 }
 #endif
 
+struct xattr_node_s;
+typedef struct xattr_node_s {
+  struct xattr_node_s *next;
+  char                *key;
+  char                *value;
+  size_t              value_size;
+} xattr_node_t;
+
 struct data_node_s;
 typedef struct data_node_s {
   struct data_node_s *next;
   struct fakestat     buf;
   uint32_t            remote;
+  xattr_node_t       *xattr;
 } data_node_t;
+
+static xattr_node_t *xattr_find(xattr_node_t *node, char *key)
+{
+  while (node) {
+    if (node->key && (!strcmp(node->key, key)))
+      break;
+    node = node->next;
+  }
+  return node;
+}
+
+static int xattr_erase(xattr_node_t **head, char *key)
+{
+  xattr_node_t *cur_node, *prev_node = NULL;
+
+  for (cur_node = *head; cur_node; prev_node = cur_node, cur_node = cur_node->next) {
+    if (cur_node->key && (!strcmp(cur_node->key, key))) {
+      if (prev_node == NULL) {
+        *head = cur_node->next;
+      } else {
+        prev_node->next = cur_node->next;
+      }
+      free(cur_node->key);
+      if (cur_node->value)
+        free(cur_node->value);
+      free(cur_node);
+      return 1;
+    }
+  }
+  return 0;
+}
+
+static int xattr_clear(xattr_node_t **head)
+{
+  xattr_node_t *cur_node, *next_node;
+  cur_node = *head;
+  *head = NULL;
+  while (cur_node) {
+    next_node = cur_node->next;
+    if (cur_node->key)
+      free(cur_node->key);
+    if (cur_node->value)
+      free(cur_node->value);
+    free(cur_node);
+    cur_node = next_node;
+  }
+  return 0;
+}
+
+static xattr_node_t *xattr_insert(xattr_node_t **head)
+{
+  xattr_node_t *new_node;
+  new_node = calloc(1, sizeof(xattr_node_t));
+  new_node->next = *head;
+  *head = new_node;
+  return new_node;
+}
+
+static void xattr_fill(xattr_node_t *node, char *key, char *value, size_t value_size)
+{
+  if (node->key)
+    free(node->key);
+  node->key = strdup(key);
+  if (node->value)
+    free(node->value);
+  node->value = malloc(value_size);
+  memcpy(node->value, value, value_size);
+  node->value_size = value_size;
+}
 
 #define data_node_get(n)   ((struct fakestat *) &(n)->buf)
 
@@ -247,6 +338,7 @@ static void data_insert(const struct fakestat *buf,
   }
 
   memcpy(&n->buf, buf, sizeof (struct fakestat));
+  n->xattr = NULL;
   n->remote = (uint32_t) remote;
 }
 
@@ -266,6 +358,7 @@ static data_node_t *data_erase(data_node_t *pos)
   else
     prev->next = next;
 
+  xattr_clear(&n->xattr);
   free(n);
 
   return next;
@@ -361,6 +454,9 @@ static void faked_send_fakem(const struct fake_msg *buf)
   fm.st.mode = htonl(buf->st.mode);
   fm.st.nlink = htonl(buf->st.nlink);
   fm.remote = htonl(buf->remote);
+  fm.xattr.buffersize = htonl(buf->xattr.buffersize);
+  fm.xattr.flags_rc = htonl(buf->xattr.flags_rc);
+  memcpy(fm.xattr.buf, buf->xattr.buf, MAX_IPC_BUFFER_SIZE);
 
   while (1) {
     ssize_t len;
@@ -779,6 +875,177 @@ void process_unlink(struct fake_msg *buf){
   }
 }
 
+void process_listxattr(struct fake_msg *buf)
+{
+#if defined(HAVE_LISTXATTR) || defined(HAVE_LLISTXATTR) || defined(HAVE_FLISTXATTR)
+  data_node_t *i;
+  xattr_node_t *x = NULL;
+
+  buf->xattr.flags_rc = 0;
+  i = data_find(&buf->st, buf->remote);
+  if(debug){
+    fprintf(stderr,"FAKEROOT: process listxattr\n");
+  }
+  if (i != data_end()) {
+    x = i->xattr;
+  }
+  if (!x) {
+    if (debug) {
+      fprintf(stderr,"FAKEROOT:    (previously unknown)\n");
+    }
+    buf->xattr.buffersize = 0;
+  } else {
+    int bsize = 0;
+    while (x) {
+      int keysize = strlen(x->key);
+      if ((bsize + keysize + 1) > MAX_IPC_BUFFER_SIZE)
+      {
+        buf->xattr.flags_rc = ERANGE;
+        break;
+      }
+      strcpy(&buf->xattr.buf[bsize], x->key);
+      bsize += keysize + 1;
+      x = x->next;
+    }
+    buf->xattr.buffersize = bsize;
+    if(debug) {
+      fprintf(stderr,"FAKEROOT: (previously known): xattr=%s\n", buf->xattr.buf);
+    }
+  }
+  faked_send_fakem(buf);
+#endif /* defined(HAVE_LISTXATTR) || defined(HAVE_LLISTXATTR) || defined(HAVE_FLISTXATTR) */
+}
+
+void process_setxattr(struct fake_msg *buf)
+{
+#if defined(HAVE_SETXATTR) || defined(HAVE_LSETXATTR) || defined(HAVE_FSETXATTR)
+  data_node_t *i;
+  xattr_node_t *x = NULL;
+  xattr_node_t **x_ref = NULL;
+  xattr_node_t *new_node = NULL;
+  struct fakestat st;
+  char *value = NULL;
+  int key_size, value_size;
+  int flags = buf->xattr.flags_rc;
+
+  buf->xattr.flags_rc = 0;
+  /* Need some more bounds checking */
+  key_size = strlen(buf->xattr.buf);
+  value = &buf->xattr.buf[key_size + 1];
+  value_size = buf->xattr.buffersize - key_size - 1;
+
+  i = data_find(&buf->st, buf->remote);
+  if(debug){
+    fprintf(stderr,"FAKEROOT: process setxattr key = %s\n", buf->xattr.buf);
+  }
+  if (i == data_end()) {
+    if (debug) {
+      fprintf(stderr,"FAKEROOT:    (previously unknown)\n");
+    }
+    st=buf->st;
+    /* We pretend that unknown files are owned
+       by root.root, so we have to maintain that pretense when the
+       caller asks to leave an id unchanged. */
+    if ((uint32_t)st.uid == (uint32_t)-1)
+       st.uid = 0;
+    if ((uint32_t)st.gid == (uint32_t)-1)
+       st.gid = 0;
+    insert_or_overwrite(&st, buf->remote);
+    i = data_find(&buf->st, buf->remote);
+  }
+  x = xattr_find(i->xattr, buf->xattr.buf);
+  if (x) {
+    if (flags == XATTR_CREATE) {
+      buf->xattr.flags_rc = EEXIST;
+      if (debug) {
+        fprintf(stderr,"FAKEROOT:    Already exists\n");
+      }
+    } else {
+      xattr_fill(x, buf->xattr.buf, value, value_size);
+      if (debug) {
+        fprintf(stderr,"FAKEROOT:    Replaced\n");
+      }
+    }
+  } else {
+    if (flags == XATTR_REPLACE) {
+      buf->xattr.flags_rc = ENODATA;
+      if (debug) {
+        fprintf(stderr,"FAKEROOT:    Replace requested but no previous entry found\n");
+      }
+    } else {
+      x = xattr_insert(&i->xattr);
+      xattr_fill(x, buf->xattr.buf, value, value_size);
+      if (debug) {
+        fprintf(stderr,"FAKEROOT:    Inserted\n");
+      }
+    }
+  }
+  buf->xattr.buffersize = 0;
+  faked_send_fakem(buf);
+#endif /* defined(HAVE_SETXATTR) || defined(HAVE_LSETXATTR) || defined(HAVE_FSETXATTR) */
+}
+
+void process_getxattr(struct fake_msg *buf)
+{
+#if defined(HAVE_GETXATTR) || defined(HAVE_LGETXATTR) || defined(HAVE_FGETXATTR)
+  data_node_t *i;
+  xattr_node_t *x = NULL;
+
+  buf->xattr.flags_rc = ENODATA;
+  i = data_find(&buf->st, buf->remote);
+  if(debug){
+    fprintf(stderr,"FAKEROOT: process getxattr key = %s\n", buf->xattr.buf);
+  }
+  if (i != data_end()) {
+    x = xattr_find(i->xattr, buf->xattr.buf);
+  }
+  if (!x) {
+    if (debug) {
+      fprintf(stderr,"FAKEROOT:    (previously unknown)\n");
+    }
+    buf->xattr.buffersize = 0;
+  } else {
+    if (debug) {
+      fprintf(stderr,"FAKEROOT: (previously known): %s\n", x->value);
+    }
+    buf->xattr.buffersize = x->value_size;
+    memcpy(buf->xattr.buf, x->value, x->value_size);
+    buf->xattr.flags_rc = 0;
+  }
+  faked_send_fakem(buf);
+#endif /* defined(HAVE_GETXATTR) || defined(HAVE_LGETXATTR) || defined(HAVE_FGETXATTR) */
+}
+
+void process_removexattr(struct fake_msg *buf)
+{
+#if defined(HAVE_REMOVEXATTR) || defined(HAVE_LREMOVEXATTR) || defined(HAVE_FREMOVEXATTR)
+  data_node_t *i;
+  xattr_node_t *x = NULL;
+
+  buf->xattr.flags_rc = ENODATA;
+  i = data_find(&buf->st, buf->remote);
+  if(debug){
+    fprintf(stderr,"FAKEROOT: process removexattr key = %s\n", buf->xattr.buf);
+  }
+  if (i != data_end()) {
+    x = xattr_find(i->xattr, buf->xattr.buf);
+  }
+  if (!x) {
+    if (debug) {
+      fprintf(stderr,"FAKEROOT:    (previously unknown)\n");
+    }
+  } else {
+    if (debug) {
+      fprintf(stderr,"FAKEROOT: (previously known): %s\n", x->value);
+    }
+    xattr_erase(&i->xattr, buf->xattr.buf);
+    buf->xattr.flags_rc = 0;
+  }
+  buf->xattr.buffersize = 0;
+  faked_send_fakem(buf);
+#endif /* defined(HAVE_REMOVEXATTR) || defined(HAVE_LREMOVEXATTR) || defined(HAVE_FREMOVEXATTR) */
+}
+
 void debugdata(int dummy UNUSED){
   int stored_errno = errno;
   data_node_t *i;
@@ -1022,6 +1289,8 @@ static int get_fakem(struct fake_msg *buf)
   buf->st.mode = ntohl(buf->st.mode);
   buf->st.nlink = ntohl(buf->st.nlink);
   buf->remote = ntohl(buf->remote);
+  buf->xattr.buffersize = ntohl(buf->xattr.buffersize);
+  buf->xattr.flags_rc = ntohl(buf->xattr.flags_rc);
 
   return 0;
 }

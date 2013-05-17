@@ -10,7 +10,8 @@ TESTS =						\
   t.option					\
   t.tar						\
   t.touchinstall				\
-  t.truereturn
+  t.truereturn \
+  t.xattr
 
 suffix =
 TESTS_ENVIRONMENT =				\
