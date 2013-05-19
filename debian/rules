@@ -69,8 +69,8 @@ ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu x86_64
 	-cd obj64-tcp && $(MAKE) distclean
 endif
 	rm -rf .deps
-	rm -f debian/substvars debian/files
-	rm -rf debian/tmp obj obj64 autom4te.cache
+	rm -f debian/*.substvars debian/files
+	rm -rf debian/tmp debian/fakeroot debian/libfakeroot obj obj64 autom4te.cache
 	find . -type f -a \( -name \#\*\# -o -name .\*\~ -o -name \*\~ -o -name DEADJOE -o -name \*.orig -o -name \*.rej -o -name \*.bak -o -name .\*.orig -o -name .\*.rej -o -name .SUMS -o -name TAGS -o -name core -o \( -path \*/.deps/\* -a -name \*.P \) \) -exec rm -f {} \;
 
 # Build architecture-independent files here.
@@ -93,7 +93,6 @@ binary-arch: build checkroot
 	mv debian/tmp/${LIB_DIR}/libfakeroot/libfakeroot-0.so debian/tmp/${LIB_DIR}/libfakeroot/libfakeroot-sysv.so
 	rm debian/tmp/${LIB_DIR}/libfakeroot/libfakeroot.so
 
-	$(INSTALL_DIR) debian/tmp/DEBIAN debian/tmp/usr/bin/
 #	$(INSTALL_SCRIPT) scripts/fakeroot debian/tmp/usr/bin/
 	$(INSTALL_DIR) debian/tmp/usr/share/doc/fakeroot \
 		           debian/tmp/${LIB_DIR}/libfakeroot
@@ -107,31 +106,8 @@ binary-arch: build checkroot
 	rm -f debian/tmp/usr/bin/simple
 	$(INSTALL_FILE) debian/copyright debian/tmp/usr/share/doc/fakeroot/copyright
 	$(INSTALL_FILE) debian/changelog debian/tmp/usr/share/doc/fakeroot/changelog.Debian
-	gzip -9f debian/tmp/usr/share/man/man1/faked-sysv.1 \
-		 debian/tmp/usr/share/man/man1/fakeroot-sysv.1 \
-		 debian/tmp/usr/share/man/man1/faked-tcp.1 \
-		 debian/tmp/usr/share/man/man1/fakeroot-tcp.1 \
-		 debian/tmp/usr/share/man/de/man1/faked-sysv.1 \
-		 debian/tmp/usr/share/man/de/man1/fakeroot-sysv.1 \
-		 debian/tmp/usr/share/man/de/man1/faked-tcp.1 \
-		 debian/tmp/usr/share/man/de/man1/fakeroot-tcp.1 \
-		 debian/tmp/usr/share/man/es/man1/faked-sysv.1 \
-		 debian/tmp/usr/share/man/es/man1/fakeroot-sysv.1 \
-		 debian/tmp/usr/share/man/es/man1/faked-tcp.1 \
-		 debian/tmp/usr/share/man/es/man1/fakeroot-tcp.1 \
-		 debian/tmp/usr/share/man/fr/man1/faked-sysv.1 \
-		 debian/tmp/usr/share/man/fr/man1/fakeroot-sysv.1 \
-		 debian/tmp/usr/share/man/fr/man1/faked-tcp.1 \
-		 debian/tmp/usr/share/man/fr/man1/fakeroot-tcp.1 \
-		 debian/tmp/usr/share/man/nl/man1/faked-sysv.1 \
-		 debian/tmp/usr/share/man/nl/man1/fakeroot-sysv.1 \
-		 debian/tmp/usr/share/man/nl/man1/faked-tcp.1 \
-		 debian/tmp/usr/share/man/nl/man1/fakeroot-tcp.1 \
-		 debian/tmp/usr/share/man/sv/man1/faked-sysv.1 \
-		 debian/tmp/usr/share/man/sv/man1/fakeroot-sysv.1 \
-		 debian/tmp/usr/share/man/sv/man1/faked-tcp.1 \
-		 debian/tmp/usr/share/man/sv/man1/fakeroot-tcp.1 \
-		 debian/tmp/usr/share/doc/fakeroot/changelog.Debian
+	find debian/tmp -name '*.1' -or -name changelog.Debian | \
+		xargs gzip -9fn
 ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	$(STRIP) --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/${LIB_DIR}/libfakeroot/libfakeroot-sysv.so
 	$(STRIP) --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/${LIB_DIR}/libfakeroot/libfakeroot-tcp.so
@@ -139,8 +115,19 @@ ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	$(STRIP) --remove-section=.comment --remove-section=.note debian/tmp/usr/bin/faked-tcp
 #	$(STRIP) --strip-debug debian/tmp/${LIB_DIR}/libfakeroot.a
 endif
-	$(INSTALL_SCRIPT) debian/fakeroot.postrm debian/tmp/DEBIAN/postrm
-	$(INSTALL_SCRIPT) debian/fakeroot.prerm debian/tmp/DEBIAN/prerm
+	$(INSTALL_DIR) debian/fakeroot/DEBIAN debian/libfakeroot/DEBIAN
+
+	# split
+	(cd debian/tmp && find usr/bin usr/share -type f | xargs tar -cf - ) |\
+		(cd debian/fakeroot && tar -xf - )
+	(cd debian/tmp && find usr/lib | xargs tar -cf - ) |\
+		(cd debian/libfakeroot && tar -xf - )
+	$(INSTALL_DIR) debian/libfakeroot/usr/share/doc/libfakeroot
+	cp -r debian/tmp/usr/share/doc/fakeroot/. \
+		debian/libfakeroot/usr/share/doc/libfakeroot/.
+
+	$(INSTALL_SCRIPT) debian/fakeroot.postrm debian/fakeroot/DEBIAN/postrm
+	$(INSTALL_SCRIPT) debian/fakeroot.prerm debian/fakeroot/DEBIAN/prerm
 ifneq ($(DEB_HOST_GNU_SYSTEM),gnu)
 	sed 's/@FAKEROOT_SYSV_ALTPRIO@/50/;s/@FAKEROOT_TCP_ALTPRIO@/30/;' \
 		debian/fakeroot.postinst.in > debian/fakeroot.postinst
@@ -148,17 +135,22 @@ else
 	sed 's/@FAKEROOT_SYSV_ALTPRIO@/30/;s/@FAKEROOT_TCP_ALTPRIO@/50/;' \
 		debian/fakeroot.postinst.in > debian/fakeroot.postinst
 endif
-	$(INSTALL_SCRIPT) debian/fakeroot.postinst debian/tmp/DEBIAN/postinst
+	$(INSTALL_SCRIPT) debian/fakeroot.postinst debian/fakeroot/DEBIAN/postinst
 	rm -f debian/fakeroot.postinst
 	# We can just use the deps for faked.
-	dpkg-shlibdeps -Tdebian/substvars \
-		debian/tmp/usr/bin/faked-sysv \
-		debian/tmp/usr/bin/faked-tcp
-	dpkg-gencontrol -ldebian/changelog -isp -Tdebian/substvars -Pdebian/tmp
-	chmod 644 debian/tmp/DEBIAN/control
-	chown root:root debian/tmp/DEBIAN/control
-	cd debian/tmp && find * -type f ! -regex '^DEBIAN/.*' -print0 | xargs -r0 md5sum > DEBIAN/md5sums
-	dpkg-deb --build debian/tmp ..
+	dpkg-shlibdeps -Tdebian/libfakeroot.substvars \
+		debian/libfakeroot/${LIB_DIR}/libfakeroot/*.so
+	dpkg-shlibdeps -Tdebian/fakeroot.substvars \
+		debian/fakeroot/usr/bin/faked-sysv \
+		debian/fakeroot/usr/bin/faked-tcp
+	dpkg-gencontrol -pfakeroot -ldebian/changelog -isp -Tdebian/fakeroot.substvars -Pdebian/fakeroot
+	dpkg-gencontrol -plibfakeroot -ldebian/changelog -isp -Tdebian/libfakeroot.substvars -Pdebian/libfakeroot
+	chmod 644 debian/fakeroot/DEBIAN/control debian/libfakeroot/DEBIAN/control
+	chown root:root debian/fakeroot/DEBIAN/control debian/libfakeroot/DEBIAN/control
+	cd debian/fakeroot && find * -type f ! -regex '^DEBIAN/.*' -print0 | xargs -r0 md5sum > DEBIAN/md5sums
+	cd debian/libfakeroot && find * -type f ! -regex '^DEBIAN/.*' -print0 | xargs -r0 md5sum > DEBIAN/md5sums
+	dpkg-deb --build debian/fakeroot ..
+	dpkg-deb --build debian/libfakeroot ..
 
 source diff:
 	@echo >&2 'source and diff are obsolete - use dpkg-source -b'; false

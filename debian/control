@@ -9,10 +9,29 @@ Vcs-Browser: http://git.debian.org/?p=users/clint/fakeroot.git;a=summary
 
 Package: fakeroot
 Architecture: any
-Depends: ${shlibs:Depends}
+Multi-Arch: foreign
+Depends: ${shlibs:Depends}, libfakeroot (>= ${binary:Version}),
 Description: tool for simulating superuser privileges
  fakeroot provides a fake "root environment" by means of LD_PRELOAD and
  SysV IPC (or TCP) trickery. It puts wrappers around getuid(), chown(),
  stat(), and other file-manipulation functions, so that unprivileged
  users can (for instance) populate .deb archives with root-owned files;
  various build tools use fakeroot for this by default.
+ .
+ This package contains fakeroot command and the daemon that remembers
+ fake ownership/permissions of files manipulated by fakeroot
+ processes.
+
+Package: libfakeroot
+Architecture: any
+Multi-Arch: same
+Breaks: fakeroot (<< 1.9-2~)
+Depends: ${shlibs:Depends}
+Description: tool for simulating superuser privileges - shared libraries
+ fakeroot provides a fake "root environment" by means of LD_PRELOAD and
+ SysV IPC (or TCP) trickery. It puts wrappers around getuid(), chown(),
+ stat(), and other file-manipulation functions, so that unprivileged
+ users can (for instance) populate .deb archives with root-owned files;
+ various build tools use fakeroot for this by default.
+ .
+ This package contains the LD_PRELOAD libraries.
