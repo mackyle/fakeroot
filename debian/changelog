@@ -1,3 +1,13 @@
+fakeroot (1.20-1) unstable; urgency=low
+
+  * Patch from Andrew Shadura to fix fts_statp-related segfault.
+    closes: #722596.
+  * Use colon as a delimiter for preload libs. closes: #697430.
+  * Patch from Steve Langasek to add support for wrapping
+    setpriority(). closes: #693580.
+
+ -- Clint Adams <clint@debian.org>  Fri, 20 Sep 2013 09:55:31 -0400
+
 fakeroot (1.19-2) unstable; urgency=low
 
   * Patch from Colin Watson to use appropriate strip command
