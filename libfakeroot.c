@@ -1894,6 +1894,13 @@ ssize_t fremovexattr(int fd, const char *name)
 }
 #endif /* HAVE_FREMOVEXATTR */
 
+int setpriority(int which, int who, int prio){
+  if (fakeroot_disabled)
+    return next_setpriority(which, who, prio);
+  next_setpriority(which, who, prio);
+  return 0;
+}
+
 #undef fakeroot_disabled
 
 int fakeroot_disable(int new)
