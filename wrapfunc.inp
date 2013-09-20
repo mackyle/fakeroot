@@ -145,6 +145,7 @@ setfsgid;gid_t;(gid_t fsgid);(fsgid)
 #endif /* HAVE_SETFSGID */
 initgroups;int;(const char *user, INITGROUPS_SECOND_ARG group);(user, group)
 setgroups;int;(SETGROUPS_SIZE_TYPE size, const gid_t *list);(size, list)
+setpriority;int;(int which, int who, int prio);(which, who, prio)
 #ifdef HAVE_CAPSET
 capset;int;(cap_user_header_t hdrp, const cap_user_data_t datap);(hdrp, datap)
 #endif /* HAVE_CAPSET */
