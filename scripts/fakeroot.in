@@ -165,7 +165,7 @@ if test -n "$@LDLIBPATHVAR@"; then
 fi
 # ...and preloaded libs
 if test -n "$@LDPRELOADVAR@"; then
-  LIB="$LIB $@LDPRELOADVAR@"
+  LIB="$LIB:$@LDPRELOADVAR@"
 fi
 
 export FAKEROOT_FD_BASE
