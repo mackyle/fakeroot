@@ -25,7 +25,8 @@ Description: tool for simulating superuser privileges
 Package: libfakeroot
 Architecture: any
 Multi-Arch: same
-Breaks: fakeroot (<< 1.9-2~)
+Replaces: fakeroot (<< 1.20-2~)
+Breaks: fakeroot (<< 1.20-2~)
 Depends: ${shlibs:Depends}
 Description: tool for simulating superuser privileges - shared libraries
  fakeroot provides a fake "root environment" by means of LD_PRELOAD and
