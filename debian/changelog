@@ -1,3 +1,10 @@
+fakeroot (1.20-3) unstable; urgency=low
+
+  * Fix Replaces/Breaks headers on libfakeroot.  closes: #730792.
+  * Drop biarch build-deps.
+
+ -- Clint Adams <clint@debian.org>  Fri, 29 Nov 2013 11:33:55 -0500
+
 fakeroot (1.20-2) unstable; urgency=low
 
   * Patch from Hilko Bengen to hardcode path to setcap
