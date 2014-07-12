@@ -1,3 +1,11 @@
+fakeroot (1.20.1-1) unstable; urgency=medium
+
+  * Drop the patch hard-coding the path to setcap since we now
+    skip the t.xattr test when the getcap command can't be found.
+    closes: #737573.
+
+ -- Clint Adams <clint@debian.org>  Sat, 12 Jul 2014 14:35:51 -0400
+
 fakeroot (1.20-3) unstable; urgency=low
 
   * Fix Replaces/Breaks headers on libfakeroot.  closes: #730792.
