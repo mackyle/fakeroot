@@ -1,3 +1,11 @@
+fakeroot (1.20.2-1) unstable; urgency=medium
+
+  * New upstream version.
+    - More accurate location of DSOs in fakeroot(1).  closes: #763732.
+    - Portuguese translation from Américo Monteiro.  closes: #757788.
+
+ -- Clint Adams <clint@debian.org>  Sun, 05 Oct 2014 11:09:57 -0400
+
 fakeroot (1.20.1-1.1) unstable; urgency=medium
 
   * Non-maintainer upload with maintainer permission.

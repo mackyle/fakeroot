@@ -3,7 +3,7 @@ Section: utils
 Priority: optional
 Build-Depends: sharutils, libacl1-dev, libcap-dev [linux-any], libcap2-bin [linux-any]
 Maintainer: Clint Adams <clint@debian.org>
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 Vcs-Git: git://git.debian.org/git/users/clint/fakeroot.git
 Vcs-Browser: http://git.debian.org/?p=users/clint/fakeroot.git;a=summary
 
