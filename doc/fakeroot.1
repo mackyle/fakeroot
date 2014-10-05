@@ -13,7 +13,7 @@
 .sp
 ..
 .\"
-.TH fakeroot 1 "6 August 2004" "Debian Project" "Debian manual"
+.TH fakeroot 1 "5 October 2014" "Debian Project" "Debian manual"
 .\" Manpage by J.H.M. Dassen <jdassen@debian.org>
 .\" and Clint Adams <clint@debian.org>
 .SH NAME
@@ -52,8 +52,9 @@ works by replacing the file manipulation library functions (chmod(2),
 stat(2) etc.) by ones that simulate the effect the real library
 functions would have had, had the user really been root. These wrapper
 functions are in a shared library
-.B /usr/lib/libfakeroot.so*
-which is loaded through the 
+.B /usr/lib/*/libfakeroot-*.so
+or similar location on your platform.
+The shared object is loaded through the 
 .B LD_PRELOAD
 mechanism of the dynamic loader. (See
 .BR ld.so (8))
@@ -169,7 +170,7 @@ need that argument).
 is a regular, non-setuid program. It does not enhance a user's
 privileges, or decrease the system's security.
 .SH FILES
-.I /usr/lib/libfakeroot/libfakeroot.so*
+.I /usr/lib/*/libfakeroot-*.so
 The shared library containing the wrapper functions.
 .SH ENVIRONMENT
 .B 
