@@ -1,3 +1,11 @@
+fakeroot (1.20.1-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload with maintainer permission.
+  * Add patch glibc-xattr-types to fix the type of xattr functions. closes:
+    #758406.
+
+ -- Aurelien Jarno <aurel32@debian.org>  Mon, 18 Aug 2014 14:58:00 +0200
+
 fakeroot (1.20.1-1) unstable; urgency=medium
 
   * Drop the patch hard-coding the path to setcap since we now
