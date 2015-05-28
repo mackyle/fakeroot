@@ -64,7 +64,7 @@ struct fakestat {
 #pragma pack()
 #endif
 
-#define MAX_IPC_BUFFER_SIZE 256
+#define MAX_IPC_BUFFER_SIZE 1024
 
 #if __SUNPRO_C
 #pragma pack(4)
