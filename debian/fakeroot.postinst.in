@@ -44,3 +44,4 @@ update-alternatives --install /usr/bin/fakeroot fakeroot \
 
 fi
 
+#DEBHELPER#

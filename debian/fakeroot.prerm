@@ -7,3 +7,4 @@ then
 	update-alternatives --remove fakeroot /usr/bin/fakeroot-tcp
 fi
 
+#DEBHELPER#

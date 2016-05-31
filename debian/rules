@@ -1,5 +1,7 @@
 #!/usr/bin/make -f
 
+export DH_VERBOSE = 1
+
 DEB_BUILD_GNU_TYPE = $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 DEB_HOST_GNU_TYPE = $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
@@ -41,6 +43,11 @@ obj-tcp/config.status:
 build: build-arch build-indep
 build-arch: build-stamp
 build-stamp: obj-sysv/config.status obj-tcp/config.status
+	#dh_testdir
+	#dh_update_autotools_config
+	#dh_auto_configure
+	#dh_auto_build
+	#dh_auto_test
 	$(checkdir)
 
 	cd obj-sysv && $(MAKE)
@@ -68,6 +75,9 @@ endif
 	touch build-stamp
 
 clean: checkroot
+	#dh_testdir
+	#dh_auto_clean
+	#dh_clean
 	$(checkdir)
 	rm -rf obj-sysv obj64-sysv obj-tcp obj64-tcp
 	rm -f build-stamp
@@ -91,6 +101,31 @@ binary-indep: build
 
 # Build architecture-dependent files here.
 binary-arch: build checkroot
+	#dh_testroot -a
+	#dh_prep -a
+	#dh_installdirs -a
+	#dh_auto_install -a
+	#dh_install -a
+	#dh_installdocs -a
+	#dh_installchangelogs -a
+	#dh_installexamples -a
+	#dh_installman -a
+	#dh_installcatalogs -a
+	#dh_installcron -a
+	#dh_installdebconf -a
+	#dh_installemacsen -a
+	#dh_installifupdown -a
+	#dh_installinfo -a
+	#dh_installinit -a
+	#dh_installmenu -a
+	#dh_installmime -a
+	#dh_installmodules -a
+	#dh_installlogcheck -a
+	#dh_installlogrotate -a
+	#dh_installpam -a
+	#dh_installppp -a
+	#dh_installudev -a
+	#dh_installgsettings -a
 	$(checkdir)
 
 	cd obj-tcp && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
@@ -138,6 +173,26 @@ endif
 	cp -r debian/tmp/usr/share/doc/fakeroot/. \
 		debian/libfakeroot/usr/share/doc/libfakeroot/.
 
+	#dh_bugfiles -a
+	#dh_ucf -a
+	#dh_lintian -a
+	#dh_gconf -a
+	#dh_icons -a
+	#dh_perl -a
+	#dh_usrlocal -a
+	#dh_link -a
+	#dh_installwm -a
+	#dh_installxfonts -a
+	#dh_strip_nondeterminism -a
+	#dh_compress -a
+	#dh_fixperms -a
+	#dh_strip -a
+	#dh_makeshlibs -a
+	#dh_shlibdeps -a
+	#dh_installdeb -a
+	#dh_gencontrol -a
+	#dh_md5sums -a
+	#dh_builddeb -a
 	$(INSTALL_SCRIPT) debian/fakeroot.postrm debian/fakeroot/DEBIAN/postrm
 	$(INSTALL_SCRIPT) debian/fakeroot.prerm debian/fakeroot/DEBIAN/prerm
 	echo /etc/ld.so.conf.d/fakeroot-$(DEB_HOST_MULTIARCH).conf >debian/libfakeroot/DEBIAN/conffiles

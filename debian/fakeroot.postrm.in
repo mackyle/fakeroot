@@ -8,3 +8,4 @@ then
     rm -f @LIBDIR@/libfakeroot/libfakeroot-0.so
 fi
 
+#DEBHELPER#

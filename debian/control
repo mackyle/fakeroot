@@ -1,7 +1,8 @@
 Source: fakeroot
 Section: utils
 Priority: optional
-Build-Depends: sharutils, libacl1-dev, libcap-dev [linux-any], libcap2-bin [linux-any]
+Build-Depends: debhelper (>= 9),
+ sharutils, libacl1-dev, libcap-dev [linux-any], libcap2-bin [linux-any]
 Maintainer: Clint Adams <clint@debian.org>
 Standards-Version: 3.9.6
 Vcs-Git: git://git.debian.org/git/users/clint/fakeroot.git
@@ -10,7 +11,7 @@ Vcs-Browser: http://git.debian.org/?p=users/clint/fakeroot.git;a=summary
 Package: fakeroot
 Architecture: any
 Multi-Arch: foreign
-Depends: ${shlibs:Depends}, libfakeroot (>= ${binary:Version}),
+Depends: ${shlibs:Depends}, libfakeroot (>= ${binary:Version}), ${misc:Depends}
 Description: tool for simulating superuser privileges
  fakeroot provides a fake "root environment" by means of LD_PRELOAD and
  SysV IPC (or TCP) trickery. It puts wrappers around getuid(), chown(),
@@ -27,7 +28,7 @@ Architecture: any
 Multi-Arch: same
 Replaces: fakeroot (<< 1.20-2~)
 Breaks: fakeroot (<< 1.20-2~)
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: tool for simulating superuser privileges - shared libraries
  fakeroot provides a fake "root environment" by means of LD_PRELOAD and
  SysV IPC (or TCP) trickery. It puts wrappers around getuid(), chown(),
