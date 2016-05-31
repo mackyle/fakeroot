@@ -1,19 +1,8 @@
-#!/bin/sh -e
+#!/bin/sh
+set -e
 
-case "$1" in
-    configure)
-	# continue below
-    ;;
-
-    abort-upgrade|abort-remove|abort-deconfigure)
-	exit 0
-    ;;
-
-    *)
-	echo "postinst called with unknown argument \`$1'" >&2
-	exit 0
-    ;;
-esac
+if [ "$1" = "configure" ]
+then
 
 update-alternatives --install /usr/bin/fakeroot fakeroot \
 			/usr/bin/fakeroot-sysv @FAKEROOT_SYSV_ALTPRIO@ \
@@ -53,4 +42,5 @@ update-alternatives --install /usr/bin/fakeroot fakeroot \
 		--slave /usr/share/man/sv/man1/faked.1.gz \
 		faked.sv.1.gz /usr/share/man/sv/man1/faked-tcp.1.gz
 
-exit 0
+fi
+

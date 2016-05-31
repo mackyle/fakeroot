@@ -1,20 +1,9 @@
-#!/bin/sh -e
+#!/bin/sh
+set -e
 
-case "$1" in
-    remove|deconfigure)
+if [ "$1" = "remove" ] || [ "$1" = "deconfigure" ]
+then
 	update-alternatives --remove fakeroot /usr/bin/fakeroot-sysv
 	update-alternatives --remove fakeroot /usr/bin/fakeroot-tcp
-    ;;
-    upgrade)
-    ;;
+fi
 
-    failed-upgrade)
-    ;;
-
-    *)
-	echo "prerm called with unknown argument \`$1'" >&2
-	exit 0
-    ;;
-esac
-
-exit 0
