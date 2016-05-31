@@ -31,24 +31,23 @@ endif
 LIB_DIR=usr/lib/$(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
 obj-sysv/config.status:
-	$(checkdir)
+	dh_testdir
 	mkdir obj-sysv
 	cd obj-sysv && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/$(LIB_DIR)/libfakeroot --program-suffix=-sysv $(CONFARGS)
 
 obj-tcp/config.status:
-	$(checkdir)
+	dh_testdir
 	mkdir obj-tcp
 	cd obj-tcp && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/$(LIB_DIR)/libfakeroot --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 
 build: build-arch build-indep
 build-arch: build-stamp
 build-stamp: obj-sysv/config.status obj-tcp/config.status
-	#dh_testdir
+	dh_testdir
 	#dh_update_autotools_config
 	#dh_auto_configure
 	#dh_auto_build
 	#dh_auto_test
-	$(checkdir)
 
 	cd obj-sysv && $(MAKE)
 	cd obj-tcp && $(MAKE)
@@ -74,11 +73,10 @@ endif
 
 	touch build-stamp
 
-clean: checkroot
-	#dh_testdir
+clean:
+	dh_testdir
 	#dh_auto_clean
 	#dh_clean
-	$(checkdir)
 	rm -rf obj-sysv obj64-sysv obj-tcp obj64-tcp
 	rm -f build-stamp
 #	 Add here commands to clean up after the build process.
@@ -100,9 +98,9 @@ binary-indep: build
 # We have nothing to do by default.
 
 # Build architecture-dependent files here.
-binary-arch: build checkroot
-	#dh_testroot -a
-	#dh_prep -a
+binary-arch: build
+	dh_testroot -a
+	dh_prep -a
 	#dh_installdirs -a
 	#dh_auto_install -a
 	#dh_install -a
@@ -126,7 +124,6 @@ binary-arch: build checkroot
 	#dh_installppp -a
 	#dh_installudev -a
 	#dh_installgsettings -a
-	$(checkdir)
 
 	cd obj-tcp && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
 
@@ -220,11 +217,3 @@ binary: binary-indep binary-arch
 
 prebuild:
 	@echo prebuild handled differently now
-
-define checkdir
-	test -f debian/rules
-endef
-
-checkroot:
-	$(checkdir)
-	test root = "`whoami`"
