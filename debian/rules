@@ -148,8 +148,6 @@ ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	$(STRIP) --remove-section=.comment --remove-section=.note debian/tmp/usr/bin/faked-sysv
 	$(STRIP) --remove-section=.comment --remove-section=.note debian/tmp/usr/bin/faked-tcp
 endif
-	$(INSTALL_DIR) debian/fakeroot/DEBIAN debian/libfakeroot/DEBIAN
-
 	# split
 	(cd debian/tmp && find usr/bin usr/share -type f | xargs tar -cf - ) |\
 		(cd debian/fakeroot && tar -xf - )
@@ -175,17 +173,13 @@ endif
 	#dh_strip -a
 	#dh_makeshlibs -a
 	#dh_shlibdeps -a
-	#dh_installdeb -a
-	$(INSTALL_SCRIPT) debian/fakeroot.postrm debian/fakeroot/DEBIAN/postrm
-	$(INSTALL_SCRIPT) debian/fakeroot.prerm debian/fakeroot/DEBIAN/prerm
-	echo /etc/ld.so.conf.d/fakeroot-$(DEB_HOST_MULTIARCH).conf >debian/libfakeroot/DEBIAN/conffiles
-	$(INSTALL_SCRIPT) debian/fakeroot.postinst debian/fakeroot/DEBIAN/postinst
 	# We can just use the deps for faked.
 	dpkg-shlibdeps -Tdebian/libfakeroot.substvars \
 		debian/libfakeroot/$(LIB_DIR)/libfakeroot/*.so
 	dpkg-shlibdeps -Tdebian/fakeroot.substvars \
 		debian/fakeroot/usr/bin/faked-sysv \
 		debian/fakeroot/usr/bin/faked-tcp
+	dh_installdeb -a
 	dh_gencontrol -a
 	dh_md5sums -a
 	dh_builddeb -a
