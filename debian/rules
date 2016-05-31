@@ -91,7 +91,7 @@ binary-indep:
 binary-arch: build-arch
 	dh_testroot -a
 	dh_prep -a
-	#dh_installdirs -a
+	dh_installdirs -a
 	#dh_auto_install -a
 	#dh_install -a
 	#dh_installdocs -a
@@ -128,8 +128,7 @@ binary-arch: build-arch
 	rm debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot.so
 
 	$(INSTALL_DIR) debian/tmp/usr/share/doc/fakeroot \
-		           debian/tmp/$(LIB_DIR)/libfakeroot \
-		           debian/libfakeroot/etc/ld.so.conf.d
+		           debian/tmp/$(LIB_DIR)/libfakeroot
 	echo /$(LIB_DIR)/libfakeroot > debian/libfakeroot/etc/ld.so.conf.d/fakeroot-$(DEB_HOST_MULTIARCH).conf
 	$(INSTALL_FILE) README doc/README.saving DEBUG debian/tmp/usr/share/doc/fakeroot/
 	( echo "fakeroot was written originally by"; \
