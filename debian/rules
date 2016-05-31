@@ -88,25 +88,6 @@ binary-arch: build-arch
 	#dh_auto_install -a
 	#dh_install -a
 	#dh_installdocs -a
-	#dh_installchangelogs -a
-	#dh_installexamples -a
-	#dh_installman -a
-	#dh_installcatalogs -a
-	#dh_installcron -a
-	#dh_installdebconf -a
-	#dh_installemacsen -a
-	#dh_installifupdown -a
-	#dh_installinfo -a
-	#dh_installinit -a
-	#dh_installmenu -a
-	#dh_installmime -a
-	#dh_installmodules -a
-	#dh_installlogcheck -a
-	#dh_installlogrotate -a
-	#dh_installpam -a
-	#dh_installppp -a
-	#dh_installudev -a
-	#dh_installgsettings -a
 
 	cd obj-tcp && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
 
@@ -130,7 +111,6 @@ binary-arch: build-arch
 	rm -f debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot.*a*
 	rm -f debian/tmp/usr/bin/simple
 	$(INSTALL_FILE) debian/copyright debian/tmp/usr/share/doc/fakeroot/copyright
-	$(INSTALL_FILE) debian/changelog debian/tmp/usr/share/doc/fakeroot/changelog.Debian
 	# split
 	(cd debian/tmp && find usr/bin usr/share -type f | xargs tar -cf - ) |\
 		(cd debian/fakeroot && tar -xf - )
@@ -139,6 +119,8 @@ binary-arch: build-arch
 	$(INSTALL_DIR) debian/libfakeroot/usr/share/doc/libfakeroot
 	cp -r debian/tmp/usr/share/doc/fakeroot/. \
 		debian/libfakeroot/usr/share/doc/libfakeroot/.
+	dh_installchangelogs -a
+	#dh_installman -a
 	dh_bugfiles -a
 	dh_lintian -a
 	dh_link -a
