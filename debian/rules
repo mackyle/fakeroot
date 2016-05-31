@@ -55,6 +55,13 @@ endif
 endif
 endif
 
+ifneq ($(DEB_HOST_GNU_SYSTEM),gnu)
+	sed 's/@FAKEROOT_SYSV_ALTPRIO@/50/;s/@FAKEROOT_TCP_ALTPRIO@/30/;' \
+		debian/fakeroot.postinst.in > debian/fakeroot.postinst
+else
+	sed 's/@FAKEROOT_SYSV_ALTPRIO@/30/;s/@FAKEROOT_TCP_ALTPRIO@/50/;' \
+		debian/fakeroot.postinst.in > debian/fakeroot.postinst
+endif
 	sed 's,@LIBDIR@,/$(LIB_DIR),' \
 		debian/fakeroot.postrm.in > debian/fakeroot.postrm
 
@@ -75,6 +82,7 @@ endif
 	rm -f debian/*.substvars debian/files
 	rm -rf debian/tmp debian/fakeroot debian/libfakeroot obj obj64 autom4te.cache
 	find . -type f -a \( -name \#\*\# -o -name .\*\~ -o -name \*\~ -o -name DEADJOE -o -name \*.orig -o -name \*.rej -o -name \*.bak -o -name .\*.orig -o -name .\*.rej -o -name .SUMS -o -name TAGS -o -name core -o \( -path \*/.deps/\* -a -name \*.P \) \) -exec rm -f {} \;
+	$(RM) debian/fakeroot.postinst
 	$(RM) debian/fakeroot.postrm
 
 # Build architecture-independent files here.
@@ -133,15 +141,7 @@ endif
 	$(INSTALL_SCRIPT) debian/fakeroot.postrm debian/fakeroot/DEBIAN/postrm
 	$(INSTALL_SCRIPT) debian/fakeroot.prerm debian/fakeroot/DEBIAN/prerm
 	echo /etc/ld.so.conf.d/fakeroot-$(DEB_HOST_MULTIARCH).conf >debian/libfakeroot/DEBIAN/conffiles
-ifneq ($(DEB_HOST_GNU_SYSTEM),gnu)
-	sed 's/@FAKEROOT_SYSV_ALTPRIO@/50/;s/@FAKEROOT_TCP_ALTPRIO@/30/;' \
-		debian/fakeroot.postinst.in > debian/fakeroot.postinst
-else
-	sed 's/@FAKEROOT_SYSV_ALTPRIO@/30/;s/@FAKEROOT_TCP_ALTPRIO@/50/;' \
-		debian/fakeroot.postinst.in > debian/fakeroot.postinst
-endif
 	$(INSTALL_SCRIPT) debian/fakeroot.postinst debian/fakeroot/DEBIAN/postinst
-	rm -f debian/fakeroot.postinst
 	# We can just use the deps for faked.
 	dpkg-shlibdeps -Tdebian/libfakeroot.substvars \
 		debian/libfakeroot/$(LIB_DIR)/libfakeroot/*.so
