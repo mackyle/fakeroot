@@ -110,13 +110,11 @@ binary-arch: build-arch
 
 	cd obj-tcp && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
 
-	chmod 644 debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-0.so
 	mv debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-0.so debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-tcp.so
 	rm debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot.so
 
 	cd obj-sysv && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
 
-	chmod 644 debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-0.so
 	mv debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-0.so debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-sysv.so
 	rm debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot.so
 
@@ -133,8 +131,6 @@ binary-arch: build-arch
 	rm -f debian/tmp/usr/bin/simple
 	$(INSTALL_FILE) debian/copyright debian/tmp/usr/share/doc/fakeroot/copyright
 	$(INSTALL_FILE) debian/changelog debian/tmp/usr/share/doc/fakeroot/changelog.Debian
-	find debian/tmp -name '*.1' -or -name changelog.Debian | \
-		xargs gzip -9fn
 	# split
 	(cd debian/tmp && find usr/bin usr/share -type f | xargs tar -cf - ) |\
 		(cd debian/fakeroot && tar -xf - )
@@ -143,20 +139,12 @@ binary-arch: build-arch
 	$(INSTALL_DIR) debian/libfakeroot/usr/share/doc/libfakeroot
 	cp -r debian/tmp/usr/share/doc/fakeroot/. \
 		debian/libfakeroot/usr/share/doc/libfakeroot/.
-
-	#dh_bugfiles -a
-	#dh_ucf -a
-	#dh_lintian -a
-	#dh_gconf -a
-	#dh_icons -a
-	#dh_perl -a
-	#dh_usrlocal -a
-	#dh_link -a
-	#dh_installwm -a
-	#dh_installxfonts -a
-	#dh_strip_nondeterminism -a
-	#dh_compress -a
-	#dh_fixperms -a
+	dh_bugfiles -a
+	dh_lintian -a
+	dh_link -a
+	dh_strip_nondeterminism -a
+	dh_compress -a
+	dh_fixperms -a
 	dh_strip -a
 	#dh_makeshlibs -a
 	#dh_shlibdeps -a
