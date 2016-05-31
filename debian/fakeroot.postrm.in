@@ -20,7 +20,7 @@ case "$1" in
   (remove)
     # ldconfig would clean this up the next time it's run, but
     # we remove it to make piuparts stop complaining
-    rm -f /usr/lib/libfakeroot-0.so
+    rm -f @LIBDIR@/libfakeroot/libfakeroot-0.so
 
     ;;
   (purge|disappear|upgrade|failed-upgrade|abort-install|abort-upgrade)

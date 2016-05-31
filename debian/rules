@@ -55,6 +55,9 @@ endif
 endif
 endif
 
+	sed 's,@LIBDIR@,/$(LIB_DIR),' \
+		debian/fakeroot.postrm.in > debian/fakeroot.postrm
+
 	touch build-stamp
 
 clean: checkroot
@@ -72,6 +75,7 @@ endif
 	rm -f debian/*.substvars debian/files
 	rm -rf debian/tmp debian/fakeroot debian/libfakeroot obj obj64 autom4te.cache
 	find . -type f -a \( -name \#\*\# -o -name .\*\~ -o -name \*\~ -o -name DEADJOE -o -name \*.orig -o -name \*.rej -o -name \*.bak -o -name .\*.orig -o -name .\*.rej -o -name .SUMS -o -name TAGS -o -name core -o \( -path \*/.deps/\* -a -name \*.P \) \) -exec rm -f {} \;
+	$(RM) debian/fakeroot.postrm
 
 # Build architecture-independent files here.
 binary-indep: build
