@@ -4,11 +4,8 @@ export DH_VERBOSE = 1
 
 DEB_BUILD_GNU_TYPE = $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 DEB_HOST_GNU_TYPE = $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
-ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
-STRIP = strip
-else
+ifneq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
 CONFARGS = --host=$(DEB_HOST_GNU_TYPE)
-STRIP = $(DEB_HOST_GNU_TYPE)-strip
 endif
 
 CFLAGS = -W -Wall -g
@@ -22,10 +19,6 @@ ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 CFLAGS += -O0
 else
 CFLAGS += -O2
-endif
-
-ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
-INSTALL_PROGRAM += -s
 endif
 
 LIB_DIR	 = usr/lib/$(DEB_HOST_MULTIARCH)
@@ -142,12 +135,6 @@ binary-arch: build-arch
 	$(INSTALL_FILE) debian/changelog debian/tmp/usr/share/doc/fakeroot/changelog.Debian
 	find debian/tmp -name '*.1' -or -name changelog.Debian | \
 		xargs gzip -9fn
-ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
-	$(STRIP) --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-sysv.so
-	$(STRIP) --remove-section=.comment --remove-section=.note --strip-unneeded debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-tcp.so
-	$(STRIP) --remove-section=.comment --remove-section=.note debian/tmp/usr/bin/faked-sysv
-	$(STRIP) --remove-section=.comment --remove-section=.note debian/tmp/usr/bin/faked-tcp
-endif
 	# split
 	(cd debian/tmp && find usr/bin usr/share -type f | xargs tar -cf - ) |\
 		(cd debian/fakeroot && tar -xf - )
@@ -170,7 +157,7 @@ endif
 	#dh_strip_nondeterminism -a
 	#dh_compress -a
 	#dh_fixperms -a
-	#dh_strip -a
+	dh_strip -a
 	#dh_makeshlibs -a
 	#dh_shlibdeps -a
 	# We can just use the deps for faked.
