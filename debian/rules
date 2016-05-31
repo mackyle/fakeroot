@@ -28,7 +28,7 @@ ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 INSTALL_PROGRAM += -s
 endif
 
-LIB_DIR=usr/lib/$(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+LIB_DIR	 = usr/lib/$(DEB_HOST_MULTIARCH)
 
 obj-sysv/config.status:
 	dh_testdir
@@ -41,6 +41,7 @@ obj-tcp/config.status:
 	cd obj-tcp && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/$(LIB_DIR)/libfakeroot --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 
 build: build-arch build-indep
+build-indep:
 build-arch: build-stamp
 build-stamp: obj-sysv/config.status obj-tcp/config.status
 	dh_testdir
@@ -77,15 +78,8 @@ clean:
 	dh_testdir
 	#dh_auto_clean
 	#dh_clean
-	rm -rf obj-sysv obj64-sysv obj-tcp obj64-tcp
+	rm -rf obj-sysv obj-tcp
 	rm -f build-stamp
-#	 Add here commands to clean up after the build process.
-	-cd obj-sysv && $(MAKE) distclean
-	-cd obj-tcp && $(MAKE) distclean
-ifneq (,$(findstring $(DEB_HOST_GNU_TYPE), sparc-linux-gnu s390-linux-gnu x86_64-linux-gnu i486-linux-gnu powerpc-linux-gnu ppc64-linux-gnu x86_64-kfreebsd-gnu))
-	-cd obj64-sysv && $(MAKE) distclean
-	-cd obj64-tcp && $(MAKE) distclean
-endif
 	rm -rf .deps
 	rm -f debian/*.substvars debian/files
 	rm -rf debian/tmp debian/fakeroot debian/libfakeroot obj obj64 autom4te.cache
@@ -94,11 +88,11 @@ endif
 	$(RM) debian/fakeroot.postrm
 
 # Build architecture-independent files here.
-binary-indep: build
+binary-indep:
 # We have nothing to do by default.
 
 # Build architecture-dependent files here.
-binary-arch: build
+binary-arch: build-arch
 	dh_testroot -a
 	dh_prep -a
 	#dh_installdirs -a
@@ -140,7 +134,7 @@ binary-arch: build
 	$(INSTALL_DIR) debian/tmp/usr/share/doc/fakeroot \
 		           debian/tmp/$(LIB_DIR)/libfakeroot \
 		           debian/libfakeroot/etc/ld.so.conf.d
-	echo /usr/lib/$(DEB_HOST_MULTIARCH)/libfakeroot > debian/libfakeroot/etc/ld.so.conf.d/fakeroot-$(DEB_HOST_MULTIARCH).conf
+	echo /$(LIB_DIR)/libfakeroot > debian/libfakeroot/etc/ld.so.conf.d/fakeroot-$(DEB_HOST_MULTIARCH).conf
 	$(INSTALL_FILE) README doc/README.saving DEBUG debian/tmp/usr/share/doc/fakeroot/
 	( echo "fakeroot was written originally by"; \
 	  echo "joost witteveen"                   ; \
@@ -209,11 +203,5 @@ endif
 	dpkg-deb --build debian/fakeroot ..
 	dpkg-deb --build debian/libfakeroot ..
 
-source diff:
-	@echo >&2 'source and diff are obsolete - use dpkg-source -b'; false
-
 binary: binary-indep binary-arch
-.PHONY: build build-arch build-indep clean binary-indep binary-arch binary checkroot prebuild
-
-prebuild:
-	@echo prebuild handled differently now
+.PHONY: build build-arch build-indep clean binary-indep binary-arch binary
