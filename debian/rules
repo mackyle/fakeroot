@@ -87,7 +87,6 @@ binary-arch: build-arch
 	dh_installdirs -a
 	#dh_auto_install -a
 	#dh_install -a
-	#dh_installdocs -a
 
 	cd obj-tcp && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
 
@@ -99,26 +98,16 @@ binary-arch: build-arch
 	mv debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-0.so debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-sysv.so
 	rm debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot.so
 
-	$(INSTALL_DIR) debian/tmp/usr/share/doc/fakeroot \
-		           debian/tmp/$(LIB_DIR)/libfakeroot
 	echo /$(LIB_DIR)/libfakeroot > debian/libfakeroot/etc/ld.so.conf.d/fakeroot-$(DEB_HOST_MULTIARCH).conf
-	$(INSTALL_FILE) README doc/README.saving DEBUG debian/tmp/usr/share/doc/fakeroot/
-	( echo "fakeroot was written originally by"; \
-	  echo "joost witteveen"                   ; \
-	  echo "------------------------------------------------"; \
-	  cat COPYING) > debian/tmp/usr/share/doc/fakeroot/copyright
 #	cd obj-sysv && ./libtool --finish $(CURDIR)/debian/tmp/$(LIB_DIR)/fakeroot
 	rm -f debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot.*a*
 	rm -f debian/tmp/usr/bin/simple
-	$(INSTALL_FILE) debian/copyright debian/tmp/usr/share/doc/fakeroot/copyright
 	# split
 	(cd debian/tmp && find usr/bin usr/share -type f | xargs tar -cf - ) |\
 		(cd debian/fakeroot && tar -xf - )
 	(cd debian/tmp && find usr/lib | xargs tar -cf - ) |\
 		(cd debian/libfakeroot && tar -xf - )
-	$(INSTALL_DIR) debian/libfakeroot/usr/share/doc/libfakeroot
-	cp -r debian/tmp/usr/share/doc/fakeroot/. \
-		debian/libfakeroot/usr/share/doc/libfakeroot/.
+	dh_installdocs -a
 	dh_installchangelogs -a
 	#dh_installman -a
 	dh_bugfiles -a
