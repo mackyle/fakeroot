@@ -99,14 +99,8 @@ binary-arch: build-arch
 	dh_compress -a
 	dh_fixperms -a
 	dh_strip -a
-	#dh_makeshlibs -a
-	#dh_shlibdeps -a
-	# We can just use the deps for faked.
-	dpkg-shlibdeps -Tdebian/libfakeroot.substvars \
-		debian/libfakeroot/$(LIB_DIR)/libfakeroot/*.so
-	dpkg-shlibdeps -Tdebian/fakeroot.substvars \
-		debian/fakeroot/usr/bin/faked-sysv \
-		debian/fakeroot/usr/bin/faked-tcp
+	dh_makeshlibs -a
+	dh_shlibdeps -a
 	dh_installdeb -a
 	dh_gencontrol -a
 	dh_md5sums -a
