@@ -8,15 +8,10 @@ ifneq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
 CONFARGS = --host=$(DEB_HOST_GNU_TYPE)
 endif
 
-CFLAGS = -W -Wall -g
-
-ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-CFLAGS += -O0
-else
-CFLAGS += -O2
-endif
-
 LIB_DIR	 = usr/lib/$(DEB_HOST_MULTIARCH)
+
+%:
+	dh $@
 
 obj-sysv/config.status:
 	dh_testdir
@@ -28,28 +23,11 @@ obj-tcp/config.status:
 	mkdir obj-tcp
 	cd obj-tcp && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/$(LIB_DIR)/libfakeroot --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
 
-build: build-arch build-indep
-build-indep:
-build-arch: build-stamp
-build-stamp: obj-sysv/config.status obj-tcp/config.status
-	dh_testdir
-	#dh_update_autotools_config
-	#dh_auto_configure
-	#dh_auto_build
-	#dh_auto_test
+override_dh_auto_configure: obj-sysv/config.status obj-tcp/config.status
 
+override_dh_auto_build:
 	cd obj-sysv && $(MAKE)
 	cd obj-tcp && $(MAKE)
-
-ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
-ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
-ifeq (,$(findstring hurd, $(DEB_HOST_ARCH_OS)))
-	cd obj-sysv && $(MAKE) check
-endif
-	cd obj-tcp && $(MAKE) check
-endif
-endif
-
 ifneq ($(DEB_HOST_GNU_SYSTEM),gnu)
 	sed 's/@FAKEROOT_SYSV_ALTPRIO@/50/;s/@FAKEROOT_TCP_ALTPRIO@/30/;' \
 		debian/fakeroot.postinst.in > debian/fakeroot.postinst
@@ -60,28 +38,17 @@ endif
 	sed 's,@LIBDIR@,/$(LIB_DIR),' \
 		debian/fakeroot.postrm.in > debian/fakeroot.postrm
 
-	touch build-stamp
+override_dh_auto_test:
+ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
+ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
+ifeq (,$(findstring hurd, $(DEB_HOST_ARCH_OS)))
+	cd obj-sysv && $(MAKE) check
+endif
+	cd obj-tcp && $(MAKE) check
+endif
+endif
 
-clean:
-	dh_testdir
-	#dh_auto_clean
-	dh_clean
-	rm -rf obj-sysv obj-tcp
-	rm -f build-stamp
-	$(RM) debian/fakeroot.postinst
-	$(RM) debian/fakeroot.postrm
-
-# Build architecture-independent files here.
-binary-indep:
-# We have nothing to do by default.
-
-# Build architecture-dependent files here.
-binary-arch: build-arch
-	dh_testroot -a
-	dh_prep -a
-	dh_installdirs -a
-	#dh_auto_install -a
-
+override_dh_auto_install:
 	cd obj-tcp && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
 	mv debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-0.so debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-tcp.so
 	cd obj-sysv && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
@@ -89,23 +56,7 @@ binary-arch: build-arch
 	mkdir -p debian/tmp/etc/ld.so.conf.d
 	echo /$(LIB_DIR)/libfakeroot > debian/tmp/etc/ld.so.conf.d/fakeroot-$(DEB_HOST_MULTIARCH).conf
 
-	dh_install -a --list-missing
-	dh_installdocs -a
-	dh_installchangelogs -a
-	dh_installman -a
-	dh_bugfiles -a
-	dh_lintian -a
-	dh_link -a
-	dh_strip_nondeterminism -a
-	dh_compress -a
-	dh_fixperms -a
-	dh_strip -a
-	dh_makeshlibs -a
-	dh_shlibdeps -a
-	dh_installdeb -a
-	dh_gencontrol -a
-	dh_md5sums -a
-	dh_builddeb -a
-
-binary: binary-indep binary-arch
-.PHONY: build build-arch build-indep clean binary-indep binary-arch binary
+override_dh_auto_clean:
+	rm -rf obj-sysv obj-tcp
+	$(RM) debian/fakeroot.postinst
+	$(RM) debian/fakeroot.postrm
