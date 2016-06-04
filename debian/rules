@@ -86,8 +86,9 @@ binary-arch: build-arch
 	mv debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-0.so debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-tcp.so
 	cd obj-sysv && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
 	mv debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-0.so debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-sysv.so
+	mkdir -p debian/tmp/etc/ld.so.conf.d
+	echo /$(LIB_DIR)/libfakeroot > debian/tmp/etc/ld.so.conf.d/fakeroot-$(DEB_HOST_MULTIARCH).conf
 
-	echo /$(LIB_DIR)/libfakeroot > debian/libfakeroot/etc/ld.so.conf.d/fakeroot-$(DEB_HOST_MULTIARCH).conf
 	dh_install -a --list-missing
 	dh_installdocs -a
 	dh_installchangelogs -a

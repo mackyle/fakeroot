@@ -1,2 +1,3 @@
+/etc/ld.so.conf.d/fakeroot-*.conf
 /usr/lib/*/libfakeroot/libfakeroot-tcp.so
 /usr/lib/*/libfakeroot/libfakeroot-sysv.so
