@@ -9,11 +9,6 @@ CONFARGS = --host=$(DEB_HOST_GNU_TYPE)
 endif
 
 CFLAGS = -W -Wall -g
-INSTALL = install
-INSTALL_FILE    = $(INSTALL) -p    -o root -g root  -m  644
-INSTALL_PROGRAM = $(INSTALL) -p    -o root -g root  -m  755
-INSTALL_SCRIPT  = $(INSTALL) -p    -o root -g root  -m  755
-INSTALL_DIR     = $(INSTALL) -p -d -o root -g root  -m  755
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 CFLAGS += -O0
@@ -86,30 +81,17 @@ binary-arch: build-arch
 	dh_prep -a
 	dh_installdirs -a
 	#dh_auto_install -a
-	#dh_install -a
 
 	cd obj-tcp && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
-
 	mv debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-0.so debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-tcp.so
-	rm debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot.so
-
 	cd obj-sysv && $(MAKE) DESTDIR="$(CURDIR)/debian/tmp" install
-
 	mv debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-0.so debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot-sysv.so
-	rm debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot.so
 
 	echo /$(LIB_DIR)/libfakeroot > debian/libfakeroot/etc/ld.so.conf.d/fakeroot-$(DEB_HOST_MULTIARCH).conf
-#	cd obj-sysv && ./libtool --finish $(CURDIR)/debian/tmp/$(LIB_DIR)/fakeroot
-	rm -f debian/tmp/$(LIB_DIR)/libfakeroot/libfakeroot.*a*
-	rm -f debian/tmp/usr/bin/simple
-	# split
-	(cd debian/tmp && find usr/bin usr/share -type f | xargs tar -cf - ) |\
-		(cd debian/fakeroot && tar -xf - )
-	(cd debian/tmp && find usr/lib | xargs tar -cf - ) |\
-		(cd debian/libfakeroot && tar -xf - )
+	dh_install -a --list-missing
 	dh_installdocs -a
 	dh_installchangelogs -a
-	#dh_installman -a
+	dh_installman -a
 	dh_bugfiles -a
 	dh_lintian -a
 	dh_link -a
