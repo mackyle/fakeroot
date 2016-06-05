@@ -1,8 +1,12 @@
-fakeroot (1.20.2-1.1) UNRELEASED; urgency=medium
+fakeroot (1.20.2-2) unstable; urgency=medium
 
-  * Non-maintainer upload.
+  [ Andreas Beckmann ]
+  * Switch to dh.  closes: #826318.
 
- -- Andreas Beckmann <anbe@debian.org>  Mon, 30 May 2016 11:46:29 +0200
+  [ Clint Adams ]
+  * This should make the build reproducible.  closes: #795861.
+
+ -- Clint Adams <clint@debian.org>  Sat, 04 Jun 2016 18:00:48 -0700
 
 fakeroot (1.20.2-1) unstable; urgency=medium
 
