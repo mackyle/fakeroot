@@ -1,3 +1,14 @@
+fakeroot (1.21-1) unstable; urgency=medium
+
+  * New upstream version.
+    - Portuguese man page translation update from Américo Monteiro.
+      closes: #764535.
+    - Patch to increase MAX_IPC_BUFFER_SIZE (to cope with evmctl sign
+      failure) from Marc Kleine-Budde.  closes: #801977.
+  * Build-depend on dh-autoreconf and po4a.
+
+ -- Clint Adams <clint@debian.org>  Sun, 26 Jun 2016 23:31:45 +0200
+
 fakeroot (1.20.2-2) unstable; urgency=medium
 
   [ Andreas Beckmann ]
