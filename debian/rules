@@ -13,12 +13,17 @@ LIB_DIR	 = usr/lib/$(DEB_HOST_MULTIARCH)
 %:
 	dh $@
 
-obj-sysv/config.status:
+dhar-stamp:
+	dh_autoreconf
+	(cd doc && po4a -k 0 --rm-backups --variable "srcdir=../doc/" po4a/po4a.cfg) || exit 1
+	touch $@
+
+obj-sysv/config.status: dhar-stamp
 	dh_testdir
 	mkdir obj-sysv
 	cd obj-sysv && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/$(LIB_DIR)/libfakeroot --program-suffix=-sysv $(CONFARGS)
 
-obj-tcp/config.status:
+obj-tcp/config.status: dhar-stamp
 	dh_testdir
 	mkdir obj-tcp
 	cd obj-tcp && CFLAGS="$(CFLAGS)" ../configure --prefix=/usr --mandir=/usr/share/man --libdir=/$(LIB_DIR)/libfakeroot --with-ipc=tcp --program-suffix=-tcp $(CONFARGS)
@@ -58,5 +63,7 @@ override_dh_auto_install:
 
 override_dh_auto_clean:
 	rm -rf obj-sysv obj-tcp
+	dh_autoreconf_clean
+	rm -f dhar-stamp
 	$(RM) debian/fakeroot.postinst
 	$(RM) debian/fakeroot.postrm
