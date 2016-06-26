@@ -5,9 +5,9 @@ Build-Depends: debhelper (>= 9),
  dh-strip-nondeterminism,
  sharutils, libacl1-dev, libcap-dev [linux-any], libcap2-bin [linux-any]
 Maintainer: Clint Adams <clint@debian.org>
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 Vcs-Git: git://git.debian.org/git/users/clint/fakeroot.git
-Vcs-Browser: http://git.debian.org/?p=users/clint/fakeroot.git;a=summary
+Vcs-Browser: https://anonscm.debian.org/cgit/users/clint/fakeroot.git/
 
 Package: fakeroot
 Architecture: any
