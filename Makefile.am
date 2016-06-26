@@ -29,7 +29,6 @@ CLEANFILES= wrapdef.h wrapstruct.h wrapped.h wraptmpf.h
 DISTCLEANFILES = fakerootconfig.h
 
 EXTRA_DIST=wrapawk wrapawk_macosx wrapfunc.inp           \
-           debian/rules debian/changelog debian/control  \
 	   message.h \
 	   DEBUG BUGS \
 	   setenv.c \
