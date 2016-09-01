@@ -1,2 +1,3 @@
 eglibc-fts-without-LFS
 glibc-xattr-types
+hide-dlsym-error.patch
