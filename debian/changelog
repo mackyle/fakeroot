@@ -1,3 +1,12 @@
+fakeroot (1.21-2) unstable; urgency=medium
+
+  * Patch from Julian Andres Klode (hide-dlsym-error.patch) to hide the
+    errors from dlsym() unless debugging was enabled. This makes builds
+    less noisy and fixes failures in APT test suite with glibc 2.24,
+    which started reporting errors for dlsym().  closes: #830912.
+
+ -- Clint Adams <clint@debian.org>  Thu, 01 Sep 2016 10:50:06 -0400
+
 fakeroot (1.21-1) unstable; urgency=medium
 
   * New upstream version.
