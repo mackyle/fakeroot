@@ -61,11 +61,9 @@ const char *env_var_set(const char *env){
     return NULL;
 }
 
-void cpyfakemstat(struct fake_msg *f, const struct stat *st
-#ifdef STUPID_ALPHA_HACK
-		, int ver
-#endif
-		){
+void cpyfakemstat(struct fake_msg *f,
+                  const struct stat *st
+                  ALPHA_HACK_VERSION_PARAM){
 
 #ifndef STUPID_ALPHA_HACK
   f->st.mode =st->st_mode;
@@ -85,7 +83,7 @@ void cpyfakemstat(struct fake_msg *f, const struct stat *st
 
   f->st.nlink=st->st_nlink;
 #else
-  switch(ver) {
+  switch(alpha_hack_ver) {
 	  case _STAT_VER_KERNEL:
   f->st.mode  = ((struct fakeroot_kernel_stat *)st)->st_mode;
   f->st.ino   = ((struct fakeroot_kernel_stat *)st)->st_ino;
@@ -126,11 +124,9 @@ void cpyfakemstat(struct fake_msg *f, const struct stat *st
 #endif
 }
 
-void cpystatfakem(struct stat *st, const struct fake_msg *f
-#ifdef STUPID_ALPHA_HACK
-		, int ver
-#endif
-		){
+void cpystatfakem(struct stat *st,
+                  const struct fake_msg *f
+                  ALPHA_HACK_VERSION_PARAM){
 #ifndef STUPID_ALPHA_HACK
   st->st_mode =f->st.mode;
   st->st_ino  =f->st.ino ;
@@ -142,7 +138,7 @@ void cpystatfakem(struct stat *st, const struct fake_msg *f
      this one better! */
   /*  st->st_nlink=f->st.nlink;*/
 #else
-  switch(ver) {
+  switch(alpha_hack_ver) {
 	  case _STAT_VER_KERNEL:
   ((struct fakeroot_kernel_stat *)st)->st_mode = f->st.mode;
   ((struct fakeroot_kernel_stat *)st)->st_ino  = f->st.ino;
@@ -183,10 +179,7 @@ void cpystatfakem(struct stat *st, const struct fake_msg *f
 
 void cpyfakemstat64(struct fake_msg *f,
                  const struct stat64 *st
-#ifdef STUPID_ALPHA_HACK
-                 , int ver
-#endif
-                 ){
+                 ALPHA_HACK_VERSION_PARAM){
 #ifndef STUPID_ALPHA_HACK
   f->st.mode =st->st_mode;
   f->st.ino  =st->st_ino ;
@@ -205,7 +198,7 @@ void cpyfakemstat64(struct fake_msg *f,
 
   f->st.nlink=st->st_nlink;
 #else
-  switch(ver) {
+  switch(alpha_hack_ver) {
 	  case _STAT_VER_KERNEL:
   f->st.mode  = ((struct fakeroot_kernel_stat *)st)->st_mode;
   f->st.ino   = ((struct fakeroot_kernel_stat *)st)->st_ino;
@@ -247,10 +240,7 @@ void cpyfakemstat64(struct fake_msg *f,
 }
 void cpystat64fakem(struct stat64 *st,
                  const struct fake_msg *f
-#ifdef STUPID_ALPHA_HACK
-                 , int ver
-#endif
-                 ){
+                 ALPHA_HACK_VERSION_PARAM){
 #ifndef STUPID_ALPHA_HACK
   st->st_mode =f->st.mode;
   st->st_ino  =f->st.ino ;
@@ -262,7 +252,7 @@ void cpystat64fakem(struct stat64 *st,
      this one better! */
   /*  st->st_nlink=f->st.nlink;*/
 #else
-  switch(ver) {
+  switch(alpha_hack_ver) {
 	  case _STAT_VER_KERNEL:
   ((struct fakeroot_kernel_stat *)st)->st_mode = f->st.mode;
   ((struct fakeroot_kernel_stat *)st)->st_ino  = f->st.ino;
@@ -359,19 +349,12 @@ void stat32from64(struct stat *s32, const struct stat64 *s64)
 
 void send_stat(const struct stat *st,
 	       func_id_t f
-#ifdef STUPID_ALPHA_HACK
-	       , int ver
-#endif
-	       ){
+	       ALPHA_HACK_VERSION_PARAM){
   struct fake_msg buf;
 
   if(init_get_msg()!=-1)
   {
-#ifndef STUPID_ALPHA_HACK
-    cpyfakemstat(&buf,st);
-#else
-    cpyfakemstat(&buf,st,ver);
-#endif
+    cpyfakemstat(&buf,st ALPHA_HACK_VERSION);
     buf.id=f;
     send_fakem(&buf);
   }
@@ -380,19 +363,12 @@ void send_stat(const struct stat *st,
 #ifdef STAT64_SUPPORT
 void send_stat64(const struct stat64 *st,
                  func_id_t f
-#ifdef STUPID_ALPHA_HACK
-                 , int ver
-#endif
-                 ){
+                 ALPHA_HACK_VERSION_PARAM){
   struct fake_msg buf;
 
   if(init_get_msg()!=-1)
   {
-#ifndef STUPID_ALPHA_HACK
-    cpyfakemstat64(&buf,st);
-#else
-    cpyfakemstat64(&buf,st,ver);
-#endif
+    cpyfakemstat64(&buf,st ALPHA_HACK_VERSION);
     buf.id=f;
     send_fakem(&buf);
   }
@@ -400,36 +376,22 @@ void send_stat64(const struct stat64 *st,
 #endif /* STAT64_SUPPORT */
 
 void send_get_stat(struct stat *st
-#ifdef STUPID_ALPHA_HACK
-		, int ver
-#endif
-		){
+                   ALPHA_HACK_VERSION_PARAM){
   struct fake_msg buf;
 
   if(init_get_msg()!=-1)
   {
-#ifndef STUPID_ALPHA_HACK
-    cpyfakemstat(&buf,st);
-#else
-    cpyfakemstat(&buf,st,ver);
-#endif
+    cpyfakemstat(&buf,st ALPHA_HACK_VERSION);
 
     buf.id=stat_func;
     send_get_fakem(&buf);
-#ifndef STUPID_ALPHA_HACK
-    cpystatfakem(st,&buf);
-#else
-    cpystatfakem(st,&buf,ver);
-#endif
+    cpystatfakem(st,&buf ALPHA_HACK_VERSION);
   }
 }
 
 void send_get_xattr(struct stat *st
 		, xattr_args *xattr
-#ifdef STUPID_ALPHA_HACK
-		, int ver
-#endif
-		){
+		ALPHA_HACK_VERSION_PARAM){
   struct fake_msg buf;
   size_t in_size;
   size_t name_size;
@@ -437,11 +399,7 @@ void send_get_xattr(struct stat *st
 
   if(init_get_msg()!=-1)
   {
-#ifndef STUPID_ALPHA_HACK
-    cpyfakemstat(&buf,st);
-#else
-    cpyfakemstat(&buf,st,ver);
-#endif
+    cpyfakemstat(&buf,st ALPHA_HACK_VERSION);
     in_size = xattr->size;
     total_size = (xattr->func == setxattr_func) ? (in_size) : 0;
     if (xattr->name)
@@ -481,37 +439,23 @@ void send_get_xattr(struct stat *st
 
 #ifdef STAT64_SUPPORT
 void send_get_stat64(struct stat64 *st
-#ifdef STUPID_ALPHA_HACK
-                     , int ver
-#endif
-                    )
+                     ALPHA_HACK_VERSION_PARAM)
 {
   struct fake_msg buf;
 
   if(init_get_msg()!=-1)
   {
-#ifndef STUPID_ALPHA_HACK
-    cpyfakemstat64(&buf,st);
-#else
-    cpyfakemstat64(&buf,st,ver);
-#endif
+    cpyfakemstat64(&buf,st ALPHA_HACK_VERSION);
 
     buf.id=stat_func;
     send_get_fakem(&buf);
-#ifndef STUPID_ALPHA_HACK
-    cpystat64fakem(st,&buf);
-#else
-    cpystat64fakem(st,&buf,ver);
-#endif
+    cpystat64fakem(st,&buf ALPHA_HACK_VERSION);
   }
 }
 
 void send_get_xattr64(struct stat64 *st
 		, xattr_args *xattr
-#ifdef STUPID_ALPHA_HACK
-		, int ver
-#endif
-		){
+		ALPHA_HACK_VERSION_PARAM){
   struct fake_msg buf;
   size_t in_size;
   size_t name_size;
@@ -519,11 +463,7 @@ void send_get_xattr64(struct stat64 *st
 
   if(init_get_msg()!=-1)
   {
-#ifndef STUPID_ALPHA_HACK
-    cpyfakemstat64(&buf,st);
-#else
-    cpyfakemstat64(&buf,st,ver);
-#endif
+    cpyfakemstat64(&buf,st ALPHA_HACK_VERSION);
     in_size = xattr->size;
     total_size = (xattr->func == setxattr_func) ? (in_size) : 0;
     if (xattr->name)

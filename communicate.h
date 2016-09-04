@@ -128,6 +128,14 @@
 # define ALLPERMS (S_ISUID|S_ISGID|S_ISVTX|S_IRWXU|S_IRWXG|S_IRWXO)/* 07777 */
 #endif
 
+#ifdef STUPID_ALPHA_HACK
+#define ALPHA_HACK_VERSION_PARAM , int alpha_hack_ver
+#define ALPHA_HACK_VERSION , alpha_hack_ver
+#else
+#define ALPHA_HACK_VERSION_PARAM
+#define ALPHA_HACK_VERSION
+#endif
+
 /* Define big enough _constant size_ types for the various types of the
    stat struct. I cannot (or rather, shouldn't) use struct stat itself
    in the communication between the fake-daemon and the client (libfake),
@@ -164,37 +172,17 @@ typedef struct {
 #include "message.h"
 
 extern const char *env_var_set(const char *env);
-#ifndef STUPID_ALPHA_HACK
-extern void send_stat(const struct stat *st, func_id_t f);
-#else
-extern void send_stat(const struct stat *st, func_id_t f,int ver);
-#endif
+extern void send_stat(const struct stat *st, func_id_t f ALPHA_HACK_VERSION_PARAM);
 extern void send_fakem(const struct fake_msg *buf);
-#ifndef STUPID_ALPHA_HACK
-extern void send_get_stat(struct stat *buf);
-#else
-extern void send_get_stat(struct stat *buf,int ver);
-#endif
-#ifndef STUPID_ALPHA_HACK
-extern void send_get_xattr(struct stat *st, xattr_args *xattr);
-#else
-extern void send_get_xattr(struct stat *st, xattr_args *xattr, int ver);
-#endif
+extern void send_get_stat(struct stat *buf ALPHA_HACK_VERSION_PARAM);
+extern void send_get_xattr(struct stat *st, xattr_args *xattr ALPHA_HACK_VERSION_PARAM);
 extern void cpyfakefake (struct fakestat *b1, const struct fakestat *b2);
-#ifndef STUPID_ALPHA_HACK
-extern void cpystatfakem(struct     stat *st, const struct fake_msg *buf);
-#else
-extern void cpystatfakem(struct     stat *st, const struct fake_msg *buf, int ver);
-#endif
+extern void cpystatfakem(struct     stat *st, const struct fake_msg *buf ALPHA_HACK_VERSION_PARAM);
 
 extern int init_get_msg();
 #ifndef FAKEROOT_FAKENET
 extern key_t get_ipc_key(key_t new_key);
-# ifndef STUPID_ALPHA_HACK
-extern void cpyfakemstat(struct fake_msg *b1, const struct stat *st);
-# else
-extern void cpyfakemstat(struct fake_msg *b1, const struct stat *st, int ver);
-# endif
+extern void cpyfakemstat(struct fake_msg *b1, const struct stat *st ALPHA_HACK_VERSION_PARAM);
 #else /* FAKEROOT_FAKENET */
 # ifdef FAKEROOT_LIBFAKEROOT
 extern volatile int comm_sd;
@@ -204,15 +192,9 @@ extern void unlock_comm_sd(void);
 #endif /* FAKEROOT_FAKENET */
 
 #ifdef STAT64_SUPPORT
-#ifndef STUPID_ALPHA_HACK
-extern void send_stat64(const struct stat64 *st, func_id_t f);
-extern void send_get_stat64(struct stat64 *buf);
-extern void send_get_xattr64(struct stat64 *st, xattr_args *xattr);
-#else
-extern void send_stat64(const struct stat64 *st, func_id_t f, int ver);
-extern void send_get_stat64(struct stat64 *buf, int ver);
-extern void send_get_xattr64(struct stat64 *st, xattr_args *xattr, int ver);
-#endif
+extern void send_stat64(const struct stat64 *st, func_id_t f ALPHA_HACK_VERSION_PARAM);
+extern void send_get_stat64(struct stat64 *buf ALPHA_HACK_VERSION_PARAM);
+extern void send_get_xattr64(struct stat64 *st, xattr_args *xattr ALPHA_HACK_VERSION_PARAM);
 extern void stat64from32(struct stat64 *s64, const struct stat *s32);
 extern void stat32from64(struct stat *s32, const struct stat64 *s64);
 #endif
