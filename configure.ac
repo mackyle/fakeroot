@@ -54,6 +54,7 @@ signal=HUP
 else
 signal=TERM
 fi
+AM_CONDITIONAL(FAKEROOT_FAKENET, test x$ac_cv_use_ipc = xtcp)
 
 AC_SUBST(signal)
 

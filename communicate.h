@@ -187,8 +187,8 @@ extern void cpystatfakem(struct     stat *st, const struct fake_msg *buf);
 extern void cpystatfakem(struct     stat *st, const struct fake_msg *buf, int ver);
 #endif
 
-#ifndef FAKEROOT_FAKENET
 extern int init_get_msg();
+#ifndef FAKEROOT_FAKENET
 extern key_t get_ipc_key(key_t new_key);
 # ifndef STUPID_ALPHA_HACK
 extern void cpyfakemstat(struct fake_msg *b1, const struct stat *st);
@@ -222,5 +222,7 @@ extern int msg_snd;
 extern int msg_get;
 extern int sem_id;
 #endif /* ! FAKEROOT_FAKENET */
+
+void send_get_fakem(struct fake_msg *buf);
 
 #endif
