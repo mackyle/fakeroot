@@ -1,3 +1,10 @@
+fakeroot (1.21-3) unstable; urgency=medium
+
+  * Patch from Juan Picca to force the fakeroot shebang to always be
+    /bin/sh on Debian.  closes: #828810.
+
+ -- Clint Adams <clint@debian.org>  Sat, 03 Dec 2016 17:09:14 -0500
+
 fakeroot (1.21-2) unstable; urgency=medium
 
   * Patch from Julian Andres Klode (hide-dlsym-error.patch) to hide the
