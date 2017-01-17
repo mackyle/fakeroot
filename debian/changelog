@@ -1,3 +1,11 @@
+fakeroot (1.21-3.1) unstable; urgency=medium
+
+  * Non-maintainer upload with maintainer approval.
+  * libfakeroot: Ship the (unused) SONAME link to ensure it gets cleaned up
+    automatically.  closes: #744165.
+
+ -- Andreas Beckmann <anbe@debian.org>  Tue, 17 Jan 2017 02:29:36 +0100
+
 fakeroot (1.21-3) unstable; urgency=medium
 
   * Patch from Juan Picca to force the fakeroot shebang to always be

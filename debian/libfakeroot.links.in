@@ -1,0 +1,7 @@
+# Both libfakeroot-sysv.so and libfakeroot-tcp.so have a SONAME of
+# libfakeroot-0.so, so this link will be created by ldconfig anyway.
+# But ldconfig will not clean this up again if
+# /etc/ld.so.conf.d/fakeroot-*.conf got removed first. Since the link
+# is never used by fakeroot, it does not matter to which library it
+# points.
+@LIBDIR@/libfakeroot/libfakeroot-tcp.so @LIBDIR@/libfakeroot/libfakeroot-0.so

@@ -40,8 +40,8 @@ else
 	sed 's/@FAKEROOT_SYSV_ALTPRIO@/30/;s/@FAKEROOT_TCP_ALTPRIO@/50/;' \
 		debian/fakeroot.postinst.in > debian/fakeroot.postinst
 endif
-	sed 's,@LIBDIR@,/$(LIB_DIR),' \
-		debian/fakeroot.postrm.in > debian/fakeroot.postrm
+	sed 's,@LIBDIR@,/$(LIB_DIR),g' \
+		debian/libfakeroot.links.in > debian/libfakeroot.links
 
 override_dh_auto_test:
 ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
@@ -66,4 +66,4 @@ override_dh_auto_clean:
 	dh_autoreconf_clean
 	rm -f dhar-stamp
 	$(RM) debian/fakeroot.postinst
-	$(RM) debian/fakeroot.postrm
+	$(RM) debian/libfakeroot.links
