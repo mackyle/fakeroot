@@ -3,7 +3,11 @@ ACLOCAL_AMFLAGS = -I build-aux
 SUBDIRS=scripts doc test
 
 noinst_LTLIBRARIES = libcommunicate.la libmacosx.la
-libcommunicate_la_SOURCES = communicate.c
+if FAKEROOT_FAKENET
+libcommunicate_la_SOURCES = communicate.c communicate-tcp.c
+else !FAKEROOT_FAKENET
+libcommunicate_la_SOURCES = communicate.c communicate-sysv.c
+endif !FAKEROOT_FAKENET
 
 libmacosx_la_SOURCES = libfakeroot_inode64.c libfakeroot_unix2003.c patchattr.h
 
