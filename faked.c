@@ -1079,13 +1079,14 @@ void get_msg()
     r=msgrcv(msg_get,&buf,sizeof(struct fake_msg),0,0);
     if(debug)
       fprintf(stderr,"FAKEROOT: r=%i, received message type=%li, message=%i\n",r,buf.mtype,buf.id);
-    if(r!=-1)
+    if(r!=-1) {
       buf.remote = 0;
       process_msg(&buf);
+    }
   }while ((r!=-1)||(errno==EINTR));
   if(debug){
     perror("FAKEROOT, get_msg");
-    fprintf(stderr,"r=%i, EINTR=%i\n",errno,EINTR);
+    fprintf(stderr,"errno=%i, EINTR=%i\n",errno,EINTR);
   }
 }
 
