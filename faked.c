@@ -1079,13 +1079,14 @@ void get_msg()
     r=msgrcv(msg_get,&buf,sizeof(struct fake_msg),0,0);
     if(debug)
       fprintf(stderr,"FAKEROOT: r=%i, received message type=%li, message=%i\n",r,buf.mtype,buf.id);
-    if(r!=-1)
+    if(r!=-1) {
       buf.remote = 0;
       process_msg(&buf);
+    }
   }while ((r!=-1)||(errno==EINTR));
   if(debug){
     perror("FAKEROOT, get_msg");
-    fprintf(stderr,"r=%i, EINTR=%i\n",errno,EINTR);
+    fprintf(stderr,"errno=%i, EINTR=%i\n",errno,EINTR);
   }
 }
 
@@ -1421,7 +1422,7 @@ int main(int argc, char **argv){
   if (port > 0) {
     memset((char *) &addr, 0, sizeof (addr));
     addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
     addr.sin_port = htons(port);
 
     if (bind(sd, (struct sockaddr *) &addr, sizeof (addr)) < 0)
