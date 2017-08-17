@@ -1,3 +1,9 @@
+fakeroot (1.22-1) unstable; urgency=medium
+
+  * New upstream version.
+
+ -- Clint Adams <clint@debian.org>  Wed, 16 Aug 2017 22:28:12 -0400
+
 fakeroot (1.21-3.1) unstable; urgency=medium
 
   * Non-maintainer upload with maintainer approval.
