@@ -553,7 +553,13 @@ void send_get_fakem(struct fake_msg *buf)
       l=msgrcv(msg_get,
                (struct my_msgbuf*)buf,
                sizeof(*buf)-sizeof(buf->mtype),0,0);
-    while((buf->serial!=serial)||buf->pid!=pid);
+    while(((l==-1)&&(errno==EINTR))||(buf->serial!=serial)||buf->pid!=pid);
+
+    if(l==-1){
+      buf->xattr.flags_rc=errno;
+      fprintf(stderr,"fakeroot internal error #%d: %s\n",
+              errno, strerror(errno));
+    }
 
     semaphore_down();
 
