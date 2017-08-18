@@ -787,8 +787,8 @@ void process_chmod(struct fake_msg *buf){
     */
 
     if ((buf->st.mode&S_IFMT) != (st->mode&S_IFMT) &&
-        ((buf->st.mode&S_IFMT) != S_IFREG || (!st->mode&(S_IFBLK|S_IFCHR)))) {
-      fprintf(stderr,"FAKEROOT: chmod mode=%lo incompatible with "
+        ((buf->st.mode&S_IFMT) != S_IFREG || (!(st->mode&(S_IFBLK|S_IFCHR))))) {
+      fprintf(stderr, "FAKEROOT: chmod mode=%lo incompatible with "
               "existing mode=%lo\n", (unsigned long)buf->st.mode, (unsigned long)st->mode);
       st->mode = buf->st.mode;
     }
