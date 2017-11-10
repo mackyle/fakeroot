@@ -1,3 +1,9 @@
+fakeroot (1.22-2) unstable; urgency=medium
+
+  * Rules-Requires-Root: no
+
+ -- Clint Adams <clint@debian.org>  Fri, 10 Nov 2017 14:28:24 -0500
+
 fakeroot (1.22-1) unstable; urgency=medium
 
   * New upstream version.
