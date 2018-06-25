@@ -1,82 +1,96 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+# Swedish translations for fakeroot.
+# Copyright (C) 2017 Free Software Foundation, Inc.
+# Sebastian Rasmussen <sebras@gmail.com>, 2017.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2005-11-16 16:58+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: fakeroot 1.22-1\n"
+"POT-Creation-Date: 2017-08-16 22:29-0400\n"
+"PO-Revision-Date: 2017-09-20 00:22+0200\n"
+"Last-Translator: Sebastian Rasmussen <sebras@gmail.com>\n"
+"Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-15\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.0.3\n"
 
 # type: TH
-#: ../../doc/fakeroot.1:16
+#. type: TH
+#: ../doc/fakeroot.1:16
 #, no-wrap
 msgid "fakeroot"
 msgstr "fakeroot"
 
-# type: TH
-#: ../../doc/fakeroot.1:16
+#. type: TH
+#: ../doc/fakeroot.1:16
 #, no-wrap
-msgid "6 August 2004"
-msgstr ""
+msgid "5 October 2014"
+msgstr "5:e oktober 2014"
 
 # type: TH
-#: ../../doc/fakeroot.1:16 ../../doc/faked.1:16
+#. type: TH
+#: ../doc/fakeroot.1:16 ../doc/faked.1:16
 #, no-wrap
 msgid "Debian Project"
 msgstr "Debian Project"
 
 # type: TH
-#: ../../doc/fakeroot.1:16
-#, fuzzy, no-wrap
+#. type: TH
+#: ../doc/fakeroot.1:16
+#, no-wrap
 msgid "Debian manual"
-msgstr "Debian GNU/Linux manual"
+msgstr "Debian manual"
 
 # type: SH
-#.  Manpage by J.H.M. Dassen <jdassen@debian.org>
-#.  and Clint Adams
-#: ../../doc/fakeroot.1:19 ../../doc/faked.1:19
+#. Manpage by J.H.M. Dassen <jdassen@debian.org>
+#. and Clint Adams
+#. type: SH
+#: ../doc/fakeroot.1:19 ../doc/faked.1:19
 #, no-wrap
 msgid "NAME"
 msgstr "NAMN"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:22
+#. type: Plain text
+#: ../doc/fakeroot.1:22
 msgid ""
 "fakeroot - run a command in an environment faking root privileges for file "
 "manipulation"
 msgstr ""
-"fakeroot - utfˆr ett kommando i en miljˆ som fejkar root-privilegier fˆr "
+"fakeroot - utf√∂r ett kommando i en milj√∂ som fejkar root-privilegier f√∂r "
 "filmanipulation"
 
 # type: SH
-#: ../../doc/fakeroot.1:22 ../../doc/faked.1:22
+#. type: SH
+#: ../doc/fakeroot.1:22 ../doc/faked.1:22
 #, no-wrap
 msgid "SYNOPSIS"
 msgstr "SYNOPSIS"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:38
+#. type: Plain text
+#: ../doc/fakeroot.1:38
 msgid ""
 "B<fakeroot> B<[-l|--lib> I<library]> B<[--faked> I<faked-binary>B<]> B<[-i> "
 "I<load-file>B<]> B<[-s> I<save-file>B<]> B<[-u|--unknown-is-real ]> B<[-b|--"
 "fd-base ]> B<[-h|--help ]> B<[-v|--version ]> B<[--]> B<[command]>"
 msgstr ""
+"B<fakeroot> B<[-l|--lib> I<bibliotek]> B<[--faked> I<fejkad-bin√§r>B<]> B<[-"
+"i> I<l√§sfil>B<]> B<[-s> I<sparfil>B<]> B<[-u|--unknown-is-real ]> B<[-b|--fd-"
+"base ]> B<[-h|--help ]> B<[-v|--version ]> B<[--]> B<[kommando]>"
 
 # type: SH
-#: ../../doc/fakeroot.1:38 ../../doc/faked.1:30
+#. type: SH
+#: ../doc/fakeroot.1:38 ../doc/faked.1:30
 #, no-wrap
 msgid "DESCRIPTION"
 msgstr "BESKRIVNING"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:49
-#, fuzzy
+#. type: Plain text
+#: ../doc/fakeroot.1:49
 msgid ""
 "B<fakeroot> runs a command in an environment wherein it appears to have root "
 "privileges for file manipulation.  This is useful for allowing users to "
@@ -86,32 +100,35 @@ msgid ""
 "permissions and ownership, and then pack them up, or one would have to "
 "construct the archives directly, without using the archiver."
 msgstr ""
-"B<fakeroot> utfˆr ett kommando i en miljˆ d‰r kommandot tror sig ha root-"
-"privilegier fˆr filmanipulering. Detta ‰r anv‰ndbart fˆr att ge anv‰ndare "
-"mˆjlighet att skapa arkiv (tar, ar, .deb osv)  som innehÂller filer med root-"
-"r‰ttigheter/‰garskap.  Utan B<fakeroot> tvingas man att ha root-privilegier "
-"fˆr att skapa de filer arkivet bestÂr av med korrekt ‰garskaps- och "
-"r‰ttighetsinformation, alternativt konstruera arkiven manuellt."
+"B<fakeroot> utf√∂r ett kommando i en milj√∂ d√§r kommandot tror sig ha root-"
+"privilegier f√∂r filmanipulering. Detta √§r anv√§ndbart f√∂r att ge anv√§ndare "
+"m√∂jlighet att skapa arkiv (tar, ar, .deb osv) som inneh√•ller filer med root-"
+"r√§ttigheter/√§garskap. Utan B<fakeroot> tvingas man att ha root-privilegier "
+"f√∂r att skapa de filer arkivet best√•r av med korrekt √§garskaps- och "
+"r√§ttighetsinformation, alternativt konstruera arkiven manuellt utan att "
+"anv√§nda arkiveringsprogrammet."
 
 # type: Plain text
-#: ../../doc/fakeroot.1:60
+#. type: Plain text
+#: ../doc/fakeroot.1:61
 msgid ""
-"B<fakeroot> works by replacing the file manipulation library functions (chmod"
-"(2), stat(2) etc.) by ones that simulate the effect the real library "
+"B<fakeroot> works by replacing the file manipulation library functions "
+"(chmod(2), stat(2) etc.) by ones that simulate the effect the real library "
 "functions would have had, had the user really been root. These wrapper "
-"functions are in a shared library B</usr/lib/libfakeroot.so*> which is "
-"loaded through the B<LD_PRELOAD> mechanism of the dynamic loader. (See B<ld."
-"so>(8))"
+"functions are in a shared library B</usr/lib/*/libfakeroot-*.so> or similar "
+"location on your platform.  The shared object is loaded through the "
+"B<LD_PRELOAD> mechanism of the dynamic loader. (See B<ld.so>(8))"
 msgstr ""
-"B<fakeroot> arbetar genom att ers‰tta biblioteksfunktionerna fˆr "
-"filr‰ttighetsmodifiering (chmod(2), stat(2), osv) med sÂdana som simulerar "
-"effekten som de riktiga biblioteksfunktionerna skulle ha haft om anv‰ndaren "
-"verkligen varit root. Dessa funktioner finns samlade i biblioteket B</usr/"
-"lib/libfakeroot.so*> som laddas genom B<LD_PRELOAD>-mekanismen hos den "
-"dynamiska l‰nkaren (se B<ld.so>(8))"
+"B<fakeroot> arbetar genom att ers√§tta biblioteksfunktionerna f√∂r modifiering "
+"av filr√§ttigheter (chmod(2), stat(2), osv) med s√•dana som simulerar effekten "
+"som de riktiga biblioteksfunktionerna skulle ha haft om anv√§ndaren verkligen "
+"varit root. Dessa funktioner finns samlade i biblioteket B</usr/lib/*/"
+"libfakeroot-*.so> som laddas genom B<LD_PRELOAD>-mekanismen hos den "
+"dynamiska l√§nkaren. (Se B<ld.so>(8))"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:70
+#. type: Plain text
+#: ../doc/fakeroot.1:71
 msgid ""
 "If you intend to build packages with B<fakeroot>, please try building the "
 "fakeroot package first: the \"debian/rules build\" stage has a few tests "
@@ -120,80 +137,89 @@ msgid ""
 "packages you build with fakeroot will quite likely fail too, but possibly in "
 "much more subtle ways."
 msgstr ""
-"Om du planerar att bygga paket med hj‰lp av B<fakeroot>, fˆrsˆk fˆrst att "
-"bygga fakeroot-paketet: \"debian/rules build\"-stadiet har ett par tester "
-"(som mestadels testar efter buggar i gamla versioner av fakeroot).  Om dessa "
-"tester misslyckas (till exempel pÂ grund av att du har vissa libc5-program "
-"pÂ ditt system) sÂ ‰r det troligt att du ocksÂ kommer att misslyckas bygga "
-"andra paket, och det ‰r mˆjligt att dessa fel blir betydligt svÂrare att "
+"Om du planerar att bygga paket med hj√§lp av B<fakeroot>, f√∂rs√∂k f√∂rst att "
+"bygga fakeroot-paketet: ‚Äùdebian/rules build‚Äù-stadiet har ett par tester (som "
+"mestadels testar efter buggar i gamla versioner av fakeroot).  Om dessa "
+"tester misslyckas (till exempel p√• grund av att du har vissa libc5-program "
+"p√• ditt system) s√• √§r det troligt att du ocks√• kommer att misslyckas bygga "
+"andra paket, och det √§r m√∂jligt att dessa fel blir betydligt sv√•rare att "
 "hitta."
 
 # type: Plain text
-#: ../../doc/fakeroot.1:76
-#, fuzzy
+#. type: Plain text
+#: ../doc/fakeroot.1:77
 msgid ""
 "Also, note that it's best not to do the building of the binaries themselves "
 "under fakeroot. Especially configure and friends don't like it when the "
 "system suddenly behaves differently from what they expect. (or, they "
 "randomly unset some environment variables, some of which fakeroot needs)."
 msgstr ""
-"M‰rk v‰l att det ‰r b‰st att inte bygga bin‰rerna sj‰lva med hj‰lp av "
-"fakeroot. S‰rskilt configure och liknande program ogillar att systemet "
-"plˆtsligt beter sig annorlunda ‰n vad de fˆrv‰ntar sig. Det ‰r ocksÂ mˆjligt "
-"att dessa program rensar bort vissa miljˆvariabler som fakeroot behˆver."
+"M√§rk v√§l att det √§r b√§st att inte bygga bin√§rerna sj√§lva med hj√§lp av "
+"fakeroot. S√§rskilt configure och liknande program ogillar att systemet "
+"pl√∂tsligt beter sig annorlunda √§n vad de f√∂rv√§ntar sig. Det √§r ocks√• m√∂jligt "
+"att dessa program rensar bort vissa milj√∂variabler som fakeroot beh√∂ver."
 
 # type: SH
-#: ../../doc/fakeroot.1:77 ../../doc/faked.1:38
+#. type: SH
+#: ../doc/fakeroot.1:78 ../doc/faked.1:38
 #, no-wrap
 msgid "OPTIONS"
 msgstr "FLAGGOR"
 
 # type: TP
-#: ../../doc/fakeroot.1:78
-#, fuzzy, no-wrap
+#. type: TP
+#: ../doc/fakeroot.1:79
+#, no-wrap
 msgid "B<-l> I<library>, B<--lib> I<library>"
-msgstr "B<--lib>I<\\ bibliotek>"
+msgstr "B<-l> I<bibliotek>, B<--lib> I<bibliotek>"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:81
+#. type: Plain text
+#: ../doc/fakeroot.1:82
 msgid "Specify an alternative wrapper library."
-msgstr "Ange ett alternativt bibliotek med ers‰ttningsfunktioner."
+msgstr "Ange ett alternativt bibliotek med ers√§ttningsfunktioner."
 
 # type: TP
-#: ../../doc/fakeroot.1:81
+#. type: TP
+#: ../doc/fakeroot.1:82
 #, no-wrap
 msgid "B<--faked>I<\\ binary>"
-msgstr "B<--faked>I<\\ bin‰r>"
+msgstr "B<--faked>I<\\ bin√§r>"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:84
+#. type: Plain text
+#: ../doc/fakeroot.1:85
 msgid "Specify an alternative binary to use as faked."
-msgstr "Ange en alternativ bin‰r att anv‰nda ist‰llet fˆr faked(1)."
+msgstr "Ange en alternativ bin√§r att anv√§nda ist√§llet f√∂r faked(1)."
 
 # type: TP
-#: ../../doc/fakeroot.1:84
+#. type: TP
+#: ../doc/fakeroot.1:85
 #, no-wrap
 msgid "B<[--]>I<\\ command>"
 msgstr "B<[--]>I<\\ kommando>"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:88
-#, fuzzy
+#. type: Plain text
+#: ../doc/fakeroot.1:89
 msgid ""
 "Any command you want to be ran as fakeroot. Use \\(oq--\\(cq if in the "
 "command you have other options that may confuse fakeroot's option parsing."
 msgstr ""
-"Det kommando som du vill att fakeroot skall utfˆra. Anv‰nd `--' om "
-"kommandoraden kan t‰nkas fˆrvirra fakeroots kommandoradstolkning."
+"Det kommando som du vill att fakeroot skall utf√∂ra. Anv√§nd \\(oq--\\(cq om "
+"kommandot har andra flaggor som kan t√§nkas f√∂rvirra fakeroots tolkning av "
+"kommandoradsflaggor."
 
 # type: TP
-#: ../../doc/fakeroot.1:88
+#. type: TP
+#: ../doc/fakeroot.1:89
 #, no-wrap
 msgid "B<-s>I<\\ save-file>"
-msgstr ""
+msgstr "B<-s>I<\\ sparfil>"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:99
+#. type: Plain text
+#: ../doc/fakeroot.1:100
 msgid ""
 "Save the fakeroot environment to save-file on exit. This file can be used to "
 "restore the environment later using -i. However, this file will leak and "
@@ -204,91 +230,121 @@ msgid ""
 "needing to be root. See I</usr/share/doc/fakeroot/README.saving> for more "
 "details."
 msgstr ""
+"Spara fakeroot-milj√∂n till sparfil vid avslut. Denna fil kan anv√§ndas f√∂r "
+"att senare √•terst√§lla milj√∂n med -i. Men om denna filen skulle l√§cka kommer "
+"fakeroot b√∂rja bete sig p√• konstiga s√§tt om du inte l√•ter bli filerna som "
+"anv√§nts inuti fakeroot n√§r du √§r utanf√∂r milj√∂n. Detta kan dock fortfarande "
+"vara anv√§ndbart. Det kan till exempel anv√§ndas med rsync(1) f√∂r att "
+"s√§kerhetskopiera och √•terst√§lla hela katalogtr√§d kompletta med anv√§ndare, "
+"grupp och enhetsinformation utan att beh√∂va vara root. Se I</usr/share/doc/"
+"fakeroot/README.saving> f√∂r vidare information."
 
 # type: TP
-#: ../../doc/fakeroot.1:99
-#, fuzzy, no-wrap
+#. type: TP
+#: ../doc/fakeroot.1:100
+#, no-wrap
 msgid "B<-i>I<\\ load-file>"
-msgstr "B<[--]>I<\\ kommando>"
+msgstr "B<-i>I<\\ l√§sfil>"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:106
+#. type: Plain text
+#: ../doc/fakeroot.1:107
 msgid ""
 "Load a fakeroot environment previously saved using -s from load-file.  Note "
 "that this does not implicitly save the file, use -s as well for that "
 "behaviour. Using the same file for both -i and -s in a single B<fakeroot> "
 "invocation is safe."
 msgstr ""
+"L√§s in en fakeroot-milj√∂ som tidigare sparats via -s fr√•n l√§sfil. Notera att "
+"detta inte implicit sparar filen, anv√§nd -s ocks√• f√∂r det beteendet. "
+"Anv√§ndning av samma fil f√∂r b√•de -i och -s vid samma B<fakeroot>-k√∂rning √§r "
+"s√§kert."
 
 # type: TP
-#: ../../doc/fakeroot.1:106
+#. type: TP
+#: ../doc/fakeroot.1:107
 #, no-wrap
 msgid "B<-u>, B<--unknown-is-real>"
-msgstr ""
+msgstr "B<-u>, B<--unknown-is-real>"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:110
+#. type: Plain text
+#: ../doc/fakeroot.1:111
 msgid ""
 "Use the real ownership of files previously unknown to fakeroot instead of "
 "pretending they are owned by root:root."
 msgstr ""
+"Anv√§nd det riktiga √§garskapet f√∂r filer som inte tidigare √§r k√§nda av "
+"fakeroot ist√§llet f√∂r att l√•tsas att de √§gs av root:root."
 
 # type: TP
-#: ../../doc/fakeroot.1:110
-#, fuzzy, no-wrap
+#. type: TP
+#: ../doc/fakeroot.1:111
+#, no-wrap
 msgid "B<-b>I<\\ fd>"
-msgstr "B<[--]>I<\\ kommando>"
+msgstr "B<-b>I<\\ fd>"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:116
+#. type: Plain text
+#: ../doc/fakeroot.1:117
 msgid ""
 "Specify fd base (TCP mode only). fd is the minimum file descriptor number to "
 "use for TCP connections; this may be important to avoid conflicts with the "
 "file descriptors used by the programs being run under fakeroot."
 msgstr ""
+"Ange fd-bas (endast TCP-l√§ge). fd √§r det minsta fildeskriptornummer som "
+"anv√§nds f√∂r TCP-anslutningar; detta kan vara viktigt f√∂r att undvika "
+"konflikter med fildeskriptorerna som anv√§nds av program som k√∂rs under "
+"fakeroot."
 
 # type: TP
-#: ../../doc/fakeroot.1:116
+#. type: TP
+#: ../doc/fakeroot.1:117
 #, no-wrap
 msgid "B<-h>"
-msgstr ""
+msgstr "B<-h>"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:119
+#. type: Plain text
+#: ../doc/fakeroot.1:120
 msgid "Display help."
-msgstr ""
+msgstr "Visa hj√§lp."
 
 # type: TP
-#: ../../doc/fakeroot.1:119
+#. type: TP
+#: ../doc/fakeroot.1:120
 #, no-wrap
 msgid "B<-v>"
-msgstr ""
+msgstr "B<-v>"
 
 # type: IP
-#: ../../doc/fakeroot.1:122
-#, fuzzy
+#. type: Plain text
+#: ../doc/fakeroot.1:123
 msgid "Display version."
-msgstr "B<Biblioteksversioner>"
+msgstr "Visa version."
 
 # type: SH
-#: ../../doc/fakeroot.1:123
+#. type: SH
+#: ../doc/fakeroot.1:124
 #, no-wrap
 msgid "EXAMPLES"
 msgstr "EXEMPEL"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:128
+#. type: Plain text
+#: ../doc/fakeroot.1:129
 msgid ""
 "Here is an example session with B<fakeroot>.  Notice that inside the fake "
 "root environment file manipulation that requires root privileges succeeds, "
 "but is not really happening."
 msgstr ""
-"H‰r ‰r ett exempel pÂ hur B<fakeroot> kan anv‰ndas.  Notera att i den "
-"fejkade root-miljˆn sÂ lyckas filmanipulering som kr‰ver root-privilegier, "
-"trots att den egentligen inte utfˆrs."
+"H√§r √§r ett exempel p√• hur B<fakeroot> kan anv√§ndas.  Notera att i den "
+"fejkade root-milj√∂n s√• lyckas filmanipulering som kr√§ver root-privilegier, "
+"trots att den egentligen inte utf√∂rs."
 
 # type: Plain text
-#: ../../doc/fakeroot.1:151
+#. type: Plain text
+#: ../doc/fakeroot.1:152
 #, no-wrap
 msgid ""
 "$  whoami\n"
@@ -338,14 +394,16 @@ msgstr ""
 "-rw-r--r--   1 joost    users           0 Jul  2 22:58 hda3\n"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:155
+#. type: Plain text
+#: ../doc/fakeroot.1:156
 msgid "Only the effects that user B<joost> could do anyway happen for real."
 msgstr ""
-"Enbart de operationer som anv‰ndaren B<joost> skulle kunna ha genomfˆrt som "
-"sig sj‰lv utfˆrs pÂ riktigt."
+"Enbart de operationer som anv√§ndaren B<joost> skulle kunna ha genomf√∂rt som "
+"sig sj√§lv utf√∂rs p√• riktigt."
 
 # type: Plain text
-#: ../../doc/fakeroot.1:167
+#. type: Plain text
+#: ../doc/fakeroot.1:168
 msgid ""
 "B<fakeroot> was specifically written to enable users to create Debian GNU/"
 "Linux packages (in the B<deb(5)> format) without giving them root "
@@ -353,57 +411,63 @@ msgid ""
 "rfakeroot> or B<debuild -rfakeroot> (actually, -rfakeroot is default in "
 "debuild nowadays, so you don't need that argument)."
 msgstr ""
-"B<fakeroot> skrevs speciellt i syfte att ge anv‰ndare mˆjlighet att skapa "
-"Debian GNU/Linux-paket (i B<deb(5)> format) utan att behˆva root-"
-"privilegier.  Detta kan utfˆras genom kommandon sÂsom B<dpkg-buildpackage -"
-"rfakeroot> eller B<debuild -rfakeroot> (-rfakeroot ‰r numera standard i "
-"debuild, sÂ du behˆver inte ens anv‰nda den parametern)."
+"B<fakeroot> skrevs speciellt i syfte att ge anv√§ndare m√∂jlighet att skapa "
+"Debian GNU/Linux-paket (i B<deb(5)> format) utan att beh√∂va root-"
+"privilegier.  Detta kan utf√∂ras genom kommandon s√•som B<dpkg-buildpackage -"
+"rfakeroot> eller B<debuild -rfakeroot> (-rfakeroot √§r numera standard i "
+"debuild, s√• du beh√∂ver inte ens anv√§nda den parametern)."
 
 # type: SH
-#: ../../doc/fakeroot.1:167
+#. type: SH
+#: ../doc/fakeroot.1:168
 #, no-wrap
 msgid "SECURITY ASPECTS"
-msgstr "SƒKERHETSASPEKTER"
+msgstr "S√ÑKERHETSASPEKTER"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:171
+#. type: Plain text
+#: ../doc/fakeroot.1:172
 msgid ""
 "B<fakeroot> is a regular, non-setuid program. It does not enhance a user's "
 "privileges, or decrease the system's security."
 msgstr ""
-"B<fakeroot> ‰r ett vanligt program utan setuid. Det ger inte anv‰ndaren "
-"nÂgra extra privilegier, och minskar inte systemets s‰kerhet."
+"B<fakeroot> √§r ett vanligt program utan setuid. Det ger inte anv√§ndaren "
+"n√•gra extra privilegier, och minskar inte systemets s√§kerhet."
 
 # type: SH
-#: ../../doc/fakeroot.1:171
+#. type: SH
+#: ../doc/fakeroot.1:172
 #, no-wrap
 msgid "FILES"
 msgstr "FILER"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:174
+#. type: Plain text
+#: ../doc/fakeroot.1:175
 msgid ""
-"I</usr/lib/libfakeroot/libfakeroot.so*> The shared library containing the "
-"wrapper functions."
+"I</usr/lib/*/libfakeroot-*.so> The shared library containing the wrapper "
+"functions."
 msgstr ""
-"I</usr/lib/libfakeroot/libfakeroot.so*> Det delade bibliotek som innehÂller "
-"ers‰ttningsfunktionerna."
+"I</usr/lib/*/libfakeroot-*.so> Det delade bibliotek som inneh√•ller "
+"ers√§ttningsfunktionerna."
 
 # type: SH
-#: ../../doc/fakeroot.1:174
+#. type: SH
+#: ../doc/fakeroot.1:175
 #, no-wrap
 msgid "ENVIRONMENT"
-msgstr "MILJ÷"
+msgstr "MILJ√ñ"
 
 # type: IP
-#: ../../doc/fakeroot.1:176
+#. type: IP
+#: ../doc/fakeroot.1:177
 #, no-wrap
 msgid "B<FAKEROOTKEY>"
 msgstr "B<FAKEROOTKEY>"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:187
-#, fuzzy
+#. type: Plain text
+#: ../doc/fakeroot.1:188
 msgid ""
 "The key used to communicate with the fakeroot daemon. Any program started "
 "with the right B<LD_PRELOAD> and a B<FAKEROOTKEY> of a running daemon will "
@@ -411,26 +475,29 @@ msgid ""
 "file system's permissions/ownerships.  (assuming the daemon and connecting "
 "program were started by the same user)."
 msgstr ""
-"Den nyckel som anv‰nds fˆr att kommunicera med fakeroot-daemonen. Varje "
-"program som startats med korrekt B<LD_PRELOAD> och en B<FAKEROOTKEY> fˆr en "
-"kˆrande daemon kommer automatiskt att ansluta till den daemonen, och kommer "
-"att ha samma fejkade syn pÂ filsystemets ‰garskap och r‰ttigheter, givet att "
-"daemonen och programmet som ansluter till den startats av samma anv‰ndare."
+"Den nyckel som anv√§nds f√∂r att kommunicera med fakeroot-demonen. Varje "
+"program som startats med korrekt B<LD_PRELOAD> och en B<FAKEROOTKEY> f√∂r en "
+"k√∂rande demon kommer automatiskt att ansluta till den demonen, och kommer "
+"att ha samma fejkade syn p√• filsystemets √§garskap och r√§ttigheter (givet att "
+"demonen och programmet som ansluter till den startats av samma anv√§ndare)."
 
 # type: IP
-#: ../../doc/fakeroot.1:187
+#. type: IP
+#: ../doc/fakeroot.1:188
 #, no-wrap
 msgid "B<LD_LIBRARY_PATH>"
-msgstr ""
+msgstr "B<LD_LIBRARY_PATH>"
 
 # type: IP
-#: ../../doc/fakeroot.1:189
+#. type: IP
+#: ../doc/fakeroot.1:190
 #, no-wrap
 msgid "B<LD_PRELOAD>"
-msgstr ""
+msgstr "B<LD_PRELOAD>"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:202
+#. type: Plain text
+#: ../doc/fakeroot.1:203
 msgid ""
 "Fakeroot is implemented by wrapping system calls.  This is accomplished by "
 "setting LD_LIBRARY_PATH=/usr/lib/fakeroot and LD_PRELOAD=libfakeroot.so.0.  "
@@ -440,48 +507,57 @@ msgid ""
 "should be set relative to the given paths, as in B<LD_LIBRARY_PATH="
 "$LD_LIBRARY_PATH:/foo/bar/>"
 msgstr ""
+"Fakeroot √§r implementerat av ers√§ttning av systemanrop. Detta √•stadkoms "
+"genom att st√§lla in LD_LIBRARY_PATH=/usr/lib/fakeroot och "
+"LD_PRELOAD=libfakeroot.so.0. Det biblioteket l√§ses in innan systemets C-"
+"bibliotek, och d√§rf√∂r kan de flesta biblioteksfunktioner genskjutas av det. "
+"Om du beh√∂ver st√§lla in antingen B<LD_LIBRARY_PATH> eller B<LD_PRELOAD> "
+"inifr√•n en fakeroot-milj√∂ b√∂r den st√§llas in relativt till de givna "
+"s√∂kv√§garna, d.v.s. B<LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/foo/bar/>"
 
 # type: SH
-#: ../../doc/fakeroot.1:203
+#. type: SH
+#: ../doc/fakeroot.1:204
 #, no-wrap
 msgid "LIMITATIONS"
-msgstr "BEGRƒNSNINGAR"
+msgstr "BEGR√ÑNSNINGAR"
 
 # type: IP
-#: ../../doc/fakeroot.1:205
+#. type: IP
+#: ../doc/fakeroot.1:206
 #, no-wrap
 msgid "B<Library versions>"
 msgstr "B<Biblioteksversioner>"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:212
-#, fuzzy
+#. type: Plain text
+#: ../doc/fakeroot.1:213
 msgid ""
 "Every command executed within B<fakeroot> needs to be linked to the same "
 "version of the C library as B<fakeroot> itself."
 msgstr ""
-"Varje kommando som utfˆrs inom B<fakeroot> mÂste vara l‰nkat mot samma "
-"version av libc som B<fakeroot> sj‰lvt. Eftersom Potato versionen av Debian "
-"numera enbart anv‰nder libc6 (glibc2.1), ‰r inte detta nÂgot stˆrre problem "
-"l‰ngre."
+"Varje kommando som utf√∂rs inom B<fakeroot> m√•ste vara l√§nkat mot samma "
+"version av libc som B<fakeroot> sj√§lvt."
 
 # type: IP
-#: ../../doc/fakeroot.1:212
+#. type: IP
+#: ../doc/fakeroot.1:213
 #, no-wrap
 msgid "B<open()/create()>"
 msgstr "B<open()/create()>"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:216
-#, fuzzy
+#. type: Plain text
+#: ../doc/fakeroot.1:217
 msgid ""
 "fakeroot doesn't wrap open(), create(), etc. So, if user B<joost> does either"
 msgstr ""
-"fakeroot innehÂller inga ers‰ttningsfunktioner fˆr open(), create(), osv. SÂ "
-"om anv‰ndaren B<joost> antingen utfˆr"
+"fakeroot inneh√•ller inga ers√§ttningsfunktioner f√∂r open(), create(), osv. S√• "
+"om anv√§ndaren B<joost> antingen utf√∂r"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:220
+#. type: Plain text
+#: ../doc/fakeroot.1:221
 #, no-wrap
 msgid ""
 "touch foo\n"
@@ -493,12 +569,14 @@ msgstr ""
 "ls -al foo\n"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:222
+#. type: Plain text
+#: ../doc/fakeroot.1:223
 msgid "or the other way around,"
-msgstr "eller omv‰nt,"
+msgstr "eller omv√§nt,"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:226
+#. type: Plain text
+#: ../doc/fakeroot.1:227
 #, no-wrap
 msgid ""
 "fakeroot\n"
@@ -510,8 +588,8 @@ msgstr ""
 "ls -al foo\n"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:263
-#, fuzzy
+#. type: Plain text
+#: ../doc/fakeroot.1:264
 msgid ""
 "fakeroot has no way of knowing that in the first case, the owner of foo "
 "really should be B<joost> while the second case it should have been "
@@ -530,29 +608,29 @@ msgid ""
 "wrapped by fakeroot as small as possible, to limit the likelihood of "
 "\\(oqcollisions\\(cq."
 msgstr ""
-"sÂ kan fakeroot inte pÂ nÂgot s‰tt k‰nna till att i det fˆrsta fallet sÂ "
-"borde ‰garen fˆr filen foo vara B<joost> men i det senare fallet B<root>.  "
-"N‰r det g‰ller Debian-paket, sÂ ‰r det alltid ok att ge alla \"ok‰nda\" "
-"filer uid=gid=0. Den korrekta lˆsningen pÂ det h‰r problemet ‰r att ‰ven ha "
-"en ers‰ttningsfunktion fˆr B<open()> och B<create()>, men det skapar andra "
-"problem, sÂsom paketet libtricks visar exempel pÂ. Det paketet har "
-"ers‰ttningar fˆr betydligt fler funktioner, och fˆrsˆkte att gˆra betydligt "
-"mer ‰n B<fakeroot .> Det visade sig att en sm‰rre uppgradering av libc (frÂn "
-"en version d‰r funktionen B<stat()> inte anv‰nde sig av B<open()> till en "
-"version d‰r B<stat()> ibland anv‰nde sig av B<open()>), orsakade "
-"ofˆrklarliga segmenteringsfel (dvs, B<stat()> i libc6 anropade "
-"ers‰ttningsfunktionen fˆr B<open()>, som senare anropade libc6 version av "
-"B<stat()>, osv)."
+"s√• kan fakeroot inte p√• n√•got s√§tt k√§nna till att i det f√∂rsta fallet s√• "
+"borde √§garen f√∂r filen foo vara B<joost> men i det senare fallet B<root>. "
+"N√§r det g√§ller Debian-paket, s√• √§r det alltid ok att ge alla ‚Äùok√§nda‚Äù filer "
+"uid=gid=0. Den korrekta l√∂sningen p√• det h√§r problemet √§r att √§ven ha en "
+"ers√§ttningsfunktion f√∂r B<open()> och B<create()>, men det skapar andra "
+"problem, s√•som paketet libtricks visar exempel p√•. Det paketet har "
+"ers√§ttningar f√∂r betydligt fler funktioner, och f√∂rs√∂kte att g√∂ra betydligt "
+"mer √§n B<fakeroot .> Det visade sig att en sm√§rre uppgradering av libc (fr√•n "
+"en version d√§r funktionen B<stat()> inte anv√§nde sig av B<open()> till en "
+"version d√§r B<stat()> ibland anv√§nde sig av B<open()>), orsakade "
+"of√∂rklarliga krascher (dvs, B<stat()> i libc6 anropade ers√§ttningsfunktionen "
+"f√∂r B<open()>, som senare anropade libc6 version av B<stat()>, osv)."
 
 # type: IP
-#: ../../doc/fakeroot.1:263
+#. type: IP
+#: ../doc/fakeroot.1:264
 #, no-wrap
 msgid "B<GNU configure (and other such programs)>"
 msgstr "B<GNU configure (och liknande program)>"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:271
-#, fuzzy
+#. type: Plain text
+#: ../doc/fakeroot.1:272
 msgid ""
 "fakeroot, in effect, is changing the way the system behaves. Programs that "
 "probe the system like GNU configure may get confused by this (or if they "
@@ -561,25 +639,26 @@ msgid ""
 "As configure should be called in the \"debian/rules build\" target, running "
 "\"dpkg-buildpackage -rfakeroot\" correctly takes care of this."
 msgstr ""
-"fakeroot ‰ndrar hur systemet beter sig. Program som fˆrsˆker k‰nna av "
-"systemets beteende (exempelvis GNU configure) kan bli fˆrvirrade av detta "
-"(och ‰ven om de inte blir det sÂ kan fakeroot bli fˆrvirrat). D‰rfˆr ‰r det "
-"inte rekommenderat att utfˆra \"configure\" inifrÂn fakeroot. DÂ configure "
-"bˆr anropas av \"debian/rules build\", sÂ borde \"dpkg-buildpackage -"
-"rfakeroot\" ta hand om detta pÂ ett korrekt s‰tt."
+"fakeroot √§ndrar i praktiken hur systemet beter sig. Program som f√∂rs√∂ker "
+"k√§nna av systemets beteende (exempelvis GNU configure) kan bli f√∂rvirrade av "
+"detta (och √§ven om de inte blir det s√• kan fakeroot bli f√∂rvirrat). D√§rf√∂r "
+"√§r det inte rekommenderat att utf√∂ra ‚Äùconfigure‚Äù inifr√•n fakeroot. D√• "
+"configure b√∂r anropas av ‚Äùdebian/rules build‚Äù, s√• borde ‚Äùdpkg-buildpackage -"
+"rfakeroot‚Äù ta hand om detta p√• ett korrekt s√§tt."
 
 # type: SH
-#: ../../doc/fakeroot.1:271 ../../doc/faked.1:66
+#. type: SH
+#: ../doc/fakeroot.1:272 ../doc/faked.1:66
 #, no-wrap
 msgid "BUGS"
 msgstr "BUGGAR"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:281
-#, fuzzy
+#. type: Plain text
+#: ../doc/fakeroot.1:282
 msgid ""
-"It doesn't wrap open(). This isn't bad by itself, but if a program does open"
-"(\"file\", O_WRONLY, 000), writes to file \"file\", closes it, and then "
+"It doesn't wrap open(). This isn't bad by itself, but if a program does "
+"open(\"file\", O_WRONLY, 000), writes to file \"file\", closes it, and then "
 "again tries to open to read the file, then that open fails, as the mode of "
 "the file will be 000. The bug is that if root does the same, open() will "
 "succeed, as the file permissions aren't checked at all for root. I choose "
@@ -587,26 +666,28 @@ msgid ""
 "those that are already wrapped), thus creating loops (or possible future "
 "loops, when the implementation of various libc functions slightly change)."
 msgstr ""
-"fakeroot har ingen ers‰ttningsfunktion fˆr open(). Detta i sig sj‰lvt ‰r "
-"inget fel, men om ett program utfˆr open(\"file\", O_WRONLY, 000), fˆrsˆker "
-"skriva till filen \"file\", st‰nger den, och sedan fˆrsˆker att l‰sa filen, "
-"sÂ misslyckas detta dÂ filen kommer att ha r‰ttigheterna 000. Buggen bestÂr "
-"i att om en process med root-privilegier fˆrsˆker sig pÂ det samma, sÂ "
-"kommer anropet till open() att lyckas, eftersom filr‰ttigheter inte "
-"kontrolleras alls fˆr root.  Jag valde att inte skriva ers‰ttningsfunktioner "
-"fˆr open(), eftersom open() anv‰nds av mÂnga andra funktioner i libc (‰ven "
-"de som har ers‰ttningsfunktioner), vilket ger upphov till cirkelreferenser "
-"eller potential fˆr cirkelreferenser ifall implementationen av vissa "
-"funktioner i libc fˆr‰ndras)."
+"fakeroot har ingen ers√§ttningsfunktion f√∂r open(). Detta i sig sj√§lvt √§r "
+"inget fel, men om ett program utf√∂r open(\"fil\", O_WRONLY, 000), f√∂rs√∂ker "
+"skriva till filen ‚Äùfil‚Äù, st√§nger den, och sedan f√∂rs√∂ker att l√§sa filen, s√• "
+"misslyckas detta d√• filen kommer att ha r√§ttigheterna 000. Felet best√•r i "
+"att om en process med root-privilegier f√∂rs√∂ker sig p√• det samma, s√• kommer "
+"anropet till open() att lyckas, eftersom filr√§ttigheter inte kontrolleras "
+"alls f√∂r root. Jag valde att inte skriva ers√§ttningsfunktioner f√∂r open(), "
+"eftersom open() anv√§nds av m√•nga andra funktioner i libc (√§ven de som har "
+"ers√§ttningsfunktioner), vilket ger upphov till cirkelreferenser eller "
+"potential f√∂r cirkelreferenser ifall implementationen av vissa funktioner i "
+"libc f√∂r√§ndras)."
 
 # type: SH
-#: ../../doc/fakeroot.1:281 ../../doc/faked.1:76
+#. type: SH
+#: ../doc/fakeroot.1:282 ../doc/faked.1:76
 #, no-wrap
 msgid "COPYING"
 msgstr "LICENS"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:285 ../../doc/faked.1:80
+#. type: Plain text
+#: ../doc/fakeroot.1:286 ../doc/faked.1:80
 msgid ""
 "B<fakeroot> is distributed under the GNU General Public License.  (GPL 2.0 "
 "or greater)."
@@ -615,66 +696,72 @@ msgstr ""
 "senare)."
 
 # type: SH
-#: ../../doc/fakeroot.1:285 ../../doc/faked.1:80
+#. type: SH
+#: ../doc/fakeroot.1:286 ../doc/faked.1:80
 #, no-wrap
 msgid "AUTHORS"
-msgstr "F÷RFATTARE"
+msgstr "F√ñRFATTARE"
 
 # type: TP
-#: ../../doc/fakeroot.1:286 ../../doc/faked.1:81
+#. type: TP
+#: ../doc/fakeroot.1:287 ../doc/faked.1:81
 #, no-wrap
 msgid "joost witteveen"
-msgstr ""
+msgstr "joost witteveen"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:289 ../../doc/faked.1:84
-#, fuzzy
+#. type: Plain text
+#: ../doc/fakeroot.1:290 ../doc/faked.1:84
 msgid "E<lt>I<joostje@debian.org>E<gt>"
-msgstr "joost witteveen E<lt>I<joostje@debian.org>E<gt>"
+msgstr "E<lt>I<joostje@debian.org>E<gt>"
 
 # type: TP
-#: ../../doc/fakeroot.1:289 ../../doc/faked.1:84
+#. type: TP
+#: ../doc/fakeroot.1:290 ../doc/faked.1:84
 #, no-wrap
 msgid "Clint Adams"
-msgstr ""
+msgstr "Clint Adams"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:292 ../../doc/faked.1:87
-#, fuzzy
+#. type: Plain text
+#: ../doc/fakeroot.1:293 ../doc/faked.1:87
 msgid "E<lt>I<clint@debian.org>E<gt>"
-msgstr "joost witteveen E<lt>I<joostje@debian.org>E<gt>"
+msgstr "E<lt>I<clint@debian.org>E<gt>"
 
 # type: TP
-#: ../../doc/fakeroot.1:292 ../../doc/faked.1:87
+#. type: TP
+#: ../doc/fakeroot.1:293 ../doc/faked.1:87
 #, no-wrap
 msgid "Timo Savola"
-msgstr ""
+msgstr "Timo Savola"
 
 # type: SH
-#: ../../doc/fakeroot.1:294 ../../doc/faked.1:89
+#. type: SH
+#: ../doc/fakeroot.1:295 ../doc/faked.1:89
 #, no-wrap
 msgid "MANUAL PAGE"
 msgstr "MANUALSIDA"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:298
-#, fuzzy
+#. type: Plain text
+#: ../doc/fakeroot.1:299
 msgid ""
 "mostly by J.H.M. Dassen E<lt>jdassen@debian.orgE<gt> Rather a lot mods/"
 "additions by joost and Clint."
 msgstr ""
-"till stˆrre delen skriven av J.H.M. Dassen E<lt>jdassen@wi.LeidenUniv."
-"nlE<gt> med ett flertal ‰ndringar/till‰gg av joost."
+"till st√∂rre delen skriven av J.H.M. Dassen E<lt>jdassen@wi.LeidenUniv."
+"nlE<gt> med ett flertal √§ndringar/till√§gg av joost och Clint."
 
 # type: SH
-#: ../../doc/fakeroot.1:298 ../../doc/faked.1:93
+#. type: SH
+#: ../doc/fakeroot.1:299 ../doc/faked.1:93
 #, no-wrap
 msgid "SEE ALSO"
-msgstr "SE ƒVEN"
+msgstr "SE √ÑVEN"
 
 # type: Plain text
-#: ../../doc/fakeroot.1:303
-#, fuzzy
+#. type: Plain text
+#: ../doc/fakeroot.1:304
 msgid ""
 "B<faked>(1)  B<dpkg-buildpackage>(1), B<debuild>(1)  B</usr/share/doc/"
 "fakeroot/DEBUG>"
@@ -683,46 +770,50 @@ msgstr ""
 "fakeroot/DEBUG>"
 
 # type: TH
-#: ../../doc/faked.1:16
+#. type: TH
+#: ../doc/faked.1:16
 #, no-wrap
 msgid "faked"
 msgstr "faked"
 
 # type: TH
-#: ../../doc/faked.1:16
+#. type: TH
+#: ../doc/faked.1:16
 #, no-wrap
 msgid "17 June 2004"
-msgstr ""
+msgstr "17:e juni 2004"
 
 # type: TH
-#: ../../doc/faked.1:16
+#. type: TH
+#: ../doc/faked.1:16
 #, no-wrap
 msgid "Debian GNU/Linux manual"
 msgstr "Debian GNU/Linux manual"
 
 # type: Plain text
-#: ../../doc/faked.1:22
-#, fuzzy
+#. type: Plain text
+#: ../doc/faked.1:22
 msgid ""
 "faked - daemon that remembers fake ownership/permissions of files "
 "manipulated by fakeroot processes."
 msgstr ""
-"faked - daemon som kommer ihÂg fejkad ‰garskaps- och r‰ttighetsinformation "
-"fˆr filer som manipulerats av fakeroot-processer."
+"faked - demon som kommer ih√•g fejkad √§garskaps- och r√§ttighetsinformation "
+"f√∂r filer som manipulerats av fakeroot-processer."
 
 # type: Plain text
-#: ../../doc/faked.1:30
-#, fuzzy
+#. type: Plain text
+#: ../doc/faked.1:30
 msgid ""
 "B<faked> B<[--debug] [--foreground] [--cleanup] [--key> I<msg-key>B<]> B<[--"
 "load] [--save-file> I<save-file>B<]> B<[--port> I<TCP-port>B<]>"
 msgstr ""
 "B<faked> B<[--debug] [--foreground] [--cleanup] [--key> I<meddelande-"
-"nyckel>B<]>"
+"nyckel>B<]> B<[--load] [--save-file> I<spar-fil>B<]> B<[--port> I<tcp-"
+"port>B<]>"
 
 # type: Plain text
-#: ../../doc/faked.1:37
-#, fuzzy
+#. type: Plain text
+#: ../doc/faked.1:37
 msgid ""
 "If a fakeroot process wants to change the ownership of a file, then B<faked> "
 "is the process that remembers that new owner. If later the same fakeroot "
@@ -730,111 +821,127 @@ msgid ""
 "call will first ask faked for the fake ownership etc of that file, and then "
 "report it."
 msgstr ""
-"Om en fakeroot-process vill ‰ndra ‰garskap fˆr en fil, kommer B<faked> att "
-"komma ihÂg den nya ‰garen. Om samma fakeroot-process senare utfˆr ett stat()-"
-"anrop fˆr den filen, kommer libfakeroots ers‰ttningsfunktion fˆr stat() "
-"fˆrst att anropa faked fˆr att fÂ den fejkade ‰garinformationen fˆr den "
-"filen, och sedan rapportera denna."
+"Om en fakeroot-process vill √§ndra √§garskap f√∂r en fil, √§r B<faked> den "
+"process som kommer att komma ih√•g den nya √§garen. Om samma fakeroot-process "
+"senare utf√∂r ett stat()-anrop f√∂r den filen, kommer libfakeroots "
+"ers√§ttningsfunktion f√∂r stat() f√∂rst att anropa faked f√∂r att f√• den fejkade "
+"√§garinformationen, osv. f√∂r den filen, och sedan rapportera denna."
 
 # type: TP
-#: ../../doc/faked.1:39
+#. type: TP
+#: ../doc/faked.1:39
 #, no-wrap
 msgid "B<--debug>"
 msgstr "B<--debug>"
 
 # type: Plain text
-#: ../../doc/faked.1:42
+#. type: Plain text
+#: ../doc/faked.1:42
 msgid "Print debugging information on stderr."
 msgstr "Skriv ut avlusningsinformation via stderr."
 
 # type: TP
-#: ../../doc/faked.1:42
+#. type: TP
+#: ../doc/faked.1:42
 #, no-wrap
 msgid "B<--foreground>"
 msgstr "B<--foreground>"
 
 # type: Plain text
-#: ../../doc/faked.1:45
-#, fuzzy
+#. type: Plain text
+#: ../doc/faked.1:45
 msgid "Don't fork into the background."
-msgstr "Fˆrbli en fˆrgrundsprocess."
+msgstr "F√∂rbli en f√∂rgrundsprocess."
 
 # type: TP
-#: ../../doc/faked.1:45
+#. type: TP
+#: ../doc/faked.1:45
 #, no-wrap
 msgid "B<--cleanup \\ number>"
 msgstr "B<--cleanup \\ number>"
 
 # type: Plain text
-#: ../../doc/faked.1:48
-#, fuzzy
+#. type: Plain text
+#: ../doc/faked.1:48
 msgid "Cleanup the semaphores."
 msgstr "Rensa upp semaforerna."
 
 # type: TP
-#: ../../doc/faked.1:48
+#. type: TP
+#: ../doc/faked.1:48
 #, no-wrap
 msgid "B<--key \\ key-number>"
-msgstr "B<--key \\ nyckelv‰rde>"
+msgstr "B<--key \\ nyckelv√§rde>"
 
 # type: Plain text
-#: ../../doc/faked.1:52
-#, fuzzy
+#. type: Plain text
+#: ../doc/faked.1:52
 msgid ""
 "Don't allocate a new communication channel, but use channel specified by "
 "key. (If the specified channel doesn't exist, it's created)."
 msgstr ""
-"Allokera ingen ny kommunikationskanal; anv‰nd ist‰llet kanalen som angivits "
-"via nyckeln (om den angivna kanalen inte existerar sÂ skapas den)."
+"Allokera ingen ny kommunikationskanal; anv√§nd ist√§llet kanalen som angivits "
+"via nyckeln (om den angivna kanalen inte existerar s√• skapas den)."
 
 # type: TP
-#: ../../doc/faked.1:52
+#. type: TP
+#: ../doc/faked.1:52
 #, no-wrap
 msgid "B<--save-file \\ save-file>"
-msgstr ""
+msgstr "B<--save-file \\ sparfil>"
 
 # type: Plain text
-#: ../../doc/faked.1:55
+#. type: Plain text
+#: ../doc/faked.1:55
 msgid "Save the environment to save-file on exit."
-msgstr ""
+msgstr "Spara milj√∂n till sparfil vid avslut."
 
 # type: TP
-#: ../../doc/faked.1:55
-#, fuzzy, no-wrap
+#. type: TP
+#: ../doc/faked.1:55
+#, no-wrap
 msgid "B<--load>"
-msgstr "B<--debug>"
+msgstr "B<--load>"
 
 # type: Plain text
-#: ../../doc/faked.1:58
+#. type: Plain text
+#: ../doc/faked.1:58
 msgid "Load a previously saved environment from the standard input."
-msgstr ""
+msgstr "L√§sa in en tidigare sparad milj√∂ fr√•n standard in."
 
 # type: TP
-#: ../../doc/faked.1:58
+#. type: TP
+#: ../doc/faked.1:58
 #, no-wrap
 msgid "B<--unknown-is-real>"
-msgstr ""
+msgstr "B<--unknown-is-real>"
 
 # type: Plain text
-#: ../../doc/faked.1:62
+#. type: Plain text
+#: ../doc/faked.1:62
 msgid ""
 "Use real ownership of previously-unknown files instead of setting them to "
 "root:root."
 msgstr ""
+"Ok√§nt riktigt √§garskap av tidigare ok√§nda filer ist√§llet f√∂r att st√§lla in "
+"dem p√• root:root."
 
 # type: TP
-#: ../../doc/faked.1:62
+#. type: TP
+#: ../doc/faked.1:62
 #, no-wrap
 msgid "B<--port \\ tcp-port>"
-msgstr ""
+msgstr "B<--port \\ tcp-port>"
 
 # type: Plain text
-#: ../../doc/faked.1:65
+#. type: Plain text
+#: ../doc/faked.1:65
 msgid "Use TCP port tcp-port."
-msgstr ""
+msgstr "Anv√§nd TCP-port tcp-port."
 
 # type: Plain text
-#: ../../doc/faked.1:76
+#. type: Plain text
+#: ../doc/faked.1:76
 msgid ""
 "None so far. Be warned, though: although I've written quite a few much "
 "larger (and smaller) programs, I've never written anything that was as tiny "
@@ -842,25 +949,25 @@ msgid ""
 "say, B<fakeroot> version 0.0_3, the first version that could be used to "
 "build itself."
 msgstr ""
-"Inga k‰nda. Tag dock i beaktande, att ‰ven om jag skrivit ett flertal stˆrre "
-"(och mindre) program, sÂ har jag aldrig skrivit nÂgot sÂ litet som "
-"B<fakeroot>, som har sÂ mÂnga buggar som B<fakeroot>, och ‰ndÂ varit sÂ "
-"anv‰ndbart som, lÂt s‰ga, B<fakeroot> version 0.0_3, den fˆrsta versionen av "
-"programmet som kunde anv‰ndas fˆr att bygga sig sj‰lv."
+"Inga k√§nda. Tag dock i beaktande, att √§ven om jag skrivit ett flertal st√∂rre "
+"(och mindre) program, s√• har jag aldrig skrivit n√•got s√• litet som "
+"B<fakeroot>, som har s√• m√•nga buggar som B<fakeroot>, och √§nd√• varit s√• "
+"anv√§ndbart som, l√•t s√§ga, B<fakeroot> version 0.0_3, den f√∂rsta versionen av "
+"programmet som kunde anv√§ndas f√∂r att bygga sig sj√§lv."
 
 # type: Plain text
-#: ../../doc/faked.1:93
-#, fuzzy
+#. type: Plain text
+#: ../doc/faked.1:93
 msgid ""
 "mostly by J.H.M. Dassen E<lt>jdassen@debian.orgE<gt> mods/additions by joost "
 "and Clint."
 msgstr ""
-"till stˆrre delen skriven av J.H.M. Dassen E<lt>I<jdassen@wi.LeidenUniv."
-"nl>E<gt> ‰ndringar/till‰gg av joost."
+"till st√∂rre delen skriven av J.H.M. Dassen E<lt>I<jdassen@wi.LeidenUniv."
+"nl>E<gt> √§ndringar/till√§gg av joost och Clint."
 
 # type: Plain text
-#: ../../doc/faked.1:97
-#, fuzzy
+#. type: Plain text
+#: ../doc/faked.1:97
 msgid ""
 "B<fakeroot>(1), B<dpkg-buildpackage>(1), B<debuild>(1)  B</usr/share/doc/"
 "fakeroot/DEBUG>"
@@ -878,8 +985,8 @@ msgstr ""
 #~ "B<fakeroot> B<[-l|--lib> I<library]> B<[--faked> I<faked-binary]> B<[--]> "
 #~ "B<[command]>"
 #~ msgstr ""
-#~ "B<fakeroot> B<[-l|--lib> I<bibliotek]> B<[--faked> I<fejkad-bin‰r]> B<[--]"
-#~ "> B<[kommando]>"
+#~ "B<fakeroot> B<[-l|--lib> I<bibliotek]> B<[--faked> I<fejkad-bin√§r]> "
+#~ "B<[--]> B<[kommando]>"
 
 # type: Plain text
 #~ msgid ""
@@ -888,8 +995,8 @@ msgstr ""
 #~ "operating system. Thus I decided to keep the number of functions wrapped "
 #~ "by fakeroot as small as possible, to limit the likelyhood of `collisions'."
 #~ msgstr ""
-#~ "det bara en tidsfrÂga innan andra funktioner bˆrjade anv‰nda sig av open"
-#~ "(). Fˆr att inte tala om problemen med att porta libtricks till en annan "
-#~ "plattform. SÂlunda beslˆt jag mig fˆr att hÂlla antalet "
-#~ "ers‰ttningsfunktioner i fakeroot sÂ lÂgt som mˆjligt, fˆr att begr‰nsa "
-#~ "sannolikheten fˆr `kollisioner'."
+#~ "det bara en tidsfr√•ga innan andra funktioner b√∂rjade anv√§nda sig av "
+#~ "open(). F√∂r att inte tala om problemen med att porta libtricks till en "
+#~ "annan plattform. S√•lunda besl√∂t jag mig f√∂r att h√•lla antalet "
+#~ "ers√§ttningsfunktioner i fakeroot s√• l√•gt som m√∂jligt, f√∂r att begr√§nsa "
+#~ "sannolikheten f√∂r `kollisioner'."
