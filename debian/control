@@ -9,10 +9,10 @@ Build-Depends: debhelper (>= 9),
                po4a,
                sharutils
 Maintainer: Clint Adams <clint@debian.org>
-Standards-Version: 4.1.1
+Standards-Version: 4.1.4
 Rules-Requires-Root: no
-Vcs-Git: https://anonscm.debian.org/git/users/clint/fakeroot.git
-Vcs-Browser: https://anonscm.debian.org/cgit/users/clint/fakeroot.git/
+Vcs-Git: https://salsa.debian.org/clint/fakeroot.git
+Vcs-Browser: https://salsa.debian.org/clint/fakeroot
 
 Package: fakeroot
 Architecture: any
