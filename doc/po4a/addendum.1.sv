@@ -1,4 +1,4 @@
-PO4A-HEADER:mode=after;position=FÖRFATTARE;beginboundary=.SH
-.SH ÖVERSÄTTNING
+PO4A-HEADER:mode=after;position=FÃ–RFATTARE;beginboundary=.SH
+.SH Ã–VERSÃ„TTNING
 David Weinehall
 .RI < tao@kernel.org >
