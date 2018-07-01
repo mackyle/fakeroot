@@ -1,3 +1,13 @@
+fakeroot (1.23-1) unstable; urgency=medium
+
+  * Swedish man page translation from Sebastian Rasmussen.
+    closes: #876053.
+  * Patch from Loïc Minier to use getopt -T to test for GNU.
+    closes: #758728.
+  * Add autopkgtests.
+
+ -- Clint Adams <clint@debian.org>  Mon, 25 Jun 2018 12:52:49 -0400
+
 fakeroot (1.22-2) unstable; urgency=medium
 
   * Rules-Requires-Root: no
