@@ -1,0 +1,18 @@
+#!/bin/sh
+
+real_id=$(id -u)
+fake_id=$(fakeroot id -u)
+
+case "${real_id}:${fake_id}" in
+  (0:0)
+  echo >&2 "test run under root: failure"
+  exit 1
+  ;;
+  (*:0)
+  echo "id: OK"
+  ;;
+  (*)
+  echo >&2 "unexpected result (${real_id}:${fake_id}): failure"
+  exit 2
+  ;;
+esac

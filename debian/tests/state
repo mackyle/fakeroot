@@ -1,0 +1,25 @@
+#!/bin/sh
+
+WORKDIR=$(mktemp -d)
+trap "rm -rf $WORKDIR" EXIT INT QUIT ABRT PIPE TERM
+
+touch ${WORKDIR}/foo
+
+fakeroot -s ${WORKDIR}/state chown nobody ${WORKDIR}/foo
+
+real=$(stat --format '%u' ${WORKDIR}/foo)
+fake=$(fakeroot -i ${WORKDIR}/state stat --format '%U' ${WORKDIR}/foo)
+
+case "${real}:${fake}" in
+  (0:*)
+  echo >&2 "test run under root: failure"
+  exit 1
+  ;;
+  (*:nobody)
+  echo "state: OK"
+  ;;
+  (*)
+  echo >&2 "unexpected result (${real}:${fake}): failure"
+  exit 2
+  ;;
+esac
