@@ -1,0 +1,4 @@
+#!/bin/sh
+. ./defs || exit 1
+
+run_fakeroot -- ${srcdir}/cp-atest
