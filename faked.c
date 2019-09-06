@@ -1306,6 +1306,7 @@ int main(int argc, char **argv){
 #ifndef FAKEROOT_FAKENET
   union semun sem_union;
   int justcleanup = 0;
+  int msgflag = IPC_CREAT|0600;
 #else /* FAKEROOT_FAKENET */
   int sd, val;
   unsigned int port = 0;
@@ -1376,28 +1377,42 @@ int main(int argc, char **argv){
 
 #ifndef FAKEROOT_FAKENET
 
-  if(!msg_key) {
-    srandom(time(NULL)+getpid()*33151);
-    while(!msg_key && (msg_key!=-1))  /* values 0 and -1 are treated
-					 specially by libfake */
-      msg_key=random();
-  }
+  do {
+    if(!msg_key) {
+      msgflag |= IPC_EXCL;
+      srandom(time(NULL)+getpid()*33151);
+      while(!msg_key && (msg_key!=-1))  /* values 0 and -1 are treated
+                                           specially by libfake */
+        msg_key=random();
+    }
 
-  if(debug)
-    fprintf(stderr,"using %li as msg key\n",(long)msg_key);
+    if(debug)
+      fprintf(stderr,"using %li as msg key\n",(long)msg_key);
 
-  msg_get=msgget(msg_key,IPC_CREAT|0600);
-  msg_snd=msgget(msg_key+1,IPC_CREAT|0600);
-  sem_id=semget(msg_key+2,1,IPC_CREAT|0600);
+    msg_get=msgget(msg_key,msgflag);
+    if (msg_get != -1)
+      msg_snd=msgget(msg_key+1,msgflag);
+    if (msg_snd != -1)
+      sem_id=semget(msg_key+2,1,msgflag);
+
+    if((msg_get==-1)||(msg_snd==-1)||(sem_id==-1)){
+      if (errno == EEXIST) {
+        if(debug)
+          fprintf(stderr,"using %li as msg key caused a collision, cleaning up and retrying\n",(long)msg_key);
+        cleanup(-1);
+        msg_key = 0;
+        msg_get = msg_snd = sem_id = -1;
+        continue;
+      }
+      perror("fakeroot, while creating message channels");
+      fprintf(stderr, "This may be due to a lack of SYSV IPC support.\n");
+      cleanup(-1);
+      exit(1);
+    }
+  } while(msg_key == 0);
+
   sem_union.val=1;
   semctl (sem_id,0,SETVAL,sem_union);
-
-  if((msg_get==-1)||(msg_snd==-1)||(sem_id==-1)){
-    perror("fakeroot, while creating message channels");
-    fprintf(stderr, "This may be due to a lack of SYSV IPC support.\n");
-    cleanup(-1);
-    exit(1);
-  }
 
   if(debug)
     fprintf(stderr,"msg_key=%li\n",(long)msg_key);
