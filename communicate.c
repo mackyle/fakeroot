@@ -505,8 +505,10 @@ void send_fakem(const struct fake_msg *buf)
 
   if(init_get_msg()!=-1){
     ((struct fake_msg *)buf)->mtype=1;
-    r=msgsnd(msg_snd, (struct fake_msg *)buf,
-	     sizeof(*buf)-sizeof(buf->mtype), 0);
+    do
+      r=msgsnd(msg_snd, (struct fake_msg *)buf,
+	       sizeof(*buf)-sizeof(buf->mtype), 0);
+    while((r==-1) && (errno==EINTR));
     if(r==-1)
       perror("libfakeroot, when sending message");
   }
