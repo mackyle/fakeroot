@@ -1,3 +1,17 @@
+fakeroot (1.24-1) unstable; urgency=medium
+
+  [ Danny Milosavljevic ]
+  * Add test "t.cp-a".
+
+  [ Clint Adams ]
+  * Patch from Ilias Tsitsimpis to retry msgsnd() if interrupted by
+    a signal.  closes: #883780.
+  * Patch from Martin Dorey to detect and handle message queue and
+    semaphore id collision.  closes: #856439.
+  * Drop patch glibc-xattr-types.
+
+ -- Clint Adams <clint@debian.org>  Fri, 06 Sep 2019 18:48:18 -0400
+
 fakeroot (1.23-1) unstable; urgency=medium
 
   * Swedish man page translation from Sebastian Rasmussen.
