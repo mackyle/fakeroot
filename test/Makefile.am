@@ -23,5 +23,5 @@ TESTS_ENVIRONMENT =				\
 
 CLEANFILES = tmp* tartest.tar.gz hda3
 
-check_SCRIPTS = $(TESTS) echo_arg tartest compare-tar defs
+check_SCRIPTS = $(TESTS) compare-tar cp-atest defs echo_arg tartest
 EXTRA_DIST = $(check_SCRIPTS) tartest.tar.gz.uue
