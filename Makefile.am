@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS=foreign
 ACLOCAL_AMFLAGS = -I build-aux
-SUBDIRS=scripts doc test
+SUBDIRS=doc scripts test
 
 noinst_LTLIBRARIES = libcommunicate.la libmacosx.la
 libcommunicate_la_SOURCES = communicate.c
@@ -30,9 +30,17 @@ DISTCLEANFILES = fakerootconfig.h
 
 EXTRA_DIST=wrapawk wrapawk_macosx wrapfunc.inp           \
 	   message.h \
-	   DEBUG BUGS \
+	   DEBUG BUGS README_MACOSX.txt \
 	   setenv.c \
-	   preroll
+	   bootstrap \
+	   preroll \
+	   contrib/Fakeroot-Stat-1.8.8/MANIFEST \
+	   contrib/Fakeroot-Stat-1.8.8/META.yml \
+	   contrib/Fakeroot-Stat-1.8.8/Makefile.PL \
+	   contrib/Fakeroot-Stat-1.8.8/README \
+	   contrib/Fakeroot-Stat-1.8.8/Stat.xs \
+	   contrib/Fakeroot-Stat-1.8.8/lib/Fakeroot/Stat.pm \
+	   contrib/Fakeroot-Stat-1.8.8/t/Fakeroot-Stat.t
 
 CLEAN_FILES=fakerootconfig.h
 

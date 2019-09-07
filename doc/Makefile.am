@@ -4,7 +4,7 @@ SUBDIRS = de es fr nl pt sv
 man_MANS = faked.1 fakeroot.1
 
 #another automake bug workaround
-EXTRA_DIST = $(man_MANS)
+EXTRA_DIST = $(man_MANS) README.saving
 
 dist-hook:
 	cp -r $(srcdir)/po4a $(distdir)
