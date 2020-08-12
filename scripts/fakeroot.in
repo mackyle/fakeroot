@@ -34,7 +34,7 @@ FAKEROOT_PREFIX=@prefix@
 FAKEROOT_BINDIR=@bindir@
 
 USEABSLIBPATH=@LDPRELOADABS@
-LIB=lib@fakeroot_transformed@@DLSUFFIX@
+FAKEROOT_LIB=lib@fakeroot_transformed@@DLSUFFIX@
 PATHS=@libdir@:${FAKEROOT_PREFIX}/lib64/libfakeroot:${FAKEROOT_PREFIX}/lib32/libfakeroot
 FAKED=${FAKEROOT_BINDIR}/@faked_transformed@
 
@@ -64,7 +64,7 @@ while test "X$1" != "X--"; do
   case "$1" in
     -l|--lib)
        shift
-       LIB=`eval echo "$1"`
+       FAKEROOT_LIB=`eval echo "$1"`
        PATHS=
        ;;
     -f|--faked)
@@ -112,23 +112,23 @@ if [ -n "$PATHS" ]
 then
     for dir in `echo $PATHS | sed 's/:/ /g'`
     do
-	if test -r "$dir/$LIB"
+	if test -r "$dir/$FAKEROOT_LIB"
 	then
 	    libfound=yes
-	    ABSLIB="$dir/$LIB"
+	    ABSLIB="$dir/$FAKEROOT_LIB"
 	fi
     done
 else
-    if test -r "$LIB"
+    if test -r "$FAKEROOT_LIB"
     then
 	libfound=yes
-	ABSLIB="$LIB"
+	ABSLIB="$FAKEROOT_LIB"
     fi
 fi
 
 if test $libfound = no
 then
-    fatal "preload library \`$LIB' not found, aborting."
+    fatal "preload library \`$FAKEROOT_LIB' not found, aborting."
 fi
 
 if test -n "$FAKEROOTKEY"
@@ -145,8 +145,8 @@ PID=`echo $KEY_PID|cut -d: -f2`
 if [ "$WAITINTRAP" -eq 0 ]; then
   trap "kill -s @signal@ $PID" EXIT INT
 else
-  @MACOSX_FALSE@trap 'FAKEROOTKEY=$FAKEROOTKEY @LDLIBPATHVAR@="$PATHS" @LDPRELOADVAR@="$LIB" /bin/ls -l / >/dev/null 2>&1; while kill -s @signal@ $PID 2>/dev/null; do sleep 0.1; done' EXIT INT
-  @MACOSX_TRUE@trap 'FAKEROOTKEY=$FAKEROOTKEY @LDPRELOADVAR@="$LIB" /bin/ls -l / >/dev/null 2>&1; while kill -s @signal@ $PID 2>/dev/null; do sleep 0.1; done' EXIT INT
+  @MACOSX_FALSE@trap 'FAKEROOTKEY=$FAKEROOTKEY @LDLIBPATHVAR@="$PATHS" @LDPRELOADVAR@="$FAKEROOT_LIB" /bin/ls -l / >/dev/null 2>&1; while kill -s @signal@ $PID 2>/dev/null; do sleep 0.1; done' EXIT INT
+  @MACOSX_TRUE@trap 'FAKEROOTKEY=$FAKEROOTKEY @LDPRELOADVAR@="$FAKEROOT_LIB" /bin/ls -l / >/dev/null 2>&1; while kill -s @signal@ $PID 2>/dev/null; do sleep 0.1; done' EXIT INT
 fi
 
 if test -z "$FAKEROOTKEY" || test -z "$PID"; then
@@ -154,7 +154,7 @@ if test -z "$FAKEROOTKEY" || test -z "$PID"; then
 fi
 
 if test $USEABSLIBPATH -ne 0 ; then
-  LIB=$ABSLIB
+  FAKEROOT_LIB=$ABSLIB
 fi
 # Keep other library paths
 if test -n "$@LDLIBPATHVAR@"; then
@@ -162,18 +162,18 @@ if test -n "$@LDLIBPATHVAR@"; then
 fi
 # ...and preloaded libs
 if test -n "$@LDPRELOADVAR@"; then
-  LIB="$LIB:$@LDPRELOADVAR@"
+  LIB="$FAKEROOT_LIB:$@LDPRELOADVAR@"
 fi
 
 export FAKEROOT_FD_BASE
 
 if test -z "$*"; then
-  @MACOSX_FALSE@FAKEROOTKEY=$FAKEROOTKEY @LDLIBPATHVAR@="$PATHS" @LDEXTRAVAR@ @LDPRELOADVAR@="$LIB" ${SHELL:-/bin/sh}
-  @MACOSX_TRUE@FAKEROOTKEY=$FAKEROOTKEY @LDEXTRAVAR@ @LDPRELOADVAR@="$LIB" ${SHELL:-/bin/sh}
+  @MACOSX_FALSE@FAKEROOTKEY=$FAKEROOTKEY @LDLIBPATHVAR@="$PATHS" @LDEXTRAVAR@ @LDPRELOADVAR@="$FAKEROOT_LIB" ${SHELL:-/bin/sh}
+  @MACOSX_TRUE@FAKEROOTKEY=$FAKEROOTKEY @LDEXTRAVAR@ @LDPRELOADVAR@="$FAKEROOT_LIB" ${SHELL:-/bin/sh}
   RESULT=$?
 else
-  @MACOSX_FALSE@FAKEROOTKEY=$FAKEROOTKEY @LDLIBPATHVAR@="$PATHS" @LDEXTRAVAR@ @LDPRELOADVAR@="$LIB" "$@"
-  @MACOSX_TRUE@FAKEROOTKEY=$FAKEROOTKEY @LDEXTRAVAR@ @LDPRELOADVAR@="$LIB" "$@"
+  @MACOSX_FALSE@FAKEROOTKEY=$FAKEROOTKEY @LDLIBPATHVAR@="$PATHS" @LDEXTRAVAR@ @LDPRELOADVAR@="$FAKEROOT_LIB" "$@"
+  @MACOSX_TRUE@FAKEROOTKEY=$FAKEROOTKEY @LDEXTRAVAR@ @LDPRELOADVAR@="$FAKEROOT_LIB" "$@"
   RESULT=$?
 fi
 
