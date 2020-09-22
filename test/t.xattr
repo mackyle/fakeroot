@@ -14,4 +14,4 @@ echo "setcap cap_net_raw+ep $tmp/foo; getcap $tmp/foo" >$tmp/sh
 run_fakeroot -- \
   ${posixshell} $tmp/sh >$tmp/out
 cat $tmp/out
-grep "^$tmp/foo = cap_net_raw+ep" $tmp/out
+grep "^$tmp/foo =\? \?cap_net_raw[+=]ep" $tmp/out
