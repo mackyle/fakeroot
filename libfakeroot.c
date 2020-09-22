@@ -1554,6 +1554,16 @@ int initgroups(const char* user, INITGROUPS_SECOND_ARG group){
     return 0;
 }
 
+int getgroups(int size, gid_t list[]){
+  if (fakeroot_disabled)
+    return next_setgroups(size, list);
+  else {
+    if (size > 0)
+       list[0] = get_faked_gid();
+    return 1;
+  }
+}
+
 int setgroups(SETGROUPS_SIZE_TYPE size, const gid_t *list){
   if (fakeroot_disabled)
     return next_setgroups(size, list);
