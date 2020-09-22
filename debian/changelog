@@ -1,3 +1,24 @@
+fakeroot (1.24.1-1) unstable; urgency=medium
+
+  [ Matt Weber ]
+  * Select TCP when lack of SYSV IPC.
+
+  [ Norbert Lange ]
+  * Fix fchownat and fchmod with empty path.  closes: #959876
+
+  [ Quanah Gibson-Mount ]
+  * Fix namespace collision that can occur if the outside environment
+    already has a variable named LIB defined.
+
+  [ Clint Adams ]
+  * Patch to wrap getgroups() from David Kalnischkies.
+    closes: #806521.
+  * Patch from Igor Pashev to fix ACLs on Dyson.
+    closes: #736950.
+  * Drop hide-dlsym-error.patch; obsoleted by Dyson patch.
+
+ -- Clint Adams <clint@debian.org>  Mon, 21 Sep 2020 20:50:35 -0400
+
 fakeroot (1.24-1) unstable; urgency=medium
 
   [ Danny Milosavljevic ]
