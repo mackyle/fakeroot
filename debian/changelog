@@ -1,3 +1,11 @@
+fakeroot (1.25-1) unstable; urgency=medium
+
+  * test/t.xattr: adapt to changed getcap output.
+  * Wrap statx().  closes: #940056, #964621, #968868.
+  * Updated Portuguese man page translation from Américo Monteiro.  closes: #962413.
+
+ -- Clint Adams <clint@debian.org>  Tue, 22 Sep 2020 16:58:02 -0400
+
 fakeroot (1.24.1-1) unstable; urgency=medium
 
   [ Matt Weber ]
