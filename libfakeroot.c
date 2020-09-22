@@ -1,7 +1,7 @@
 /*
-  Copyright Ⓒ 1997, 1998, 1999, 2000, 2001  joost witteveen
-  Copyright Ⓒ 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009  Clint Adams
-  Copyright Ⓒ 2012 Mikhail Gusarov
+  Copyright © 1997, 1998, 1999, 2000, 2001  joost witteveen
+  Copyright © 2002-2020  Clint Adams
+  Copyright © 2012 Mikhail Gusarov
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -133,6 +133,9 @@
 #if HAVE_FTS_H
 #include <fts.h>
 #endif /* HAVE_FTS_H */
+#ifdef HAVE_SYS_SYSMACROS_H
+# include <sys/sysmacros.h>
+#endif
 #ifdef __sun
 #include <sys/systeminfo.h>
 #endif
@@ -2450,6 +2453,41 @@ int posix_spawnp(pid_t * __restrict pid, const char * __restrict file,
 }
 #endif /* MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 */
 #endif /* ifdef __APPLE__ */
+
+#ifdef HAVE_STATX
+int statx (int dirfd, const char *path, int flags, unsigned int mask, struct statx *buf)
+{
+  int r;
+  struct stat st;
+
+  if (fakeroot_disabled)
+    return next_statx(dirfd, path, flags, mask, buf);
+
+#ifdef LIBFAKEROOT_DEBUGGING
+  if (fakeroot_debug) {
+    fprintf(stderr, "statx fd %d\n", fd);
+  }
+#endif /* LIBFAKEROOT_DEBUGGING */
+  r=INT_NEXT_FSTATAT(dirfd, path, &st, flags);
+  if(r)
+    return -1;
+  SEND_GET_STAT(&st,ver);
+
+  r=next_statx(dirfd, path, flags, mask, buf);
+  if(r)
+    return -1;
+
+  buf->stx_uid = st.st_uid;
+  buf->stx_gid = st.st_gid;
+  buf->stx_mode = st.st_mode;
+
+  buf->stx_rdev_major = major(st.st_rdev);
+  buf->stx_rdev_minor = minor(st.st_rdev);
+
+  return 0;
+}
+#endif /* HAVE_STATX */
+
 
 #ifdef __sun
 /*

@@ -246,6 +246,10 @@ fts_children$INODE64;FTSENT *;(FTS *ftsp, int options);(ftsp, options)
 #endif /* ifdef __APPLE__ */
 #endif /* HAVE_FTS_CHILDREN */
 
+#ifdef HAVE_STATX
+statx;int;(int dir_fd, const char *pathname, int flags, unsigned int mask, struct statx *buf);(dir_fd, pathname, flags, mask, buf)
+#endif /* HAVE_STATX */
+
 #ifdef __sun
 sysinfo;int;(int command, char *buf, long count);(command, buf, count)
 #endif

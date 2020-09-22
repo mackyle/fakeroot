@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([fakeroot],[1.24.1],[clint@debian.org],[fakeroot])
+AC_INIT([fakeroot],[1.25],[clint@debian.org],[fakeroot])
 AC_PREREQ([2.69])
 AC_CONFIG_MACRO_DIR([build-aux])
 LT_PREREQ(2.1a)
@@ -335,6 +335,8 @@ AC_CHECK_FUNCS(acl_trivial)
 LIBS="$save_LIBS"
 
 AC_CHECK_FUNCS(capset listxattr llistxattr flistxattr getxattr lgetxattr fgetxattr setxattr lsetxattr fsetxattr removexattr lremovexattr fremovexattr)
+
+AC_CHECK_FUNCS(statx)
 
 dnl find out how stat() etc are called. On linux systems, we really
 dnl need to wrap (IIRC):
