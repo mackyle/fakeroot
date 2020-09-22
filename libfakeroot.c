@@ -2458,7 +2458,7 @@ int posix_spawnp(pid_t * __restrict pid, const char * __restrict file,
 int statx (int dirfd, const char *path, int flags, unsigned int mask, struct statx *buf)
 {
   int r;
-  struct stat st;
+  INT_STRUCT_STAT st;
 
   if (fakeroot_disabled)
     return next_statx(dirfd, path, flags, mask, buf);
