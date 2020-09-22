@@ -336,6 +336,8 @@ LIBS="$save_LIBS"
 
 AC_CHECK_FUNCS(capset listxattr llistxattr flistxattr getxattr lgetxattr fgetxattr setxattr lsetxattr fsetxattr removexattr lremovexattr fremovexattr)
 
+AC_CHECK_FUNCS(statx)
+
 dnl find out how stat() etc are called. On linux systems, we really
 dnl need to wrap (IIRC):
 dnl  Linux       : __xstat
