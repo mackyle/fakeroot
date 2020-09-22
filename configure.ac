@@ -324,6 +324,16 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 
 AC_CHECK_FUNCS(fchmodat fchownat fstatat mkdirat mknodat openat renameat unlinkat lchmod fgetattrlist)
 
+save_LIBS="$LIBS"
+# Linux
+AC_SEARCH_LIBS(acl_get_fd, acl)
+AC_CHECK_FUNCS(acl_get_fd)
+
+# Illumos
+AC_SEARCH_LIBS(acl_trivial, sec)
+AC_CHECK_FUNCS(acl_trivial)
+LIBS="$save_LIBS"
+
 AC_CHECK_FUNCS(capset listxattr llistxattr flistxattr getxattr lgetxattr fgetxattr setxattr lsetxattr fsetxattr removexattr lremovexattr fremovexattr)
 
 dnl find out how stat() etc are called. On linux systems, we really

@@ -209,10 +209,24 @@ unlinkat;int;(int dir_fd, const char *pathname, int flags);(dir_fd, pathname, fl
 #endif /* HAVE_FSTATAT */
 
 #ifdef HAVE_ACL_T
+
+#ifdef HAVE_ACL_GET_FD
 acl_get_fd;acl_t;(int fd);(fd)
 acl_get_file;acl_t;(const char *path_p, acl_type_t type);(path_p, type)
 acl_set_fd;int;(int fd, acl_t acl);(fd, acl)
 acl_set_file;int;(const char *path_p, acl_type_t type, acl_t acl);(path_p, type, acl)
+#endif
+
+#ifdef HAVE_ACL_TRIVIAL
+acl_get;int;(const char *path, int flags, acl_t **aclp);(path, flags, aclp)
+facl_get;int;(int fd, int flags, acl_t **aclp);(fd, flags, aclp)
+acl_set;int;(const char *path, acl_t *aclp);(path, aclp)
+facl_set;int;(int fd, acl_t *aclp);(fd, aclp)
+acl_trivial;int;(const char *path);(path)
+acl;int;(const char *path, int cmd, int cnt, void *buf);(path, cmd, cnt, buf)
+facl;int;(int fd, int cmd, int cnt, void *buf);(fd, cmd, cnt, buf)
+#endif
+
 #endif /* HAVE_ACL_T */
 
 #ifdef HAVE_FTS_READ
