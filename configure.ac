@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([fakeroot],[1.24],[clint@debian.org],[fakeroot])
+AC_INIT([fakeroot],[1.24.1],[clint@debian.org],[fakeroot])
 AC_PREREQ([2.69])
 AC_CONFIG_MACRO_DIR([build-aux])
 LT_PREREQ(2.1a)
@@ -323,6 +323,16 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
   ])
 
 AC_CHECK_FUNCS(fchmodat fchownat fstatat mkdirat mknodat openat renameat unlinkat lchmod fgetattrlist)
+
+save_LIBS="$LIBS"
+# Linux
+AC_SEARCH_LIBS(acl_get_fd, acl)
+AC_CHECK_FUNCS(acl_get_fd)
+
+# Illumos
+AC_SEARCH_LIBS(acl_trivial, sec)
+AC_CHECK_FUNCS(acl_trivial)
+LIBS="$save_LIBS"
 
 AC_CHECK_FUNCS(capset listxattr llistxattr flistxattr getxattr lgetxattr fgetxattr setxattr lsetxattr fsetxattr removexattr lremovexattr fremovexattr)
 
