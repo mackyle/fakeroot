@@ -1,3 +1,2 @@
 eglibc-fts-without-LFS
 fix-shell-in-fakeroot
-hide-dlsym-error.patch
