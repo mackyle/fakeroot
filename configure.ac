@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([fakeroot],[1.24.1],[clint@debian.org],[fakeroot])
+AC_INIT([fakeroot],[1.25],[clint@debian.org],[fakeroot])
 AC_PREREQ([2.69])
 AC_CONFIG_MACRO_DIR([build-aux])
 LT_PREREQ(2.1a)
