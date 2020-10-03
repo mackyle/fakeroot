@@ -1,7 +1,7 @@
 Source: fakeroot
 Section: utils
 Priority: optional
-Build-Depends: debhelper (>= 9),
+Build-Depends: debhelper-compat (= 13),
                dh-autoreconf,
                libacl1-dev,
                libcap-dev [linux-any],
@@ -9,7 +9,7 @@ Build-Depends: debhelper (>= 9),
                po4a,
                sharutils
 Maintainer: Clint Adams <clint@debian.org>
-Standards-Version: 4.1.4
+Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Vcs-Git: https://salsa.debian.org/clint/fakeroot.git
 Vcs-Browser: https://salsa.debian.org/clint/fakeroot
