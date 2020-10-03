@@ -1,3 +1,14 @@
+fakeroot (1.25.2-1) unstable; urgency=medium
+
+  [ Vasyl Gello ]
+  * Use fixed-width members in fake_msg.
+
+  [ Clint Adams ]
+  * Patch from Johannes Schauer to fix missing FAKEROOT_LIB rename.
+    closes: #971070.
+
+ -- Clint Adams <clint@debian.org>  Sat, 03 Oct 2020 18:57:01 -0400
+
 fakeroot (1.25.1-1) unstable; urgency=medium
 
   * Fix FTBFS on 32-bit architectures.
