@@ -1,3 +1,10 @@
+fakeroot (1.25.3-1) unstable; urgency=medium
+
+  * Patch from Aurelien Jarno to fix statx wrapper on mipsel.
+    closes: #971794.
+
+ -- Clint Adams <clint@debian.org>  Thu, 08 Oct 2020 13:13:45 -0400
+
 fakeroot (1.25.2-1) unstable; urgency=medium
 
   [ Vasyl Gello ]
