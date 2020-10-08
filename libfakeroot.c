@@ -102,6 +102,7 @@
 #define INT_NEXT_FSTATAT(a,b,c,d) NEXT_FSTATAT64(_STAT_VER,a,b,c,d)
 #define INT_SEND_STAT(a,b) SEND_STAT64(a,b,_STAT_VER)
 #define INT_SEND_GET_XATTR(a,b) SEND_GET_XATTR64(a,b,_STAT_VER)
+#define INT_SEND_GET_STAT(a,b) SEND_GET_STAT64(a,b)
 #else
 #define INT_STRUCT_STAT struct stat
 #define INT_NEXT_STAT(a,b) NEXT_STAT(_STAT_VER,a,b)
@@ -110,6 +111,7 @@
 #define INT_NEXT_FSTATAT(a,b,c,d) NEXT_FSTATAT(_STAT_VER,a,b,c,d)
 #define INT_SEND_STAT(a,b) SEND_STAT(a,b,_STAT_VER)
 #define INT_SEND_GET_XATTR(a,b) SEND_GET_XATTR(a,b,_STAT_VER)
+#define INT_SEND_GET_STAT(a,b) SEND_GET_STAT(a,b)
 #endif
 
 #include <stdlib.h>
@@ -2471,7 +2473,7 @@ int statx (int dirfd, const char *path, int flags, unsigned int mask, struct sta
   r=INT_NEXT_FSTATAT(dirfd, path, &st, flags);
   if(r)
     return -1;
-  SEND_GET_STAT(&st,ver);
+  INT_SEND_GET_STAT(&st,ver);
 
   r=next_statx(dirfd, path, flags, mask, buf);
   if(r)
