@@ -1,0 +1,9 @@
+---
+include:
+  - https://salsa.debian.org/salsa-ci-team/pipeline/raw/master/salsa-ci.yml
+  - https://salsa.debian.org/salsa-ci-team/pipeline/raw/master/pipeline-jobs.yml
+
+# prevent the executable bits being set for debian/fakeroot.docs
+# https://salsa.debian.org/salsa-ci-team/pipeline/-/issues/177
+variables:
+  FF_USE_FASTZIP: "true"
