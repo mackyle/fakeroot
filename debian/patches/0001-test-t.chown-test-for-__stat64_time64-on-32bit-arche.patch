@@ -1,0 +1,45 @@
+From 31ccaf1d94d595823544cc1d526a51c4426e2edd Mon Sep 17 00:00:00 2001
+From: Johannes Schauer Marin Rodrigues <josch@debian.org>
+Date: Wed, 2 Nov 2022 10:11:27 +0100
+Subject: [PATCH] test/t.chown: test for __stat64_time64 on 32bit arches
+
+---
+ test/Makefile.am |  1 +
+ test/t.chown     | 15 +++++++++++++++
+ 2 files changed, 16 insertions(+)
+ create mode 100755 test/t.chown
+
+diff --git a/test/Makefile.am b/test/Makefile.am
+--- a/test/Makefile.am
++++ b/test/Makefile.am
+@@ -2,6 +2,7 @@ AUTOMAKE_OPTIONS=foreign
+ 
+ TESTS =						\
+   t.chmod_dev					\
++  t.chown					\
+   t.cp-a					\
+   t.echoarg					\
+   t.falsereturn					\
+diff --git a/test/t.chown b/test/t.chown
+new file mode 100755
+--- /dev/null
++++ b/test/t.chown
+@@ -0,0 +1,15 @@
++#!/bin/sh
++. ./defs || exit 1
++
++mkdir $tmp
++
++# starting with glibc 2.34, __stat64_time64 is used on 32 bit architectures
++# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1023286
++echo "echo foo > $tmp/bar &&
++      echo baz > $tmp/blub &&
++      chown --reference=$tmp/bar $tmp/blub &&
++      stat -c owner:%u $tmp/blub" > $tmp/sh
++run_fakeroot -- \
++    ${posixshell} $tmp/sh > $tmp/out
++cat $tmp/out > /tmp/foo
++grep "^owner:0$" /tmp/foo
+-- 
+2.37.2
+
