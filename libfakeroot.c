@@ -2525,7 +2525,7 @@ int statx (int dirfd, const char *path, int flags, unsigned int mask, struct sta
 
 #ifdef LIBFAKEROOT_DEBUGGING
   if (fakeroot_debug) {
-    fprintf(stderr, "statx fd %d\n", fd);
+    fprintf(stderr, "statx fd %d\n", dirfd);
   }
 #endif /* LIBFAKEROOT_DEBUGGING */
   r=INT_NEXT_FSTATAT(dirfd, path, &st, flags);
