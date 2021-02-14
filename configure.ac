@@ -146,6 +146,7 @@ for first in size_t int; do
 #include <sys/types.h>
 #endif
 #include <unistd.h>
+#include <stdio.h>
 #ifdef HAVE_GRP_H
 #include <grp.h>
 #endif
@@ -183,13 +184,13 @@ AC_MSG_CHECKING([for type of arg of __xmknod])
   ]], [[
        int __xmknod  ( int ver,
                        const char *pathname ,
-                       mode_t  mode ,  dev_t dev);
+                       mode_t  mode ,  dev_t *dev);
   ]])],[
-   AC_DEFINE(XMKNOD_FRTH_ARG,)
-   AC_MSG_RESULT([no extra *])
-  ],[
    AC_DEFINE(XMKNOD_FRTH_ARG,[*])
    AC_MSG_RESULT([needs *])
+  ],[
+   AC_DEFINE(XMKNOD_FRTH_ARG,)
+   AC_MSG_RESULT([no extra *])
 
   ])
 
@@ -210,13 +211,13 @@ AC_MSG_CHECKING([for type of arg of __xmknodat])
        int __xmknodat  ( int ver,
                          int dirfd,
                          const char *pathname ,
-                         mode_t  mode ,  dev_t dev);
+                         mode_t  mode ,  dev_t *dev);
   ]])],[
-   AC_DEFINE(XMKNODAT_FIFTH_ARG,)
-   AC_MSG_RESULT([no extra *])
-  ],[
    AC_DEFINE(XMKNODAT_FIFTH_ARG,[*])
    AC_MSG_RESULT([needs *])
+  ],[
+   AC_DEFINE(XMKNODAT_FIFTH_ARG,)
+   AC_MSG_RESULT([no extra *])
 
   ])
 
