@@ -122,8 +122,16 @@
 #define INT_SEND_STAT(a,b) SEND_STAT(a,b,_STAT_VER)
 #define INT_SEND_GET_XATTR(a,b) SEND_GET_XATTR(a,b,_STAT_VER)
 #define INT_SEND_GET_STAT(a,b) SEND_GET_STAT(a,b)
+
+/* 10.10 uses id_t in getpriority/setpriority calls, so pretend
+   id_t is used everywhere, just happens to be int on some OSes */
+#ifndef _ID_T
+#define _ID_T
+typedef int id_t;
+#endif
 #endif
 
+#include <sys/types.h>
 #include <stdlib.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
@@ -135,7 +143,6 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <errno.h>
-#include <sys/types.h>
 #ifdef HAVE_SYS_ACL_H
 #include <sys/acl.h>
 #endif /* HAVE_SYS_ACL_H */
@@ -197,6 +204,15 @@ extern int unsetenv (const char *name);
 #undef __fxstat64
 #undef __lxstat64
 #undef _FILE_OFFSET_BITS
+
+
+#ifndef AT_EMPTY_PATH
+#define AT_EMPTY_PATH 0
+#endif
+
+#ifndef AT_NO_AUTOMOUNT
+#define AT_NO_AUTOMOUNT 0
+#endif
 
 /*
 // next_wrap_st:
@@ -1969,7 +1985,7 @@ ssize_t fremovexattr(int fd, const char *name)
 }
 #endif /* HAVE_FREMOVEXATTR */
 
-int setpriority(int which, int who, int prio){
+int setpriority(int which, id_t who, int prio){
   if (fakeroot_disabled)
     return next_setpriority(which, who, prio);
   next_setpriority(which, who, prio);
@@ -2568,5 +2584,21 @@ int sysinfo(int command, char *buf, long count)
     {
         return next_sysinfo(command, buf, count);
     }
+}
+#endif
+
+#ifdef HAVE_OPENAT
+int openat(int dir_fd, const char *pathname, int flags, ...)
+{
+	mode_t mode;
+
+    if (flags & O_CREAT) {
+        va_list args;
+        va_start(args, flags);
+        mode = va_arg(args, int);
+        va_end(args);
+    }
+
+    return next_openat(dir_fd, pathname, flags, mode);
 }
 #endif

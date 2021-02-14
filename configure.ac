@@ -146,6 +146,7 @@ for first in size_t int; do
 #include <sys/types.h>
 #endif
 #include <unistd.h>
+#include <stdio.h>
 #ifdef HAVE_GRP_H
 #include <grp.h>
 #endif
