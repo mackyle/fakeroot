@@ -2066,11 +2066,7 @@ FTSENT *fts_read(FTS *ftsp) {
             || r->fts_info == FTS_NS || r->fts_info == FTS_NSOK))
     r->fts_statp = NULL;  /* Otherwise fts_statp may be a random pointer */
   if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
-# if defined(STAT64_SUPPORT) && !defined(__APPLE__)
-    SEND_GET_STAT64(r->fts_statp, _STAT_VER);
-# else
     SEND_GET_STAT(r->fts_statp, _STAT_VER);
-# endif
   }
 
   return r;
@@ -2089,11 +2085,7 @@ FTSENT *fts_children(FTS *ftsp, int options) {
   first=next_fts_children(ftsp, options);
   for(r = first; r; r = r->fts_link) {
     if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
-# if defined(STAT64_SUPPORT) && !defined(__APPLE__)
-      SEND_GET_STAT64(r->fts_statp, _STAT_VER);
-# else
       SEND_GET_STAT(r->fts_statp, _STAT_VER);
-# endif
     }
   }
 
