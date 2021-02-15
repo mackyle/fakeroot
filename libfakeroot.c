@@ -1368,7 +1368,8 @@ int renameat(int olddir_fd, const char *oldpath,
 #endif /* HAVE_FSTATAT */
 
 
-#if defined(__GLIBC__) && __GLIBC_PREREQ(2,33)
+#if defined(__GLIBC__)
+#if __GLIBC_PREREQ(2,33)
 /* Glibc 2.33 exports symbols for these functions in the shared lib */
   int lstat(const char *file_name, struct stat *statbuf) {
      return WRAP_LSTAT LSTAT_ARG(_STAT_VER, file_name, statbuf);
@@ -1413,6 +1414,7 @@ int renameat(int olddir_fd, const char *oldpath,
        return WRAP_MKNODAT MKNODAT_ARG(_STAT_VER, dir_fd, pathname, mode, &dev);
     }
   #endif
+#endif /* __GLIBC__ */
 #endif /* GLIBC_PREREQ */
 
 
