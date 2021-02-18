@@ -182,6 +182,9 @@ AC_MSG_CHECKING([for type of arg of __xmknod])
        #include <fcntl.h>
        #include <unistd.h>
   ]], [[
+#ifndef __GLIBC__
+#error no extra *
+#endif
        int __xmknod  ( int ver,
                        const char *pathname ,
                        mode_t  mode ,  dev_t *dev);
@@ -208,6 +211,9 @@ AC_MSG_CHECKING([for type of arg of __xmknodat])
        #include <fcntl.h>
        #include <unistd.h>
   ]], [[
+#ifndef __GLIBC__
+#error no extra *
+#endif
        int __xmknodat  ( int ver,
                          int dirfd,
                          const char *pathname ,
