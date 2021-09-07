@@ -48,7 +48,9 @@ typedef uint32_t fake_gid_t;
 typedef uint32_t fake_mode_t;
 typedef uint32_t fake_nlink_t;
 
+#if __SUNPRO_C
 #pragma pack(4)
+#endif
 struct fakestat {
 	fake_uid_t   uid;
 	fake_gid_t   gid;
@@ -58,32 +60,42 @@ struct fakestat {
 	fake_mode_t  mode;
 	fake_nlink_t nlink;
 } FAKEROOT_ATTR(packed);
+#if __SUNPRO_C
 #pragma pack()
+#endif
 
 #define MAX_IPC_BUFFER_SIZE 1024
 
+#if __SUNPRO_C
 #pragma pack(4)
+#endif
 struct fakexattr {
 	uint32_t   buffersize;
 	char       buf[MAX_IPC_BUFFER_SIZE];
 	int32_t    flags_rc; /* flags from setxattr. Return code on round trip */
 } FAKEROOT_ATTR(packed);
+#if __SUNPRO_C
 #pragma pack()
+#endif
 
+#if __SUNPRO_C
 #pragma pack(4)
+#endif
 struct fake_msg {
 #ifndef FAKEROOT_FAKENET
-	int64_t mtype; /* message type in SYSV message sending */
+	long mtype; /* message type in SYSV message sending */
 #endif
 	func_id_t       id; /* the requested function */
 #ifndef FAKEROOT_FAKENET
 	pid_t pid;
-	int32_t serial;
+	int serial;
 #endif
 	struct fakestat st;
 	struct fakexattr xattr;
 	uint32_t        remote;
 } FAKEROOT_ATTR(packed);
+#if __SUNPRO_C
 #pragma pack()
+#endif
 
 #endif
