@@ -146,7 +146,7 @@ setfsgid;gid_t;(gid_t fsgid);(fsgid)
 initgroups;int;(const char *user, INITGROUPS_SECOND_ARG group);(user, group)
 getgroups;int;(int size, gid_t list[]);(size, list)
 setgroups;int;(SETGROUPS_SIZE_TYPE size, const gid_t *list);(size, list)
-setpriority;int;(int which, int who, int prio);(which, who, prio)
+setpriority;int;(int which, id_t who, int prio);(which, who, prio)
 #ifdef HAVE_CAPSET
 capset;int;(cap_user_header_t hdrp, const cap_user_data_t datap);(hdrp, datap)
 #endif /* HAVE_CAPSET */
@@ -198,7 +198,7 @@ fchownat;int;(int dir_fd, const char *path, uid_t owner, gid_t group, int flags)
 mkdirat;int;(int dir_fd, const char *pathname, mode_t mode);(dir_fd, pathname, mode)
 #endif /* HAVE_MKDIRAT */
 #ifdef HAVE_OPENAT
-openat;int;(int dir_fd, const char *pathname, int flags);(dir_fd, pathname, flags)
+openat;int;(int dir_fd, const char *pathname, int flags, mode_t mode);(dir_fd, pathname, flags, mode);;(int dir_fd, const char *pathname, int flags, ...)
 #endif /* HAVE_OPENAT */
 #ifdef HAVE_RENAMEAT
 renameat;int;(int olddir_fd, const char *oldpath, int newdir_fd, const char *newpath);(olddir_fd, oldpath, newdir_fd, newpath)
