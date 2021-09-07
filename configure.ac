@@ -50,9 +50,17 @@ int main() {
     return 0;
   }
 
-}]])],[ac_cv_use_ipc=sysv],[ac_cv_use_ipc=tcp],[])
+}]])],[ac_cv_use_ipc=sysv],[ac_cv_use_ipc=tcp],[ac_cv_use_ipc=cross])
 
-  if test $ac_cv_use_ipc = "tcp"; then
+  if test $ac_cv_use_ipc = cross; then
+    if test "$host_os" = linux-gnu; then
+      ac_cv_use_ipc=sysv
+      AC_MSG_RESULT([cross, guessing yes])
+    else
+      (set -o posix; set)
+      AC_MSG_ERROR([cross compiling, unknown result for $host_os])
+    fi
+  elif test $ac_cv_use_ipc = "tcp"; then
     AC_MSG_RESULT([No, using TCP])
   else
     AC_MSG_RESULT([Yes])
