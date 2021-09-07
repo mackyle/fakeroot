@@ -90,6 +90,22 @@
 #define SEND_GET_XATTR64(a,b,c) send_get_xattr64(a,b)
 #endif
 
+#ifndef _STAT_VER
+ #if defined (__aarch64__)
+  #define _STAT_VER 0
+ #elif defined (__powerpc__) && __WORDSIZE == 64
+  #define _STAT_VER 1
+ #elif defined (__riscv) && __riscv_xlen==64
+  #define _STAT_VER 0
+ #elif defined (__s390x__)
+  #define _STAT_VER 1
+ #elif defined (__x86_64__)
+  #define _STAT_VER 1
+ #else
+  #define _STAT_VER 3
+ #endif
+#endif
+
 /*
    These INT_* (which stands for internal) macros should always be used when
    the fakeroot library owns the storage of the stat variable.
@@ -112,8 +128,16 @@
 #define INT_SEND_STAT(a,b) SEND_STAT(a,b,_STAT_VER)
 #define INT_SEND_GET_XATTR(a,b) SEND_GET_XATTR(a,b,_STAT_VER)
 #define INT_SEND_GET_STAT(a,b) SEND_GET_STAT(a,b)
+
+/* 10.10 uses id_t in getpriority/setpriority calls, so pretend
+   id_t is used everywhere, just happens to be int on some OSes */
+#ifndef _ID_T
+#define _ID_T
+typedef int id_t;
+#endif
 #endif
 
+#include <sys/types.h>
 #include <stdlib.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
@@ -125,7 +149,6 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <errno.h>
-#include <sys/types.h>
 #ifdef HAVE_SYS_ACL_H
 #include <sys/acl.h>
 #endif /* HAVE_SYS_ACL_H */
@@ -187,6 +210,15 @@ extern int unsetenv (const char *name);
 #undef __fxstat64
 #undef __lxstat64
 #undef _FILE_OFFSET_BITS
+
+
+#ifndef AT_EMPTY_PATH
+#define AT_EMPTY_PATH 0
+#endif
+
+#ifndef AT_NO_AUTOMOUNT
+#define AT_NO_AUTOMOUNT 0
+#endif
 
 /*
 // next_wrap_st:
@@ -1342,6 +1374,56 @@ int renameat(int olddir_fd, const char *oldpath,
 #endif /* HAVE_FSTATAT */
 
 
+#if defined(__GLIBC__)
+#if __GLIBC_PREREQ(2,33)
+/* Glibc 2.33 exports symbols for these functions in the shared lib */
+  int lstat(const char *file_name, struct stat *statbuf) {
+     return WRAP_LSTAT LSTAT_ARG(_STAT_VER, file_name, statbuf);
+  }
+  int stat(const char *file_name, struct stat *st) {
+     return WRAP_STAT STAT_ARG(_STAT_VER, file_name, st);
+  }
+  int fstat(int fd, struct stat *st) {
+     return WRAP_FSTAT FSTAT_ARG(_STAT_VER, fd, st);
+  }
+
+  #ifdef HAVE_FSTATAT
+    int fstatat(int dir_fd, const char *path, struct stat *st, int flags) {
+       return WRAP_FSTATAT FSTATAT_ARG(_STAT_VER, dir_fd, path, st, flags);
+    }
+  #endif
+
+  #ifdef STAT64_SUPPORT
+    int lstat64(const char *file_name, struct stat64 *st) {
+       return WRAP_LSTAT64 LSTAT64_ARG(_STAT_VER, file_name, st);
+    }
+    int stat64(const char *file_name, struct stat64 *st) {
+       return WRAP_STAT64 STAT64_ARG(_STAT_VER, file_name, st);
+    }
+    int fstat64(int fd, struct stat64 *st) {
+       return WRAP_FSTAT64 FSTAT64_ARG(_STAT_VER, fd, st);
+    }
+
+    #ifdef HAVE_FSTATAT
+      int fstatat64(int dir_fd, const char *path, struct stat64 *st, int flags) {
+	 return WRAP_FSTATAT64 FSTATAT64_ARG(_STAT_VER, dir_fd, path, st, flags);
+      }
+    #endif
+  #endif
+
+  int mknod(const char *pathname, mode_t mode, dev_t dev) {
+     return WRAP_MKNOD MKNOD_ARG(_STAT_VER, pathname, mode, &dev);
+  }
+
+  #if defined(HAVE_FSTATAT) && defined(HAVE_MKNODAT)
+    int mknodat(int dir_fd, const char *pathname, mode_t mode, dev_t dev) {
+       return WRAP_MKNODAT MKNODAT_ARG(_STAT_VER, dir_fd, pathname, mode, &dev);
+    }
+  #endif
+#endif /* __GLIBC__ */
+#endif /* GLIBC_PREREQ */
+
+
 #ifdef FAKEROOT_FAKENET
 pid_t fork(void)
 {
@@ -1911,7 +1993,7 @@ ssize_t fremovexattr(int fd, const char *name)
 }
 #endif /* HAVE_FREMOVEXATTR */
 
-int setpriority(int which, int who, int prio){
+int setpriority(int which, id_t who, int prio){
   if (fakeroot_disabled)
     return next_setpriority(which, who, prio);
   next_setpriority(which, who, prio);
@@ -2008,11 +2090,7 @@ FTSENT *fts_read(FTS *ftsp) {
             || r->fts_info == FTS_NS || r->fts_info == FTS_NSOK))
     r->fts_statp = NULL;  /* Otherwise fts_statp may be a random pointer */
   if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
-# if defined(STAT64_SUPPORT) && !defined(__APPLE__)
-    SEND_GET_STAT64(r->fts_statp, _STAT_VER);
-# else
     SEND_GET_STAT(r->fts_statp, _STAT_VER);
-# endif
   }
 
   return r;
@@ -2031,11 +2109,7 @@ FTSENT *fts_children(FTS *ftsp, int options) {
   first=next_fts_children(ftsp, options);
   for(r = first; r; r = r->fts_link) {
     if(r && r->fts_statp) {  /* Should we bother checking fts_info here? */
-# if defined(STAT64_SUPPORT) && !defined(__APPLE__)
-      SEND_GET_STAT64(r->fts_statp, _STAT_VER);
-# else
       SEND_GET_STAT(r->fts_statp, _STAT_VER);
-# endif
     }
   }
 
@@ -2467,7 +2541,7 @@ int statx (int dirfd, const char *path, int flags, unsigned int mask, struct sta
 
 #ifdef LIBFAKEROOT_DEBUGGING
   if (fakeroot_debug) {
-    fprintf(stderr, "statx fd %d\n", fd);
+    fprintf(stderr, "statx fd %d\n", dirfd);
   }
 #endif /* LIBFAKEROOT_DEBUGGING */
   r=INT_NEXT_FSTATAT(dirfd, path, &st, flags);
@@ -2518,5 +2592,21 @@ int sysinfo(int command, char *buf, long count)
     {
         return next_sysinfo(command, buf, count);
     }
+}
+#endif
+
+#ifdef HAVE_OPENAT
+int openat(int dir_fd, const char *pathname, int flags, ...)
+{
+	mode_t mode;
+
+    if (flags & O_CREAT) {
+        va_list args;
+        va_start(args, flags);
+        mode = va_arg(args, int);
+        va_end(args);
+    }
+
+    return next_openat(dir_fd, pathname, flags, mode);
 }
 #endif

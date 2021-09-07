@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([fakeroot],[1.25.3],[clint@debian.org],[fakeroot])
-AC_PREREQ([2.69])
+AC_INIT([fakeroot],[1.26],[clint@debian.org],[fakeroot])
+AC_PREREQ([2.71])
 AC_CONFIG_MACRO_DIR([build-aux])
 LT_PREREQ(2.1a)
 AC_CANONICAL_TARGET
@@ -29,7 +29,7 @@ if test $ac_cv_use_ipc = "sysv"; then
   AC_MSG_CHECKING([whether SysV IPC message queues are actually working on the host])
 
   AC_LANG_PUSH(C)
-  AC_TRY_RUN([
+  AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
@@ -50,7 +50,7 @@ int main() {
     return 0;
   }
 
-}], [ac_cv_use_ipc=sysv], [ac_cv_use_ipc=tcp])
+}]])],[ac_cv_use_ipc=sysv],[ac_cv_use_ipc=tcp],[])
 
   if test $ac_cv_use_ipc = "tcp"; then
     AC_MSG_RESULT([No, using TCP])
@@ -95,7 +95,6 @@ AC_SUBST(signal)
 
 dnl Checks for header files.
 AC_HEADER_DIRENT
-AC_HEADER_STDC
 AC_CHECK_HEADERS(fcntl.h unistd.h features.h sys/feature_tests.h pthread.h stdint.h inttypes.h grp.h endian.h sys/sysmacros.h sys/socket.h sys/acl.h sys/capability.h sys/xattr.h fts.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
@@ -146,6 +145,7 @@ for first in size_t int; do
 #include <sys/types.h>
 #endif
 #include <unistd.h>
+#include <stdio.h>
 #ifdef HAVE_GRP_H
 #include <grp.h>
 #endif
@@ -181,15 +181,18 @@ AC_MSG_CHECKING([for type of arg of __xmknod])
        #include <fcntl.h>
        #include <unistd.h>
   ]], [[
+#ifndef __GLIBC__
+#error no extra *
+#endif
        int __xmknod  ( int ver,
                        const char *pathname ,
-                       mode_t  mode ,  dev_t dev);
+                       mode_t  mode ,  dev_t *dev);
   ]])],[
-   AC_DEFINE(XMKNOD_FRTH_ARG,)
-   AC_MSG_RESULT([no extra *])
-  ],[
    AC_DEFINE(XMKNOD_FRTH_ARG,[*])
    AC_MSG_RESULT([needs *])
+  ],[
+   AC_DEFINE(XMKNOD_FRTH_ARG,)
+   AC_MSG_RESULT([no extra *])
 
   ])
 
@@ -207,16 +210,19 @@ AC_MSG_CHECKING([for type of arg of __xmknodat])
        #include <fcntl.h>
        #include <unistd.h>
   ]], [[
+#ifndef __GLIBC__
+#error no extra *
+#endif
        int __xmknodat  ( int ver,
                          int dirfd,
                          const char *pathname ,
-                         mode_t  mode ,  dev_t dev);
+                         mode_t  mode ,  dev_t *dev);
   ]])],[
-   AC_DEFINE(XMKNODAT_FIFTH_ARG,)
-   AC_MSG_RESULT([no extra *])
-  ],[
    AC_DEFINE(XMKNODAT_FIFTH_ARG,[*])
    AC_MSG_RESULT([needs *])
+  ],[
+   AC_DEFINE(XMKNODAT_FIFTH_ARG,)
+   AC_MSG_RESULT([no extra *])
 
   ])
 
