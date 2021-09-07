@@ -2,7 +2,6 @@ Source: fakeroot
 Section: utils
 Priority: optional
 Build-Depends: debhelper-compat (= 13),
-               dh-autoreconf,
                libacl1-dev,
                libcap-dev [linux-any],
                libcap2-bin [linux-any],

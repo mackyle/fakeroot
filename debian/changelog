@@ -1,3 +1,21 @@
+fakeroot (1.26-1) unstable; urgency=medium
+
+  [ Helmut Grohne ]
+  * Annotate sharutils dependency <!nocheck>. (Closes: #982188)
+
+  [ Clint Adams ]
+  * New upstream version.
+
+ -- Clint Adams <clint@debian.org>  Mon, 06 Sep 2021 21:41:37 -0400
+
+fakeroot (1.25.3-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * add patch to revert commit "Use fixed-width members in fake_msg"
+    closes: #973405
+
+ -- Johannes 'josch' Schauer <josch@debian.org>  Tue, 10 Nov 2020 09:36:35 +0100
+
 fakeroot (1.25.3-1) unstable; urgency=medium
 
   * Patch from Aurelien Jarno to fix statx wrapper on mipsel.
