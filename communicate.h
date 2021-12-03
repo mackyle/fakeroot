@@ -91,6 +91,10 @@
 # include <inttypes.h>
 #endif
 
+#if __DARWIN_ONLY_64_BIT_INO_T
+struct stat64 __DARWIN_STRUCT_STAT64;
+#endif
+
 #ifndef FAKEROOT_FAKENET
 # define FAKEROOTKEY_ENV          "FAKEROOTKEY"
 #endif /* ! FAKEROOT_FAKENET */
