@@ -18,7 +18,11 @@
    In this file, we want 'struct stat' to have a 32-bit 'ino_t'.
    We use 'struct stat64' when we need a 64-bit 'ino_t'.
 */
-#define _DARWIN_NO_64_BIT_INODE
+# if __DARWIN_ONLY_64_BIT_INO_T
+#  define _DARWIN_USE_64_BIT_INODE
+# else
+#  define _DARWIN_NO_64_BIT_INODE
+# endif
 
 /*
    This file is for 32-bit symbols which have the "$UNIX2003" version, i.e.

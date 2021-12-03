@@ -36,6 +36,8 @@
 #include <fts.h>
 #endif /* HAVE_FTS_H */
 
+void load_library_symbols(void);
+
 #include "wrapped.h"
 #include "wraptmpf.h"
 #include "wrapdef.h"
