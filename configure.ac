@@ -573,11 +573,6 @@ AH_VERBATIM([WRAP_STAT],
 ])
 dnl kludge end
 
-dnl check for b0rked Solaris (and other shells) and find one that works
-_AS_DETECT_REQUIRED([echo $(echo ok) > config.$$ 2>/dev/null
-		      j=`cat config.$$`
-		      test "x$j" = "xok"])
-
 case "$target_cpu:$target_os" in
 	(alpha*:linux*)
 	AH_TEMPLATE([STUPID_ALPHA_HACK], [stat-struct conversion hackery])
