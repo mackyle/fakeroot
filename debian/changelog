@@ -1,3 +1,11 @@
+fakeroot (1.26-1.1) unstable; urgency=high
+
+  * Non-maintainer upload
+  * Also wrap the "stat" library call. Closes: #1001961
+  * Work around segfault on ppc64el. Closes: #995393
+
+ -- Christoph Biedl <debian.axhn@manchmal.in-ulm.de>  Thu, 23 Dec 2021 08:19:30 +0100
+
 fakeroot (1.26-1) unstable; urgency=medium
 
   [ Helmut Grohne ]
