@@ -1,3 +1,10 @@
+fakeroot (1.26-1.2) unstable; urgency=high
+
+  * Non-maintainer upload
+  * Fix segfault on ppc64el, take 2. Closes: #995393
+
+ -- Christoph Biedl <debian.axhn@manchmal.in-ulm.de>  Mon, 03 Jan 2022 18:49:27 +0100
+
 fakeroot (1.26-1.1) unstable; urgency=high
 
   * Non-maintainer upload

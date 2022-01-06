@@ -62,7 +62,7 @@ override_dh_auto_install:
 	echo /$(LIB_DIR)/libfakeroot > debian/tmp/etc/ld.so.conf.d/fakeroot-$(DEB_HOST_MULTIARCH).conf
 
 override_dh_auto_clean:
-	rm -rf obj-sysv obj-tcp
+	rm -rf obj-sysv obj-tcp wrapdef.h wrapstruct.h
 	dh_autoreconf_clean
 	rm -f dhar-stamp
 	$(RM) debian/fakeroot.postinst
