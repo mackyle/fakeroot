@@ -481,6 +481,10 @@ static void open_comm_sd(void)
   if (fcntl(comm_sd, F_SETFD, FD_CLOEXEC) < 0)
     fail("fcntl(F_SETFD, FD_CLOEXEC)");
 
+  int val = 1;
+  if (setsockopt(comm_sd, SOL_TCP, TCP_NODELAY, &val, sizeof (val)) < 0)
+      fail("setsockopt(TCP_NODELAY)");
+
   while (1) {
     if (connect(comm_sd, get_addr(), sizeof (struct sockaddr_in)) < 0) {
       if (errno != EINTR)
