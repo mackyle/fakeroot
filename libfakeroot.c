@@ -38,7 +38,12 @@
    In this file, we want 'struct stat' to have a 32-bit 'ino_t'.
    We use 'struct stat64' when we need a 64-bit 'ino_t'.
 */
-#define _DARWIN_NO_64_BIT_INODE
+# include <sys/types.h>
+# if __DARWIN_ONLY_64_BIT_INO_T
+#  define _DARWIN_USE_64_BIT_INODE
+# else
+#  define _DARWIN_NO_64_BIT_INODE
+# endif
 
 /* The helper _unix2003 version of this file calls a few functions in this file
    that are marked with static_nonapple so that needs to become private instead

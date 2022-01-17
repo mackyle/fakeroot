@@ -24,7 +24,12 @@
    In this file, we want 'struct stat' to have a 32-bit 'ino_t'.
    We use 'struct stat64' when we need a 64-bit 'ino_t'.
 */
-#define _DARWIN_NO_64_BIT_INODE
+# include <sys/types.h>
+# if __DARWIN_ONLY_64_BIT_INO_T
+#  define _DARWIN_USE_64_BIT_INODE
+# else
+#  define _DARWIN_NO_64_BIT_INODE
+# endif
 #endif
 
 #include "communicate.h"
@@ -475,6 +480,10 @@ static void open_comm_sd(void)
 
   if (fcntl(comm_sd, F_SETFD, FD_CLOEXEC) < 0)
     fail("fcntl(F_SETFD, FD_CLOEXEC)");
+
+  int val = 1;
+  if (setsockopt(comm_sd, SOL_TCP, TCP_NODELAY, &val, sizeof (val)) < 0)
+      fail("setsockopt(TCP_NODELAY)");
 
   while (1) {
     if (connect(comm_sd, get_addr(), sizeof (struct sockaddr_in)) < 0) {
