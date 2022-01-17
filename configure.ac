@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([fakeroot],[1.26],[clint@debian.org],[fakeroot])
+AC_INIT([fakeroot],[1.27],[clint@debian.org],[fakeroot])
 AC_PREREQ([2.71])
 AC_CONFIG_MACRO_DIR([build-aux])
 LT_PREREQ(2.1a)
@@ -50,9 +50,17 @@ int main() {
     return 0;
   }
 
-}]])],[ac_cv_use_ipc=sysv],[ac_cv_use_ipc=tcp],[])
+}]])],[ac_cv_use_ipc=sysv],[ac_cv_use_ipc=tcp],[ac_cv_use_ipc=cross])
 
-  if test $ac_cv_use_ipc = "tcp"; then
+  if test $ac_cv_use_ipc = cross; then
+    if test "$host_os" = linux-gnu; then
+      ac_cv_use_ipc=sysv
+      AC_MSG_RESULT([cross, guessing yes])
+    else
+      (set -o posix; set)
+      AC_MSG_ERROR([cross compiling, unknown result for $host_os])
+    fi
+  elif test $ac_cv_use_ipc = "tcp"; then
     AC_MSG_RESULT([No, using TCP])
   else
     AC_MSG_RESULT([Yes])
@@ -564,11 +572,6 @@ AH_VERBATIM([WRAP_STAT],
 #define NEXT_MKNODAT_NOARG  next___amknodat
 ])
 dnl kludge end
-
-dnl check for b0rked Solaris (and other shells) and find one that works
-_AS_DETECT_REQUIRED([echo $(echo ok) > config.$$ 2>/dev/null
-		      j=`cat config.$$`
-		      test "x$j" = "xok"])
 
 case "$target_cpu:$target_os" in
 	(alpha*:linux*)
