@@ -1,3 +1,11 @@
+fakeroot (1.28-1) unstable; urgency=medium
+
+  * New upstream version
+    - includes patch from Samuel Thibault to handle _STAT_VER on
+      GNU/Hurd.  closes: #1006151.
+
+ -- Clint Adams <clint@debian.org>  Fri, 04 Mar 2022 09:22:15 -0500
+
 fakeroot (1.27-1) unstable; urgency=medium
 
   * New upstream version
