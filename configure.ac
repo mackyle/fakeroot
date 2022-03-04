@@ -129,6 +129,7 @@ for zeroth in ssize_t int; do
   for second in void char; do
     for third in size_t int; do
       AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <unistd.h>
+#include <stdio.h>
         $zeroth readlink(const char *path, $second *buf, $third bufsiz);]], [[puts("hello, world");]])],
 	[readlink_retval=$zeroth
 	 readlink_buf_arg=$second
