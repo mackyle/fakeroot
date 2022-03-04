@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([fakeroot],[1.27],[clint@debian.org],[fakeroot])
+AC_INIT([fakeroot],[1.28],[clint@debian.org],[fakeroot])
 AC_PREREQ([2.71])
 AC_CONFIG_MACRO_DIR([build-aux])
 LT_PREREQ(2.1a)
@@ -129,6 +129,7 @@ for zeroth in ssize_t int; do
   for second in void char; do
     for third in size_t int; do
       AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <unistd.h>
+#include <stdio.h>
         $zeroth readlink(const char *path, $second *buf, $third bufsiz);]], [[puts("hello, world");]])],
 	[readlink_retval=$zeroth
 	 readlink_buf_arg=$second
