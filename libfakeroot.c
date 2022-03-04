@@ -96,18 +96,22 @@
 #endif
 
 #ifndef _STAT_VER
- #if defined (__aarch64__)
-  #define _STAT_VER 0
- #elif defined (__powerpc__) && __WORDSIZE == 64
-  #define _STAT_VER 1
- #elif defined (__riscv) && __riscv_xlen==64
-  #define _STAT_VER 0
- #elif defined (__s390x__)
-  #define _STAT_VER 1
- #elif defined (__x86_64__)
-  #define _STAT_VER 1
- #else
-  #define _STAT_VER 3
+ #if defined __linux__
+  #if defined (__aarch64__)
+   #define _STAT_VER 0
+  #elif defined (__powerpc__) && __WORDSIZE == 64
+   #define _STAT_VER 1
+  #elif defined (__riscv) && __riscv_xlen==64
+   #define _STAT_VER 0
+  #elif defined (__s390x__)
+   #define _STAT_VER 1
+  #elif defined (__x86_64__)
+   #define _STAT_VER 1
+  #else
+   #define _STAT_VER 3
+  #endif
+ #elif defined __GNU__
+   #define _STAT_VER 0
  #endif
 #endif
 
