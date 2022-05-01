@@ -197,9 +197,6 @@ fchownat;int;(int dir_fd, const char *path, uid_t owner, gid_t group, int flags)
 #ifdef HAVE_MKDIRAT
 mkdirat;int;(int dir_fd, const char *pathname, mode_t mode);(dir_fd, pathname, mode)
 #endif /* HAVE_MKDIRAT */
-#ifdef HAVE_OPENAT
-openat;int;(int dir_fd, const char *pathname, int flags, mode_t mode);(dir_fd, pathname, flags, mode);;(int dir_fd, const char *pathname, int flags, ...)
-#endif /* HAVE_OPENAT */
 #ifdef HAVE_RENAMEAT
 renameat;int;(int olddir_fd, const char *oldpath, int newdir_fd, const char *newpath);(olddir_fd, oldpath, newdir_fd, newpath)
 #endif /* HAVE_RENAMEAT */
