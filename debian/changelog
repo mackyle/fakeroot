@@ -1,3 +1,11 @@
+fakeroot (1.29-1) unstable; urgency=medium
+
+  * New upstream version
+    - includes patch from Matthias Ellert to handle _STAT_VER on
+       ia64.  closes: #1011234.
+
+ -- Clint Adams <clint@debian.org>  Sun, 22 May 2022 13:18:30 -0400
+
 fakeroot (1.28-1) unstable; urgency=medium
 
   * New upstream version
