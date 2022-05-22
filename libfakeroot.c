@@ -99,6 +99,8 @@
  #if defined __linux__
   #if defined (__aarch64__)
    #define _STAT_VER 0
+  #elif defined (__ia64__)
+   #define _STAT_VER 1
   #elif defined (__powerpc__) && __WORDSIZE == 64
    #define _STAT_VER 1
   #elif defined (__riscv) && __riscv_xlen==64
@@ -2601,21 +2603,5 @@ int sysinfo(int command, char *buf, long count)
     {
         return next_sysinfo(command, buf, count);
     }
-}
-#endif
-
-#ifdef HAVE_OPENAT
-int openat(int dir_fd, const char *pathname, int flags, ...)
-{
-	mode_t mode;
-
-    if (flags & O_CREAT) {
-        va_list args;
-        va_start(args, flags);
-        mode = va_arg(args, int);
-        va_end(args);
-    }
-
-    return next_openat(dir_fd, pathname, flags, mode);
 }
 #endif
