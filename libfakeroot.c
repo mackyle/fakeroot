@@ -99,6 +99,8 @@
  #if defined __linux__
   #if defined (__aarch64__)
    #define _STAT_VER 0
+  #elif defined (__ia64__)
+   #define _STAT_VER 1
   #elif defined (__powerpc__) && __WORDSIZE == 64
    #define _STAT_VER 1
   #elif defined (__riscv) && __riscv_xlen==64
