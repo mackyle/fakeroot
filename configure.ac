@@ -7,6 +7,7 @@ AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE
 AM_MAINTAINER_MODE
 AC_CONFIG_HEADERS([config.h])
+AC_PROG_CPP
 AC_PROG_MAKE_SET
 LT_INIT
 LT_LANG(C)
@@ -590,11 +591,11 @@ CPPFLAGS="$CPPFLAGS -I\$(srcdir)/statconv/glibc/linux/alpha"
 esac
 
 dnl AH_TEMPLATE([MACOSX], [is __APPLE__ defined by the compiler])
-AC_MSG_CHECKING([for MacOS X/Darwin])
+AC_MSG_CHECKING([for macOS/Darwin])
   AC_PREPROC_IFELSE(
     [AC_LANG_PROGRAM([[
        #ifndef __APPLE__
-       #error We are somewhere better
+       #error Not Apple
        #endif
   ]])],
     [macosx=true
