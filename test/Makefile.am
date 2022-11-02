@@ -2,6 +2,7 @@ AUTOMAKE_OPTIONS=foreign
 
 TESTS =						\
   t.chmod_dev					\
+  t.chown					\
   t.cp-a					\
   t.echoarg					\
   t.falsereturn					\
