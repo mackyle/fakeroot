@@ -1,0 +1,15 @@
+#!/bin/sh
+. ./defs || exit 1
+
+mkdir $tmp
+
+# starting with glibc 2.34, __stat64_time64 is used on 32 bit architectures
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1023286
+echo "echo foo > $tmp/bar &&
+      echo baz > $tmp/blub &&
+      chown --reference=$tmp/bar $tmp/blub &&
+      stat -c owner:%u $tmp/blub" > $tmp/sh
+run_fakeroot -- \
+    ${posixshell} $tmp/sh > $tmp/out
+cat $tmp/out > /tmp/foo
+grep "^owner:0$" /tmp/foo
