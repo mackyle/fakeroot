@@ -9,8 +9,10 @@
 /**/									  */
 /* each line of this file lists 4 fields, seperated by a ";".		  */
 /* The first field is the name of the wrapped function, then it's return  */
-/* value. After that come the function arguments with types, and the last */
+/* value. After that come the function arguments with types, and the fifth */
 /* field contains the function arguments without types.                   */
+/* A sixth field is a special needed when wrapping the openat syscall.    */
+/* Otherwise it's like the third (function arguments with types).         */
 /**/
 
 /* __*xstat are used on glibc systems instead of just *xstat. */
