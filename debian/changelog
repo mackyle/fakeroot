@@ -1,3 +1,11 @@
+fakeroot (1.30.1-1) unstable; urgency=medium
+
+  * New upstream version.
+    - fixes and extends time64 support to fstatat64.
+      closes: #1023286.
+
+ -- Clint Adams <clint@debian.org>  Thu, 03 Nov 2022 15:04:55 -0400
+
 fakeroot (1.30-1) unstable; urgency=medium
 
   * New upstream version.
