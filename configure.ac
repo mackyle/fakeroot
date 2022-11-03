@@ -361,9 +361,27 @@ dnl  Solaris <=9 : _stat
 dnl  Solaris 10  : _xstat
 dnl  Digital Unix: stat
 
+time64_hack=no
+AH_TEMPLATE([TIME64_HACK], [time64 shuffle])
+AC_MSG_CHECKING([if we need to cope with time64])
+AC_EGREP_CPP([time64],[
+#include <bits/wordsize.h>
+#if __WORDSIZE == 32
+#define __USE_TIME_BITS64 1
+#include <sys/stat.h>
+stat
+#else
+NO
+#endif
+],
+       [AC_MSG_RESULT([yes]); AC_DEFINE(TIME64_HACK)
+time64_hack=yes
+],
+       [AC_MSG_RESULT([no]);])
+
 :>fakerootconfig.h.tmp
 
-for SEARCH in %stat f%stat l%stat f%statat %stat64 f%stat64 l%stat64 f%statat64 %mknod %mknodat %stat64_time64 f%stat64_time64 l%stat64_time64; do
+for SEARCH in %stat f%stat l%stat f%statat %stat64 f%stat64 l%stat64 f%statat64 %mknod %mknodat; do
   FUNC=`echo $SEARCH|sed -e 's/.*%//'`
   PRE=`echo $SEARCH|sed -e 's/%.*//'`
   FOUND=
@@ -423,6 +441,41 @@ dnl    FOUND=$WRAPPED
     fi
   done
 done
+
+if test "x$time64_hack" = "xyes"; then
+for SEARCH in stat64_time64 fstat64_time64 lstat64_time64 fstatat64_time64; do
+  FOUND=
+  for WRAPPED in __${SEARCH} ${SEARCH}; do
+    AC_CHECK_FUNCS($WRAPPED,FOUND=$WRAPPED)
+    if test -n "$FOUND"; then
+      PF=[`echo ${SEARCH}| tr '[a-z]' '[A-Z]'`]
+      DEFINE_WRAP=[`echo wrap_${SEARCH}| tr '[a-z]' '[A-Z]'`]
+      DEFINE_NEXT=[`echo wrap_${FOUND}| tr '[a-z]' '[A-Z]'`]
+      DEFINE_ARG=[`echo wrap_${FOUND}| tr '[a-z]' '[A-Z]'`]
+      AC_DEFINE_UNQUOTED(WRAP_${PF}, $FOUND)
+      AC_DEFINE_UNQUOTED(WRAP_${PF}_RAW, $FOUND)
+      AC_DEFINE_UNQUOTED(WRAP_${PF}_QUOTE, "$FOUND")
+      AC_DEFINE_UNQUOTED(TMP_${PF}, tmp_$FOUND)
+      AC_DEFINE_UNQUOTED(NEXT_${PF}_NOARG, next_$FOUND)
+      DEF_BEGIN=""
+      case "$SEARCH" in
+	     (*statat64_time64)
+	     DEF_END=",d,e"
+	     ;;
+	     (*)
+	     DEF_END=""
+	     ;;
+      esac
+      {
+       echo "#define NEXT_${PF}(a,b,c${DEF_END}) next_$FOUND(${DEF_BEGIN}b,c${DEF_END})"
+       echo "#define ${PF}_ARG(a,b,c${DEF_END}) (${DEF_BEGIN}b,c${DEF_END})"
+      } >>fakerootconfig.h.tmp
+
+      break
+    fi
+  done
+done
+fi
 
 if test -r fakerootconfig.h
 then
@@ -572,6 +625,31 @@ AH_VERBATIM([WRAP_STAT],
 #define WRAP_MKNODAT_RAW  __amknodat
 #define TMP_MKNODAT  __amknodat
 #define NEXT_MKNODAT_NOARG  next___amknodat
+
+#define WRAP_STAT64_TIME64_QUOTE  __astat64_time64
+#define WRAP_STAT64_TIME64  __astat64_time64
+#define WRAP_STAT64_TIME64_RAW  __astat64_time64
+#define TMP_STAT64_TIME64  __astat64_time64
+#define NEXT_STAT64_TIME64_NOARG  next___astat64_time64
+
+#define WRAP_LSTAT64_TIME64_QUOTE  __astat64_time64
+#define WRAP_LSTAT64_TIME64  __astat64_time64
+#define WRAP_LSTAT64_TIME64_RAW  __astat64_time64
+#define TMP_LSTAT64_TIME64  __astat64_time64
+#define NEXT_LSTAT64_TIME64_NOARG  next___astat64_time64
+
+#define WRAP_FSTAT64_TIME64_QUOTE  __astat64_time64
+#define WRAP_FSTAT64_TIME64  __astat64_time64
+#define WRAP_FSTAT64_TIME64_RAW  __astat64_time64
+#define TMP_FSTAT64_TIME64  __astat64_time64
+#define NEXT_FSTAT64_TIME64_NOARG  next___astat64_time64
+
+#define WRAP_FSTATAT64_TIME64_QUOTE  __astatat64_time64
+#define WRAP_FSTATAT64_TIME64  __astat64_time64
+#define WRAP_FSTATAT64_TIME64_RAW  __astat64_time64
+#define TMP_FSTATAT64_TIME64  __astat64_time64
+#define NEXT_FSTATAT64_TIME64_NOARG  next___astat64_time64
+
 ])
 dnl kludge end
 
