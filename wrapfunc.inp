@@ -250,3 +250,10 @@ statx;int;(int dir_fd, const char *pathname, int flags, unsigned int mask, struc
 #ifdef __sun
 sysinfo;int;(int command, char *buf, long count);(command, buf, count)
 #endif
+
+#ifdef TIME64_HACK
+WRAP_LSTAT64_TIME64;int;LSTAT64_TIME64_ARG(int ver, const char *file_name, struct stat64 *buf);LSTAT64_TIME64_ARG(ver, file_name, buf);LSTAT64_TIME64
+WRAP_STAT64_TIME64;int;STAT64_TIME64_ARG(int ver, const char *file_name, struct stat64 *buf);STAT64_TIME64_ARG(ver, file_name, buf);STAT64_TIME64
+WRAP_FSTAT64_TIME64;int;FSTAT64_TIME64_ARG(int ver, int fd, struct stat64 *buf);FSTAT64_TIME64_ARG(ver, fd, buf);FSTAT64_TIME64
+WRAP_FSTATAT64_TIME64;int;FSTATAT64_TIME64_ARG(int ver, int dir_fd, const char *path, struct stat64 *buf, int flags);FSTATAT64_TIME64_ARG(ver, dir_fd, path, buf, flags);FSTATAT64_TIME64
+#endif /* TIME64_HACK */
