@@ -1,4 +1,3 @@
 fix-shell-in-fakeroot
 also-wrap-stat-library-call.patch
 fix-prototype-generation.patch
-0001-test-t.chown-test-for-__stat64_time64-on-32bit-arche.patch
