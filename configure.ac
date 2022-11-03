@@ -363,11 +363,11 @@ dnl  Digital Unix: stat
 
 :>fakerootconfig.h.tmp
 
-for SEARCH in %stat f%stat l%stat f%statat %stat64 f%stat64 l%stat64 f%statat64 %mknod %mknodat; do
+for SEARCH in %stat f%stat l%stat f%statat %stat64 f%stat64 l%stat64 f%statat64 %mknod %mknodat %stat64_time64 f%stat64_time64 l%stat64_time64; do
   FUNC=`echo $SEARCH|sed -e 's/.*%//'`
   PRE=`echo $SEARCH|sed -e 's/%.*//'`
   FOUND=
-  for WRAPPED in __${PRE}x${FUNC} _${PRE}x${FUNC} __${PRE}${FUNC}13 ${PRE}${FUNC}; do
+  for WRAPPED in __${PRE}x${FUNC} _${PRE}x${FUNC} __${PRE}${FUNC}13 ${PRE}${FUNC} __${PRE}${FUNC}; do
     AC_CHECK_FUNCS($WRAPPED,FOUND=$WRAPPED)
 dnl
 dnl to unconditionally define only the _* functions, comment out the 2 lines above,
