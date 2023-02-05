@@ -11,5 +11,4 @@ echo "echo foo > $tmp/bar &&
       stat -c owner:%u $tmp/blub" > $tmp/sh
 run_fakeroot -- \
     ${posixshell} $tmp/sh > $tmp/out
-cat $tmp/out > /tmp/foo
-grep "^owner:0$" /tmp/foo
+cat $tmp/out | grep "^owner:0$"
