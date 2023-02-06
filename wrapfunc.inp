@@ -196,9 +196,6 @@ fchmodat;int;(int dir_fd, const char *path, mode_t mode, int flags);(dir_fd, pat
 #ifdef HAVE_FCHOWNAT
 fchownat;int;(int dir_fd, const char *path, uid_t owner, gid_t group, int flags);(dir_fd, path, owner, group, flags)
 #endif /* HAVE_FCHOWNAT */
-#ifdef HAVE_FCHOWN32
-fchown32;int;(int fd, uid_t owner, gid_t group);(fd, owner, group)
-#endif /* HAVE_FCHOWN32 */
 #ifdef HAVE_MKDIRAT
 mkdirat;int;(int dir_fd, const char *pathname, mode_t mode);(dir_fd, pathname, mode)
 #endif /* HAVE_MKDIRAT */
