@@ -923,6 +923,32 @@ int fchown(int fd, uid_t owner, gid_t group){
   return r;
 }
 
+#ifdef HAVE_FCHOWN32
+int fchown32(int fd, uid_t owner, gid_t group){
+  INT_STRUCT_STAT st;
+  int r;
+
+  r=INT_NEXT_FSTAT(fd, &st);
+  if(r)
+    return r;
+
+  st.st_uid=owner;
+  st.st_gid=group;
+  INT_SEND_STAT(&st, chown_func);
+
+  if(!dont_try_chown())
+    r=next_fchown32(fd,owner,group);
+  else
+    r=0;
+
+  if(r&&(errno==EPERM))
+    r=0;
+
+  return r;
+}
+#endif /* HAVE_FCHOWN32 */
+
+
 #ifdef HAVE_FSTATAT
 #ifdef HAVE_FCHOWNAT
 int fchownat(int dir_fd, const char *path, uid_t owner, gid_t group, int flags) {
