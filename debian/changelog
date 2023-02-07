@@ -1,8 +1,8 @@
 fakeroot (1.31-1) unstable; urgency=medium
 
   * New upstream version.
-    - patch from Johannes Schauer to not use temporary file in
-      chown test.  closes: #1026132.
+    - patch from Johannes Schauer Marin Rodrigues to not use
+      temporary file in chown test.  closes: #1026132.
 
  -- Clint Adams <clint@debian.org>  Mon, 06 Feb 2023 10:12:11 -0500
 
