@@ -2,20 +2,23 @@ AUTOMAKE_OPTIONS=foreign
 ACLOCAL_AMFLAGS = -I build-aux
 SUBDIRS=doc scripts test
 
-noinst_LTLIBRARIES = libcommunicate.la libmacosx.la
+noinst_LTLIBRARIES = libcommunicate.la libmacosx.la libfakeroot_time64.la
 libcommunicate_la_SOURCES = communicate.c
 
 libmacosx_la_SOURCES = libfakeroot_inode64.c libfakeroot_unix2003.c patchattr.h
+
+libfakeroot_time64_la_SOURCES = libfakeroot_time64.c
+libfakeroot_time64_la_CPPFLAGS = -D_FILE_OFFSET_BITS=64 -D_TIME_BITS=64
 
 lib_LTLIBRARIES=libfakeroot.la
 libfakeroot_la_SOURCES=libfakeroot.c statconv/glibc/linux/alpha/stats.h wrapdef.h  wrapstruct.h communicate.h
 libfakeroot_la_LDFLAGS=-release 0
 if MACOSX
-libfakeroot_la_DEPENDENCIES=wrapdef.h wrapstruct.h libcommunicate.la libmacosx.la $(LTLIBOBJS)
-libfakeroot_la_LIBADD = libcommunicate.la libmacosx.la $(LTLIBOBJS)
+libfakeroot_la_DEPENDENCIES=wrapdef.h wrapstruct.h libfakeroot_time64.la libcommunicate.la libmacosx.la $(LTLIBOBJS)
+libfakeroot_la_LIBADD = libfakeroot_time64.la libcommunicate.la libmacosx.la $(LTLIBOBJS)
 else !MACOSX
-libfakeroot_la_DEPENDENCIES=wrapdef.h wrapstruct.h libcommunicate.la $(LTLIBOBJS)
-libfakeroot_la_LIBADD = libcommunicate.la $(LTLIBOBJS)
+libfakeroot_la_DEPENDENCIES=wrapdef.h wrapstruct.h libfakeroot_time64.la libcommunicate.la $(LTLIBOBJS)
+libfakeroot_la_LIBADD = libfakeroot_time64.la libcommunicate.la $(LTLIBOBJS)
 endif !MACOSX
 
 bin_PROGRAMS=faked
