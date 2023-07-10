@@ -1,3 +1,9 @@
+fakeroot (1.32-1) unstable; urgency=medium
+
+  * New upstream version.
+
+ -- Clint Adams <clint@debian.org>  Mon, 10 Jul 2023 09:14:43 -0400
+
 fakeroot (1.31-1) unstable; urgency=medium
 
   * New upstream version.
