@@ -184,6 +184,7 @@ dnl glibc uses `* dev' as fourth argument of __xmknod.
 dnl Although the test below should probably be more general
 dnl (not just __xmknod, but also mknod etc), at the moment this
 dnl seems enough, as probably glibc is the only that does this.
+AC_CHECK_FUNC(__xmknod,[
 AC_MSG_CHECKING([for type of arg of __xmknod])
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
        #include <sys/types.h>
@@ -198,6 +199,8 @@ AC_MSG_CHECKING([for type of arg of __xmknod])
                        const char *pathname ,
                        mode_t  mode ,  dev_t *dev);
   ]])],[
+   dnl XXX: __xmknod is not declared in public headers in glibc 2.36 and newer.
+   dnl Assume __xkmnod takes a dev_t pointer this case anyway.
    AC_DEFINE(XMKNOD_FRTH_ARG,[*])
    AC_MSG_RESULT([needs *])
   ],[
@@ -205,6 +208,15 @@ AC_MSG_CHECKING([for type of arg of __xmknod])
    AC_MSG_RESULT([no extra *])
 
   ])
+],
+[
+ dnl glibc does not export  __xmknod symbol. In this case WRAP_MKNOD expands
+ dnl to mknod, and XMKNOD_FRTH_ARG is acutally the 3rd argument of mknod,
+ dnl which must be dev_t (not the pointer)
+ AC_DEFINE(XMKNOD_FRTH_ARG,)
+ AC_MSG_RESULT([no extra *])
+])
+
 
 dnl Possibly this should only be done if we actually have mknodat
 dnl on the system.  Nothing  breaks by running the test itself though.
@@ -213,6 +225,8 @@ dnl glibc uses `* dev' as fifth argument of __xmknodat.
 dnl Although the test below should probably be more general
 dnl (not just __xmknodat, but also mknod etc), at the moment this
 dnl seems enough, as probably glibc is the only that does this.
+
+AC_CHECK_FUNC(__xmknodat,[
 AC_MSG_CHECKING([for type of arg of __xmknodat])
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
        #include <sys/types.h>
@@ -235,6 +249,14 @@ AC_MSG_CHECKING([for type of arg of __xmknodat])
    AC_MSG_RESULT([no extra *])
 
   ])
+],
+[
+ dnl glibc does not export  __xmknodat symbol. In this case WRAP_MKNODAT expands
+ dnl to mknodat, and XMKNODAT_FIFTH_ARG is acutally the 4th argument of mknodat,
+ dnl which must be dev_t (not the pointer)
+ AC_DEFINE(XMKNODAT_FIFTH_ARG,)
+ AC_MSG_RESULT([no extra *])
+])
 
 AH_TEMPLATE([INITGROUPS_SECOND_ARG], [second argument of initgroups])
 dnl FreeBSD 4.7 uses int instead of gid_t
@@ -381,6 +403,23 @@ time64_hack=yes
 
 :>fakerootconfig.h.tmp
 
+dnl Before glibc 2.33 the stat family of functions (and mknod)
+dnl used to be inline wrappers around calls to xstat, fxstat,
+dnl lxstat, xmknod, which all take a leading version number
+dnl argument designating the data structure and bits used.
+dnl Thus libfakeroot needs to wrap xstat, fxstat, xmknod only.
+dnl 
+dnl In glibc 2.33 inline wrapper functions have been removed.
+dnl Instead libc.so.6 exports stat, stat64, etc symbols.
+dnl xstat, fxstat, xmknod still exist (for compatibility reasons).
+dnl Thus libfakeroot must wrap both stat (fstat, statat, fstatat, etc)
+dnl and internal xstat (fxstat, etc) functions.
+dnl
+dnl However some new architectures (such as LoongArch lp64d ABI)
+dnl decided to be 64-bit only since the day 0 and don't use any wrappers.
+dnl Here libfakeroot should wrap only stat (statat, fstat, fstatat).
+dnl A special care should be taken to avoid the double definition.
+
 for SEARCH in %stat f%stat l%stat f%statat %stat64 f%stat64 l%stat64 f%statat64 %mknod %mknodat; do
   FUNC=`echo $SEARCH|sed -e 's/.*%//'`
   PRE=`echo $SEARCH|sed -e 's/%.*//'`
@@ -437,6 +476,15 @@ dnl    FOUND=$WRAPPED
        echo "#define ${PF}_ARG(a,b,c${DEF_END}) (${DEF_BEGIN}b,c${DEF_END})"
       } >>fakerootconfig.h.tmp
 
+      if test "x${FOUND}" = "x${PRE}${FUNC}"; then
+         dnl Some architectures are 64-bit only from day 0 and don't have xstat, etc
+         dnl internal functions. For such architectures WRAP_STAT evaluates to stat,
+         dnl so an extra wrapper is NOT required.
+	 AC_MSG_RESULT([Extra wrapper for ${PRE}${FUNC} is not necessary])
+	 AC_DEFINE_UNQUOTED(NO_WRAP_${PF}_SYMBOL, 1)
+      else
+	 AC_MSG_RESULT([Extra wrapper for ${PRE}${FUNC} is required because of ${FOUND}])
+      fi
       break
     fi
   done
@@ -571,60 +619,70 @@ AH_VERBATIM([WRAP_STAT],
 #define WRAP_STAT_RAW  __astat
 #define TMP_STAT  __astat
 #define NEXT_STAT_NOARG  next___astat
+#undef NO_WRAP_STAT_SYMBOL
 
 #define WRAP_LSTAT_QUOTE  __astat
 #define WRAP_LSTAT  __astat
 #define WRAP_LSTAT_RAW  __astat
 #define TMP_LSTAT  __astat
 #define NEXT_LSTAT_NOARG  next___astat
+#undef NO_WRAP_LSTAT_SYMBOL
 
 #define WRAP_FSTAT_QUOTE  __astat
 #define WRAP_FSTAT  __astat
 #define WRAP_FSTAT_RAW  __astat
 #define TMP_FSTAT  __astat
 #define NEXT_FSTAT_NOARG  next___astat
+#undef NO_WRAP_FSTAT_SYMBOL
 
 #define WRAP_FSTATAT_QUOTE  __astatat
 #define WRAP_FSTATAT  __astatat
 #define WRAP_FSTATAT_RAW  __astatat
 #define TMP_FSTATAT  __astatat
 #define NEXT_FSTATAT_NOARG  next___astatat
+#undef NO_WRAP_FSTATAT_SYMBOL
 
 #define WRAP_STAT64_QUOTE  __astat64
 #define WRAP_STAT64  __astat64
 #define WRAP_STAT64_RAW  __astat64
 #define TMP_STAT64  __astat64
 #define NEXT_STAT64_NOARG  next___astat64
+#undef NO_WRAP_STAT64_SYMBOL
 
 #define WRAP_LSTAT64_QUOTE  __astat64
 #define WRAP_LSTAT64  __astat64
 #define WRAP_LSTAT64_RAW  __astat64
 #define TMP_LSTAT64  __astat64
 #define NEXT_LSTAT64_NOARG  next___astat64
+#undef NO_WRAP_LSTAT64_SYMBOL
 
 #define WRAP_FSTAT64_QUOTE  __astat64
 #define WRAP_FSTAT64  __astat64
 #define WRAP_FSTAT64_RAW  __astat64
 #define TMP_FSTAT64  __astat64
 #define NEXT_FSTAT64_NOARG  next___astat64
+#undef NO_WRAP_FSTAT64_SYMBOL
 
 #define WRAP_FSTATAT64_QUOTE  __astatat64
 #define WRAP_FSTATAT64  __astatat64
 #define WRAP_FSTATAT64_RAW  __astatat64
 #define TMP_FSTATAT64  __astatat64
 #define NEXT_FSTATAT64_NOARG  next___astatat64
+#undef NO_WRAP_FSTATAT64_SYMBOL
 
 #define WRAP_MKNOD_QUOTE  __amknod
 #define WRAP_MKNOD  __amknod
 #define WRAP_MKNOD_RAW  __amknod
 #define TMP_MKNOD  __amknod
 #define NEXT_MKNOD_NOARG  next___amknod
+#undef NO_WRAP_MKNOD_SYMBOL
 
 #define WRAP_MKNODAT_QUOTE  __amknodat
 #define WRAP_MKNODAT  __amknodat
 #define WRAP_MKNODAT_RAW  __amknodat
 #define TMP_MKNODAT  __amknodat
 #define NEXT_MKNODAT_NOARG  next___amknodat
+#undef NO_WRAP_MKNODAT_SYMBOL
 
 #define WRAP_STAT64_TIME64_QUOTE  __astat64_time64
 #define WRAP_STAT64_TIME64  __astat64_time64
