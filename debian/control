@@ -5,10 +5,10 @@ Build-Depends: debhelper-compat (= 13),
                libacl1-dev,
                libcap-dev [linux-any],
                libcap2-bin [linux-any],
-               po4a <!pkg.fakeroot.stage1>,
+               po4a <!nodoc>,
                sharutils <!nocheck>
 Maintainer: Clint Adams <clint@debian.org>
-Standards-Version: 4.6.1
+Standards-Version: 4.6.2
 Rules-Requires-Root: no
 Vcs-Git: https://salsa.debian.org/clint/fakeroot.git
 Vcs-Browser: https://salsa.debian.org/clint/fakeroot

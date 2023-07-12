@@ -15,7 +15,7 @@ LIB_DIR	 = usr/lib/$(DEB_HOST_MULTIARCH)
 
 dhar-stamp:
 	dh_autoreconf
-ifeq (,$(findstring pkg.fakeroot.stage1,$(DEB_BUILD_PROFILES)))
+ifeq (,$(findstring nodoc,$(DEB_BUILD_PROFILES)))
 	(cd doc && po4a -k 0 --rm-backups --variable "srcdir=../doc/" po4a/po4a.cfg) || exit 1
 endif
 	touch $@
