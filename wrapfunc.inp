@@ -50,6 +50,7 @@ getattrlist$UNIX2003;int;(const char *path, void *attrList, void *attrBuf, size_
 #endif
 #endif
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+#include <spawn.h>
 lstat$INODE64;int;(const char *file_name, struct stat *buf);(file_name, buf)
 stat$INODE64;int;(const char *file_name, struct stat *buf);(file_name, buf)
 fstat$INODE64;int;(int fd, struct stat *buf);(fd, buf)
