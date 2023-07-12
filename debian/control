@@ -5,7 +5,7 @@ Build-Depends: debhelper-compat (= 13),
                libacl1-dev,
                libcap-dev [linux-any],
                libcap2-bin [linux-any],
-               po4a,
+               po4a <!pkg.fakeroot.stage1>,
                sharutils <!nocheck>
 Maintainer: Clint Adams <clint@debian.org>
 Standards-Version: 4.6.1
